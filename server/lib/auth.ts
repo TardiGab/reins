@@ -16,9 +16,9 @@ export const auth = betterAuth({
           providerId: "battlenet",
           clientId: process.env.BATTLENET_ID!,
           clientSecret: process.env.BATTLENET_SECRET!,
-          authorizationUrl: "https://oauth.battle.net/authorize",
-          tokenUrl: "https://oauth.battle.net/token",
-          userInfoUrl: "https://oauth.battle.net/userinfo",
+          discoveryUrl:
+            "https://oauth.battle.net/.well-known/openid-configuration",
+          scopes: ["openid", "wow.profile"],
           getUserInfo: async (tokens) => {
             const user = await fetch("https://oauth.battle.net/userinfo", {
               headers: {
