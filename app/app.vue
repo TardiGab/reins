@@ -18,12 +18,14 @@ const session = authClient.useSession();
       Connexion avec Battlenet
     </button>
     <div>
-      <span v-if="session.data"
-        >Connecté en tant que {{ session.data?.user.name }}</span
-      >
+      <p v-if="session.data">
+        Connecté en tant que {{ session.data?.user.name }}
+      </p>
+      <pre v-if="session.data">{{ session.data }}</pre>
       <button v-if="session.data" @click="() => authClient.signOut()">
         Se déconnecter
       </button>
     </div>
   </div>
+  <MountList />
 </template>
