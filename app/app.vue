@@ -21,7 +21,7 @@ const session = authClient.useSession();
       <p v-if="session.data">
         Connecté en tant que {{ session.data?.user.name }}
       </p>
-      <pre v-if="session.data">{{ session.data }}</pre>
+      <!-- <pre v-if="session.data">{{ session.data }}</pre> -->
       <button v-if="session.data" @click="() => authClient.signOut()">
         Se déconnecter
       </button>
