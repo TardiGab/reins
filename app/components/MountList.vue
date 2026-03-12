@@ -1,29 +1,15 @@
 <script setup lang="ts">
-import { authClient } from "~~/server/lib/auth-client";
-const session = authClient.useSession();
-
-function getMounts() {
-  fetch(
-    "https://eu.api.blizzard.com/data/wow/mount/index?namespace=static-eu",
-    {
-      headers: {
-        Authorization: `Bearer ${session.value.data?.user.accessToken}`, // Fonctionne avec mon propre token dans la DB
-      },
-    },
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Mounts data:", data);
-    })
-    .catch((error) => {
-      console.error("Error fetching mounts:", error);
-    });
-}
+const { data, error } = await useFetch("/api/mounts");
 </script>
 
 <template>
   <div>
-    <button @click="getMounts">Get Mounts</button>
+    <h2>Montures data</h2>
+    <pre v-if="data">{{ data }}</pre>
+    <p v-else-if="error">Error fetching mounts</p>
+    <!-- <pre>{{ data }}</pre> -->
+    <!-- <button @click="getMounts">Get Mounts</button>
+    <pre>{{ data.mounts }}</pre> -->
     <!-- <pre>{{ session.data }}</pre> -->
   </div>
 </template>
