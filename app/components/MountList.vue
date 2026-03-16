@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { data, error } = await useFetch("/api/mounts");
-
 import mountsGlobal from "@/assets/data/mounts.json";
+
+const { data, error } = await useFetch("/api/mounts");
 
 console.log("Mounts global : ", mountsGlobal);
 </script>
@@ -22,14 +22,19 @@ console.log("Mounts global : ", mountsGlobal);
   </div>
   <div>
     <h2>Montures globales</h2>
-    <!-- <pre v-if="mountsGlobal">{{ mountsGlobal.data }}</pre> -->
     <div v-if="mountsGlobal">
       <div v-for="expansion in mountsGlobal" :key="expansion.name">
         <h3>{{ expansion.name }}</h3>
-        <h4 v-for="subcat in expansion.subcats" :key="subcat.name">
-          {{ subcat.name }}
-        </h4>
-        <!-- <p v-for="mount in expansion.subcats.items">{{  }}</p> -->
+        <div v-for="subcat in expansion.subcats" :key="subcat.name">
+          <h4>
+            {{ subcat.name }}
+          </h4>
+          <ul>
+            <li v-for="mount in subcat.items" :key="mount.ID">
+              {{ mount.name }} - {{ mount.ID }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
