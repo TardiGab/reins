@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
-
 const { data, error } = await useFetch("/api/mounts");
-
-console.log("Mounts global : ", mountsGlobal);
 </script>
 
 <template>
@@ -13,7 +10,12 @@ console.log("Mounts global : ", mountsGlobal);
     <div v-if="data">
       <ul>
         <li v-for="mounts in data">
-          {{ mounts.mount.name }} - {{ mounts.mount.id }}
+          <a
+            :href="`https://wowhead.com/mount/${mounts.mount.id}?domain=fr`"
+            data-wh-rename-link="true"
+          >
+            {{ mounts.mount.name }} - {{ mounts.mount.id }}
+          </a>
         </li>
       </ul>
     </div>
@@ -31,7 +33,12 @@ console.log("Mounts global : ", mountsGlobal);
           </h4>
           <ul>
             <li v-for="mount in subcat.items" :key="mount.ID">
-              {{ mount.name }} - {{ mount.ID }}
+              <a
+                :href="`https://wwww.wowhead.com/mount/${mount.ID}?domain=fr`"
+                data-wh-rename-link="true"
+              >
+                {{ mount.name }} - {{ mount.ID }}
+              </a>
             </li>
           </ul>
         </div>
