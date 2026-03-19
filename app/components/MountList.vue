@@ -42,8 +42,13 @@ const { data: icons } = await useFetch("/api/icons");
                 :href="`https://wwww.wowhead.com/mount/${mount.ID}`"
                 class="mount-item"
               >
-                <img
+                <!-- <img
                   :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon}.jpg`"
+                  alt=""
+                  srcset=""
+                /> -->
+                <img
+                  :src="`https://render.worldofwarcraft.com/eu/icons/56/ability_mount_drake_blue.jpg`"
                   alt=""
                   srcset=""
                 />
