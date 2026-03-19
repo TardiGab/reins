@@ -3,7 +3,7 @@ useHead({
   title: "Reins",
   script: [
     {
-      innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};`,
+      innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: false, iconSize: false, renameLinks: false};`,
       // defer: true,
     },
     {

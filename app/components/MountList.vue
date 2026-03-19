@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
-console.log(mountsGlobal);
 const { data, error } = await useFetch("/api/mounts");
-const { data: icons } = await useFetch("/api/icons");
 
-// declare var $WowheadPower: any;
-
-// // $WowheadPower.refreshLinks();
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
@@ -17,7 +18,6 @@ const { data: icons } = await useFetch("/api/icons");
         <li v-for="mounts in data">
           <a
             :href="`https://wowhead.com/mount/${mounts.mount.id}?domain=fr`"
-            data-wh-rename-link="true"
           >
             {{ mounts.mount.name }}
           </a>
@@ -39,20 +39,21 @@ const { data: icons } = await useFetch("/api/icons");
           <ul>
             <li v-for="mount in subcat.items" :key="mount.ID">
               <a
-                :href="`https://wwww.wowhead.com/mount/${mount.ID}`"
+                :href="`https://wwww.wowhead.com/ptr/mount/${mount.ID}`"
                 class="mount-item"
               >
-                <!-- <img
-                  :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon}.jpg`"
-                  alt=""
-                  srcset=""
-                /> -->
                 <img
-                  :src="`https://render.worldofwarcraft.com/eu/icons/56/ability_mount_drake_blue.jpg`"
+                  :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                   alt=""
                   srcset=""
                 />
+                <!-- <img
+                  :src="`https://render.worldofwarcraft.com/eu/icons/56/ability_mount_drake_blue.jpg`"
+                  alt=""
+                  srcset=""
+                /> -->
                 <span>{{ mount.name }}</span>
+                <!-- {{ mount.name }} -->
               </a>
             </li>
           </ul>

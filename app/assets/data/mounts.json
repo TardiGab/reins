@@ -707,7 +707,7 @@
           },
           {
             "ID": 2935,
-            "icon": null,
+            "icon": "inv_blue_hawkstrider",
             "itemId": 268578,
             "name": "Void-Touched Hawkstrider",
             "new": true,
