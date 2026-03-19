@@ -1,13 +1,16 @@
 <script setup lang="ts">
 useHead({
-  title: "Reins - Montures",
+  title: "Reins",
   script: [
     {
-      src: "https://wow.zamimg.com/js/tooltips.js",
       innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};`,
+      // defer: true,
+    },
+    {
+      src: "https://wow.zamimg.com/js/tooltips.js",
+      // defer: true,
     },
   ],
-  // script: [{innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true};`}]
 });
 </script>
 
