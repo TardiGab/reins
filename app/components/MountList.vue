@@ -47,7 +47,7 @@ onMounted(() => {
           <ul>
             <li v-for="mount in subcat.items" :key="mount.ID">
               <a
-                :href="`https://wwww.wowhead.com/ptr/mount/${mount.ID}`"
+                :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
                 class="mount-item"
               >
                 <img
