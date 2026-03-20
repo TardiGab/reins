@@ -25,7 +25,7 @@ onMounted(() => {
     <h2>Montures possédées</h2>
     <div v-if="data">
       <ul>
-        <li v-for="mounts in data">
+        <li v-for="mounts in data" :key="mounts.mount.id">
           <a :href="`https://wowhead.com/mount/${mounts.mount.id}`">
             {{ mounts.mount.name }}
           </a>
