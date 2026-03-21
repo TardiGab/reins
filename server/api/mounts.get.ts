@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
   });
 
   const token = tokenData?.accessToken;
-  // console.log("Token:", token);
 
   if (session) {
     const mountsResponse = fetch(
@@ -28,12 +27,6 @@ export default defineEventHandler(async (event) => {
         return res.json();
       })
       .then((data) => {
-        // console.log("Raw API Response:", data.mounts);
-        // const mounts = data.mounts.map((mount: any) => ({
-        //   id: mount.mount.id,
-        //   name: mount.mount.name,
-        // }));
-        // console.log("Processed Mounts:", mounts);
         const mounts = data.mounts;
         return mounts;
       })

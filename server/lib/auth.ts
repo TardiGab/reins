@@ -19,20 +19,6 @@ export const auth = betterAuth({
           discoveryUrl:
             "https://oauth.battle.net/.well-known/openid-configuration",
           scopes: ["openid", "wow.profile"],
-          // getToken: async () => {
-          //   const response = await fetch(
-          //     `https://oauth.battle.net/token?client_id=${process.env.BATTLENET_ID}&client_secret=${process.env.BATTLENET_SECRET}&grant_type=credentials`,
-          //     { method: "POST" },
-          //   );
-
-          //   const data = await response.json();
-
-          //   return {
-          //     accessToken: data.access_token,
-          //     refreshToken: data.refresh_token,
-          //     expiresIn: data.expires_in,
-          //   };
-          // },
           getUserInfo: async (tokens) => {
             const user = await fetch("https://oauth.battle.net/userinfo", {
               headers: {
@@ -40,14 +26,11 @@ export const auth = betterAuth({
               },
             }).then((res) => res.json());
 
-            // const accessToken = tokens.raw?.access_token;
-
             return {
               id: user.id,
-              email: user.battletag, // Use battletag as email workaround
+              email: user.battletag,
               emailVerified: false,
               name: user.battletag,
-              // accessToken: accessToken,
             };
           },
         },
