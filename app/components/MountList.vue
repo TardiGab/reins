@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+console.clear();
+import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
-const { data, error } = await useFetch("/api/mounts");
-console.log(data);
+const { data: userMounts, error } = await useFetch("/api/mounts");
+// console.log("User mounts:", userMounts.value);
+// console.log("Global mounts:", mountsGlobal);
 
 // Source - https://stackoverflow.com/a/56458070
 // Posted by Titian Cernicova-Dragomir, modified by community. See post 'Timeline' for change history
@@ -18,14 +20,44 @@ onMounted(() => {
     window.$WowheadPower.refreshLinks();
   }
 });
+const userMountsIds = userMounts.value.map((item: any) => {
+  return item.mount.id;
+});
+
+// console.log(userMountsIds);
+
+// const mountOwned = ref(true);
+// const mountNotOwned = ref(false);
+
+mountsGlobal.forEach((item) => {
+  item.subcats.forEach((subcats) => {
+    subcats.items.forEach((mount) => {
+      if (userMountsIds.includes(mount.ID)) {
+        // console.log(`Je possède cette monture : ${mount.name}`);
+        // const mountOwned = userMountsIds.includes(mount.ID);
+        // return mountOwned;
+        const mountOwned = { ...mount, isOwned: true };
+        console.log(mountOwned);
+        return mountOwned;
+      } else {
+        // console.log(`Je ne possède pas cette monture : ${mount.name}`);
+        // const mountOwned = userMountsIds.includes(mount.ID);
+        // return mountOwned;
+        const mountNotOwned = { ...mount, isOwned: false };
+        console.log(mountNotOwned);
+        return mountNotOwned;
+      }
+    });
+  });
+});
 </script>
 
 <template>
   <div>
     <h2>Montures possédées</h2>
-    <div v-if="data">
+    <div v-if="userMounts">
       <ul>
-        <li v-for="mounts in data" :key="mounts.mount.id">
+        <li v-for="mounts in userMounts" :key="mounts.mount.id">
           <a :href="`https://wowhead.com/mount/${mounts.mount.id}`">
             {{ mounts.mount.name }}
           </a>
@@ -45,10 +77,17 @@ onMounted(() => {
             {{ subcat.name }}
           </h4>
           <ul>
-            <li v-for="mount in subcat.items" :key="mount.ID">
+            <li
+              v-for="(mount, isOwned) in subcat.items"
+              :key="mount.ID"
+              class="mount-item"
+              :class="{
+                'mount-item__owned': isOwned,
+              }"
+            >
               <a
                 :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
-                class="mount-item"
+                target="_blank"
               >
                 <img
                   :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
@@ -63,7 +102,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 a {
   text-decoration: none;
 }
@@ -86,5 +125,9 @@ ul {
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+  opacity: 0.25;
+  &__owned {
+    opacity: 1;
+  }
 }
 </style>
