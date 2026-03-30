@@ -17,12 +17,12 @@ function logout() {
       <button
         @click="() => authClient.signIn.social({ provider: 'battlenet' })"
       >
-        Connexion avec Battlenet
+        Login with Battlenet
       </button>
     </div>
     <div v-if="session.data">
       <p>Bonjour, {{ session.data?.user.name }}</p>
-      <button @click="logout">Se déconnecter</button>
+      <button @click="logout">Logout</button>
     </div>
   </header>
 </template>
