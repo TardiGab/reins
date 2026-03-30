@@ -7,7 +7,7 @@ export const auth = betterAuth({
   database: new pg.Pool({
     connectionString: process.env.DATABASE_URL,
   }),
-  baseURL: "http://localhost:3000/",
+  baseURL: process.env.BETTER_AUTH_URL,
   plugins: [
     dash(),
     genericOAuth({
@@ -28,7 +28,7 @@ export const auth = betterAuth({
 
             return {
               id: user.id,
-              email: user.battletag, // Use battletag as email workaround
+              email: user.battletag,
               emailVerified: false,
               name: user.battletag,
             };
