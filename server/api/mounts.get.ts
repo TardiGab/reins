@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   if (session) {
     const mountsResponse = fetch(
-      "https://eu.api.blizzard.com/profile/user/wow/collections/mounts?namespace=profile-eu&locale=fr_FR",
+      "https://eu.api.blizzard.com/profile/user/wow/collections/mounts?namespace=profile-eu&locale=en_US",
       {
         headers: {
           Authorization: `Bearer ${token}`,
