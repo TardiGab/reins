@@ -4,7 +4,7 @@ import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
 const { data: userMounts, error } = await useFetch("/api/mounts");
 
-console.log(mountsGlobal);
+// console.log(mountsGlobal);
 
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
@@ -96,22 +96,55 @@ mountsGlobal.forEach((item, i) => {
     });
   });
 });
-
-console.log(totalMountNumber);
-console.log(categoryOwnedMountsArray);
-
-// console.log(completionMountArray);
 </script>
 
 <template>
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div
-        class="expansion"
+        class="expansion-wrapper"
         v-for="(expansion, index) in mountsGlobal"
         :key="expansion.name"
       >
-        <div class="expansion-title">
+        <Accordion
+          :title="expansion.name"
+          :unlocked-amount="categoryOwnedMountsArray[index]?.unlockedAmount"
+          :amount="categoryOwnedMountsArray[index]?.amount"
+        >
+          <div class="expansion__container">
+            <div
+              v-for="subcat in expansion.subcats"
+              :key="subcat.name"
+              class="expansion__subcategories"
+            >
+              <h3 class="expansion__subcat">
+                {{ subcat.name }}
+              </h3>
+              <ul class="expansion__subcat-container">
+                <li
+                  v-for="mount in subcat.items"
+                  :key="mount.ID"
+                  class="mount-item"
+                  :class="{
+                    'mount-item__owned': ownedMountArray.includes(mount.ID),
+                  }"
+                >
+                  <a
+                    :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                    target="_blank"
+                    class="mount-item__link"
+                  >
+                    <img
+                      :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
+                    />
+                    <span>{{ mount.name }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Accordion>
+        <!-- <button class="expansion-title"">
           <h2 class="expansion-title__name">{{ expansion.name }}</h2>
           <div class="expansion-title__completion">
             <span
@@ -119,33 +152,41 @@ console.log(categoryOwnedMountsArray);
               {{ categoryOwnedMountsArray[index]?.amount }}</span
             >
           </div>
-        </div>
-        <div v-for="subcat in expansion.subcats" :key="subcat.name">
-          <h3 class="expansion__subcat">
-            {{ subcat.name }}
-          </h3>
-          <ul>
-            <li
-              v-for="mount in subcat.items"
-              :key="mount.ID"
-              class="mount-item"
-              :class="{
-                'mount-item__owned': ownedMountArray.includes(mount.ID),
-              }"
-            >
-              <a
-                :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
-                target="_blank"
-                class="mount-item__link"
+        </button>
+        <div
+          class="expansion__container"
+        >
+          <div
+            v-for="subcat in expansion.subcats"
+            :key="subcat.name"
+            class="expansion__subcategories"
+          >
+            <h3 class="expansion__subcat">
+              {{ subcat.name }}
+            </h3>
+            <ul class="expansion__subcat-container">
+              <li
+                v-for="mount in subcat.items"
+                :key="mount.ID"
+                class="mount-item"
+                :class="{
+                  'mount-item__owned': ownedMountArray.includes(mount.ID),
+                }"
               >
-                <img
-                  :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
-                />
-                <span>{{ mount.name }}</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+                <a
+                  :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                  target="_blank"
+                  class="mount-item__link"
+                >
+                  <img
+                    :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
+                  />
+                  <span>{{ mount.name }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -182,41 +223,58 @@ ul {
 .mounts-container {
   padding: 2rem;
   max-height: calc(80vh - 2rem);
-  // background-color: rgba(0, 0, 0, 0.7);
-  background-image: url("/images/wooden-background.webp");
-  // background-color: rgba(86, 74, 66, 0.9);
-  background-color: rgba(26, 12, 0, 0.9);
-  // background-color: rgba(24, 21, 17, 0.95);
-  background-blend-mode: color;
+  background-color: #1a1512;
+  background-image: url("/images/wooden-background-2.webp");
   box-shadow: 0 0 40px 0 #000 inset;
-  background-repeat: repeat-y;
+  background-repeat: repeat;
   background-attachment: local;
   overflow-y: scroll;
 }
 
 .expansion {
-  &-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &__name,
-    span {
-      font-family: "Sentient-Variable";
-      color: $dark-gray;
-      font-weight: 400;
-      text-shadow: 1px 1px 0 #000;
-      font-size: $main-size;
-      line-height: 100%;
-      padding: 0;
-      margin: 0;
-    }
-  }
+  // &__container {
+  //   max-height: 10000px;
+  //   transition: all 0.3 ease-in-out;
+  //   &--closed {
+  //     max-height: 0px;
+  //     overflow: hidden;
+  //     transition: all 0.3 ease-in-out;
+  //   }
+  // }
+  // &-title {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   background-color: #28221c;
+  //   border: 2px solid $border-container;
+  //   border-radius: 0.5rem;
+  //   padding: 0.5rem 1rem;
+  //   margin-bottom: 2rem;
+  //   width: 100%;
+  //   cursor: pointer;
+  //   &__name,
+  //   span {
+  //     font-family: "Sentient-Variable";
+  //     color: $dark-gray;
+  //     font-weight: 400;
+  //     text-shadow: 1px 1px 0 #000;
+  //     font-size: $main-size;
+  //     line-height: 100%;
+  //     padding: 0;
+  //     margin: 0;
+  //   }
+  // }
   &__subcat {
     font-family: "Sentient-Variable";
     color: $yellow;
     text-shadow: 1px 1px 0 #000;
     line-height: 100%;
     font-weight: 400;
+    padding: 0 1rem;
+    &-container {
+      padding: 0 1rem;
+      margin-bottom: 2rem;
+    }
   }
 }
 
