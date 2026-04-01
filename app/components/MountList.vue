@@ -207,6 +207,18 @@ ul {
   filter: grayscale(100%);
   font-family: "Sentient-Variable";
   font-size: $small;
+  transition: all 0.3s;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  span {
+    text-shadow: 1px 1px 0 #000;
+  }
+  &:hover {
+    filter: grayscale(0%);
+    background-color: #28221c;
+    border-radius: 0.5rem;
+    box-shadow: inset 0px 0px 0px 2px $border-container;
+  }
   &__owned {
     filter: grayscale(0%);
     .mount-item__link {

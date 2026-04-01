@@ -67,7 +67,7 @@ onMounted(() => {
 .expansion {
   &__container {
     max-height: 10000px;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.5s;
     overflow: hidden;
     &--closed {
       max-height: 0px;
