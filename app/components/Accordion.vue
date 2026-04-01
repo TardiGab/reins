@@ -23,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="expansion">
+  <div class="expansion" :class="{ 'expansion--closed': !isOpen }">
     <button class="expansion-title" @click="() => (isOpen = !isOpen)">
       <slot name="header">
         <h2 class="expansion-title__name">{{ title }}</h2>
@@ -67,11 +67,10 @@ onMounted(() => {
 .expansion {
   &__container {
     max-height: 10000px;
-    transition: all 0.3 ease-in-out;
+    transition: all 0.5s ease-in-out;
+    overflow: hidden;
     &--closed {
       max-height: 0px;
-      overflow: hidden;
-      transition: all 0.3 ease-in-out;
     }
   }
   &-title {
