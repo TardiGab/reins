@@ -4,6 +4,8 @@ import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
 const { data: userMounts, error } = await useFetch("/api/mounts");
 
+console.log(mountsGlobal);
+
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
 // })
@@ -38,28 +40,88 @@ onMounted(() => {
 const userMountsIds = userMounts.value?.map((item: any) => {
   return item.mount.id;
 });
+// Un grand merci à M. Schmouker d'avoir implémenté le compte des montures possédées et le compte total des montures par catégories.
+// Un grand merci également à M. Terranova de m'avoir aidé à vérifier la présence d'une monture possédée par le joueur dans la liste des montures globales.
+interface SubCategoryOwnedMounts {
+  subcatName: string;
+  amount: number;
+  unlockedAmount: number;
+}
 
-const ownedMountArrawy: number[] = [];
+interface CategoryOwnedMounts {
+  categoryName: string;
+  subCategories: SubCategoryOwnedMounts[];
+  amount: number;
+  unlockedAmount: number;
+}
 
-mountsGlobal.forEach((item) => {
-  item?.subcats?.forEach((subcats) => {
+const ownedMountArray: number[] = [];
+let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
+let numberOfMountsUnlocked = 0;
+let totalMountNumber: number = 0;
+
+mountsGlobal.forEach((item, i) => {
+  categoryOwnedMountsArray.push({
+    categoryName: item.name,
+    subCategories: [],
+    amount: 0,
+    unlockedAmount: 0,
+  });
+  item?.subcats?.forEach((subcats, index) => {
+    if (categoryOwnedMountsArray[i])
+      categoryOwnedMountsArray[i].subCategories[index] = {
+        subcatName: subcats.name,
+        amount: 0,
+        unlockedAmount: 0,
+      };
+
     subcats?.items?.forEach((mount) => {
+      // console.log(mount);
+      if (categoryOwnedMountsArray[i]?.subCategories[index]) {
+        categoryOwnedMountsArray[i].subCategories[index].amount += 1;
+        categoryOwnedMountsArray[i].amount += 1;
+      }
+      totalMountNumber += 1;
       if (userMountsIds?.includes(mount.ID)) {
-        ownedMountArrawy.push(mount.ID);
+        ownedMountArray.push(mount.ID);
+        numberOfMountsUnlocked = numberOfMountsUnlocked + 1;
+        if (
+          categoryOwnedMountsArray[i] &&
+          categoryOwnedMountsArray[i].subCategories[index]
+        ) {
+          categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
+          categoryOwnedMountsArray[i].unlockedAmount += 1;
+        }
       }
     });
   });
 });
+
+console.log(totalMountNumber);
+console.log(categoryOwnedMountsArray);
+
+// console.log(completionMountArray);
 </script>
 
 <template>
-  <div>
-    <!-- <h2>Montures globales</h2> -->
-    <div>
-      <div v-for="expansion in mountsGlobal" :key="expansion.name">
-        <h2>{{ expansion.name }}</h2>
+  <div class="mounts-wrapper">
+    <div class="mounts-container">
+      <div
+        class="expansion"
+        v-for="(expansion, index) in mountsGlobal"
+        :key="expansion.name"
+      >
+        <div class="expansion-title">
+          <h2 class="expansion-title__name">{{ expansion.name }}</h2>
+          <div class="expansion-title__completion">
+            <span
+              >{{ categoryOwnedMountsArray[index]?.unlockedAmount }} /
+              {{ categoryOwnedMountsArray[index]?.amount }}</span
+            >
+          </div>
+        </div>
         <div v-for="subcat in expansion.subcats" :key="subcat.name">
-          <h3>
+          <h3 class="expansion__subcat">
             {{ subcat.name }}
           </h3>
           <ul>
@@ -68,7 +130,7 @@ mountsGlobal.forEach((item) => {
               :key="mount.ID"
               class="mount-item"
               :class="{
-                'mount-item__owned': ownedMountArrawy.includes(mount.ID),
+                'mount-item__owned': ownedMountArray.includes(mount.ID),
               }"
             >
               <a
@@ -107,16 +169,73 @@ ul {
   padding: 0;
 }
 
+.mounts-wrapper {
+  border-radius: 1rem;
+  border: 2px solid $border-container;
+  overflow: hidden;
+  max-height: calc(85vh - 2rem);
+  max-width: calc(95vw - 2rem);
+  margin: auto;
+  position: relative;
+}
+
+.mounts-container {
+  padding: 2rem;
+  max-height: calc(80vh - 2rem);
+  // background-color: rgba(0, 0, 0, 0.7);
+  background-image: url("/images/wooden-background.webp");
+  // background-color: rgba(86, 74, 66, 0.9);
+  background-color: rgba(26, 12, 0, 0.9);
+  // background-color: rgba(24, 21, 17, 0.95);
+  background-blend-mode: color;
+  box-shadow: 0 0 40px 0 #000 inset;
+  background-repeat: repeat-y;
+  background-attachment: local;
+  overflow-y: scroll;
+}
+
+.expansion {
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__name,
+    span {
+      font-family: "Sentient-Variable";
+      color: $dark-gray;
+      font-weight: 400;
+      text-shadow: 1px 1px 0 #000;
+      font-size: $main-size;
+      line-height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  &__subcat {
+    font-family: "Sentient-Variable";
+    color: $yellow;
+    text-shadow: 1px 1px 0 #000;
+    line-height: 100%;
+    font-weight: 400;
+  }
+}
+
 .mount-item {
-  opacity: 0.25;
+  filter: grayscale(100%);
+  font-family: "Sentient-Variable";
+  font-size: $small;
   &__owned {
-    opacity: 1;
+    filter: grayscale(0%);
+    .mount-item__link {
+      color: white;
+    }
   }
   &__link {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+    color: #595959;
   }
 }
 </style>
