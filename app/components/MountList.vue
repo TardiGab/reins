@@ -132,6 +132,7 @@ mountsGlobal.forEach((item, i) => {
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
+                      class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
                   </a>
@@ -227,6 +228,26 @@ ul {
     align-items: center;
     gap: 0.5rem;
     color: #595959;
+  }
+  &__icon {
+    position: relative;
+    border-radius: 0.25rem;
+    /* Ne fonctionne pas */
+    &::after {
+      content: "";
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        to top,
+        rgba(102, 102, 102, 1),
+        rgba(17, 17, 17, 1)
+      );
+    }
   }
 }
 </style>
