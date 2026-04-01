@@ -144,49 +144,6 @@ mountsGlobal.forEach((item, i) => {
             </div>
           </div>
         </Accordion>
-        <!-- <button class="expansion-title"">
-          <h2 class="expansion-title__name">{{ expansion.name }}</h2>
-          <div class="expansion-title__completion">
-            <span
-              >{{ categoryOwnedMountsArray[index]?.unlockedAmount }} /
-              {{ categoryOwnedMountsArray[index]?.amount }}</span
-            >
-          </div>
-        </button>
-        <div
-          class="expansion__container"
-        >
-          <div
-            v-for="subcat in expansion.subcats"
-            :key="subcat.name"
-            class="expansion__subcategories"
-          >
-            <h3 class="expansion__subcat">
-              {{ subcat.name }}
-            </h3>
-            <ul class="expansion__subcat-container">
-              <li
-                v-for="mount in subcat.items"
-                :key="mount.ID"
-                class="mount-item"
-                :class="{
-                  'mount-item__owned': ownedMountArray.includes(mount.ID),
-                }"
-              >
-                <a
-                  :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
-                  target="_blank"
-                  class="mount-item__link"
-                >
-                  <img
-                    :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
-                  />
-                  <span>{{ mount.name }}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -232,38 +189,6 @@ ul {
 }
 
 .expansion {
-  // &__container {
-  //   max-height: 10000px;
-  //   transition: all 0.3 ease-in-out;
-  //   &--closed {
-  //     max-height: 0px;
-  //     overflow: hidden;
-  //     transition: all 0.3 ease-in-out;
-  //   }
-  // }
-  // &-title {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   background-color: #28221c;
-  //   border: 2px solid $border-container;
-  //   border-radius: 0.5rem;
-  //   padding: 0.5rem 1rem;
-  //   margin-bottom: 2rem;
-  //   width: 100%;
-  //   cursor: pointer;
-  //   &__name,
-  //   span {
-  //     font-family: "Sentient-Variable";
-  //     color: $dark-gray;
-  //     font-weight: 400;
-  //     text-shadow: 1px 1px 0 #000;
-  //     font-size: $main-size;
-  //     line-height: 100%;
-  //     padding: 0;
-  //     margin: 0;
-  //   }
-  // }
   &__subcat {
     font-family: "Sentient-Variable";
     color: $yellow;
