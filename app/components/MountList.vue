@@ -101,11 +101,7 @@ mountsGlobal.forEach((item, i) => {
 <template>
   <div class="mounts-wrapper">
     <div class="mounts-container">
-      <div
-        class="expansion-wrapper"
-        v-for="(expansion, index) in mountsGlobal"
-        :key="expansion.name"
-      >
+      <div v-for="(expansion, index) in mountsGlobal" :key="expansion.name">
         <Accordion
           :title="expansion.name"
           :unlocked-amount="categoryOwnedMountsArray[index]?.unlockedAmount"
