@@ -101,7 +101,11 @@ mountsGlobal.forEach((item, i) => {
 <template>
   <div class="mounts-wrapper">
     <div class="mounts-container">
-      <div v-for="(expansion, index) in mountsGlobal" :key="expansion.name">
+      <div
+        v-for="(expansion, index) in mountsGlobal"
+        :key="expansion.name"
+        class="expansion"
+      >
         <Accordion
           :title="expansion.name"
           :unlocked-amount="categoryOwnedMountsArray[index]?.unlockedAmount"
@@ -232,22 +236,7 @@ ul {
   &__icon {
     position: relative;
     border-radius: 0.25rem;
-    /* Ne fonctionne pas */
-    &::after {
-      content: "";
-      width: calc(100% + 2px);
-      height: calc(100% + 2px);
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: linear-gradient(
-        to top,
-        rgba(102, 102, 102, 1),
-        rgba(17, 17, 17, 1)
-      );
-    }
+    border: $border-container solid 2px;
   }
 }
 </style>

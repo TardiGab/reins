@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import gsap from "gsap";
 
 defineProps({
   title: String,
@@ -20,46 +21,75 @@ onMounted(() => {
     window.$WowheadPower.refreshLinks();
   }
 });
+
+// interface ExpansionsWrappers {
+//   wrapperHeight: number;
+// }
+
+// const expansionsWrapper = document.querySelectorAll(".expansion__wrapper");
+
+// let expansionsWrapperSizes: ExpansionsWrappers[] = [];
+
+// expansionsWrapper.forEach((item) => {
+//   let rect = item.getBoundingClientRect();
+
+//   expansionsWrapperSizes.push({
+//     wrapperHeight: rect.height,
+//   });
+
+//   item.style.height = `${rect.height}px`;
+//   // if (!isOpen) {
+//   //   gsap.to(item, {
+//   //     height: 0,
+//   //     ease: "power1.inOut",
+//   //   });
+//   // } else {
+//   //   gsap.to(item, {
+//   //     height: rect.height,
+//   //     ease: "power1.inOut",
+//   //   });
+//   // }
+
+//   // console.log(expansionsWrapperSizes);
+// });
 </script>
 
 <template>
-  <div class="expansion">
-    <button class="expansion-title" @click="() => (isOpen = !isOpen)">
-      <slot name="header">
-        <h2 class="expansion-title__name">{{ title }}</h2>
-        <div class="expansion-title__completion">
-          <span>{{ unlockedAmount }} / {{ amount }}</span>
-          <div class="icon" v-if="!isOpen">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path fill="#FFD100" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
-            </svg>
-          </div>
-          <div class="icon" v-else>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path fill="#FFD100" d="M19 12.998H5v-2h14z" />
-            </svg>
-          </div>
+  <button class="expansion-title" @click="() => (isOpen = !isOpen)">
+    <slot name="header">
+      <h2 class="expansion-title__name">{{ title }}</h2>
+      <div class="expansion-title__completion">
+        <span>{{ unlockedAmount }} / {{ amount }}</span>
+        <div class="icon" v-if="!isOpen">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path fill="#FFD100" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
+          </svg>
         </div>
-      </slot>
-    </button>
-    <div
-      class="expansion__wrapper"
-      :class="{ 'expansion__wrapper--closed': !isOpen }"
-    >
-      <Transition>
-        <slot />
-      </Transition>
-    </div>
+        <div class="icon" v-else>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path fill="#FFD100" d="M19 12.998H5v-2h14z" />
+          </svg>
+        </div>
+      </div>
+    </slot>
+  </button>
+  <div
+    class="expansion__wrapper"
+    :class="{ 'expansion__wrapper--closed': !isOpen }"
+  >
+    <Transition>
+      <slot />
+    </Transition>
   </div>
 </template>
 
@@ -67,7 +97,7 @@ onMounted(() => {
 .expansion {
   &__wrapper {
     max-height: 10000px;
-    transition: all 0.5s ease-in-out;
+    // transition: all 0.5s ease-in-out;
     overflow: hidden;
     &--closed {
       max-height: 0px;
