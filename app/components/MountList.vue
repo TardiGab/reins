@@ -4,8 +4,6 @@ import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
 const { data: userMounts, error } = await useFetch("/api/mounts");
 
-// console.log(mountsGlobal);
-
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
 // })
