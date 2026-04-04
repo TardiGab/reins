@@ -138,6 +138,9 @@ mountsGlobal.forEach((item, i) => {
                     />
                     <span>{{ mount.name }}</span>
                   </a>
+                  <button v-if="!ownedMountArray.includes(mount.ID)">
+                    Pin
+                  </button>
                 </li>
               </ul>
             </div>
