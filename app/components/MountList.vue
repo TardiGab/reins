@@ -170,8 +170,10 @@ ul {
   border-radius: 1rem;
   border: 2px solid $border-container;
   overflow: hidden;
-  max-height: calc(85vh - 2rem);
-  max-width: calc(95vw - 2rem);
+  // max-height: calc(85vh - 2rem);
+  // max-width: calc(95vw - 2rem);
+  // max-width: 80%;
+  width: 80%;
   margin: auto;
   position: relative;
 }
@@ -185,6 +187,14 @@ ul {
   background-repeat: repeat;
   background-attachment: local;
   overflow-y: scroll;
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 32px;
+  }
 }
 
 .expansion {
