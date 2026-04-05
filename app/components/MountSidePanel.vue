@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
 const session = authClient.useSession();
-
-const { data: pinnedMounts } = await useFetch("/api/pinnedMounts");
-
+const { data: pinnedMounts } = await useFetch("/api/pinned-mounts");
 console.log(pinnedMounts.value);
 
 // console.log(pinnedMounts);

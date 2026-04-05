@@ -115,9 +115,7 @@ mountsGlobal.forEach((item, i) => {
               :key="subcat.name"
               class="expansion__subcategories"
             >
-              <h3 class="expansion__subcat">
-                {{ subcat.name }}
-              </h3>
+              <h3 class="expansion__subcat">{{ subcat.name }}</h3>
               <ul class="expansion__subcat-container">
                 <li
                   v-for="mount in subcat.items"
@@ -138,7 +136,14 @@ mountsGlobal.forEach((item, i) => {
                     />
                     <span>{{ mount.name }}</span>
                   </a>
-                  <button v-if="!ownedMountArray.includes(mount.ID)">
+                  <button
+                    v-if="!ownedMountArray.includes(mount.ID)"
+                    @click="
+                      console.log(
+                        `${mount.name}, ${mount.ID}, ${mount.icon} clicked`,
+                      )
+                    "
+                  >
                     Pin
                   </button>
                 </li>
