@@ -25,4 +25,5 @@ export default defineNuxtConfig({
   fonts: {
     families: [{ name: "Sentient Variable", provider: "fontshare" }],
   },
+  pages: true,
 });

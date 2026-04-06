@@ -15,16 +15,7 @@ useHead({
 </script>
 
 <template>
-  <Header />
-  <main class="main">
-    <MountSidePanel />
-    <MountList />
-  </main>
+  <div>
+    <NuxtPage />
+  </div>
 </template>
-
-<style scoped>
-.main {
-  display: flex;
-  gap: 1rem;
-}
-</style>
