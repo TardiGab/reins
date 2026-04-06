@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   const token = tokenData?.accessToken;
 
-  if (session) {
+  if (session?.user) {
     const mountsResponse = fetch(
       "https://eu.api.blizzard.com/profile/user/wow/collections/mounts?namespace=profile-eu&locale=en_US",
       {

@@ -15,6 +15,7 @@ useHead({
 </script>
 
 <template>
-  <Header />
-  <MountList />
+  <div>
+    <NuxtPage />
+  </div>
 </template>

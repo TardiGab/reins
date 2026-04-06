@@ -2,6 +2,8 @@
 import mountsGlobal from "@/assets/data/mounts.json";
 const { data: userMounts, error } = await useFetch("/api/mounts");
 
+console.log(userMounts);
+
 // export const getUserMountsIds = () => {
 //   const userMountsIds = userMounts.value?.map((item: any) => {
 //     return item.mount.id;
