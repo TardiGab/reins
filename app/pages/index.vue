@@ -1,9 +1,18 @@
 <script setup lang="ts">
-const { data: userMounts, error } = await useFetch("/api/mounts");
+// Retrieved 2026-03-20, License - CC BY-SA 4.0
+// Source - https://stackoverflow.com/a/56458070
+// Posted by Titian Cernicova-Dragomir, modified by community. See post 'Timeline' for change history
+declare global {
+  interface Window {
+    $WowheadPower: any;
+  }
+}
 
-// if (error) {
-//   navigateTo("/login");
-// }
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>

@@ -70,7 +70,9 @@ function getRandomMount() {
               </li>
             </ul>
           </div>
-          <div v-else><span>Please login to start pinning mounts</span></div>
+          <div v-else class="pinned-mounts--not-logged">
+            <span>Please login to start pinning mounts</span>
+          </div>
         </div>
         <div class="random-mount">
           <div class="random-mount__heading">
@@ -168,6 +170,9 @@ ul {
     margin: 0;
     margin-bottom: 1rem;
     font-weight: 400;
+  }
+  &--not-logged {
+    margin-bottom: 1rem;
   }
 }
 
