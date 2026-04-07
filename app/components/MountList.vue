@@ -2,8 +2,9 @@
 // console.clear();
 import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
+import { authClient } from "~~/server/lib/auth-client";
 const { data: userMounts, error } = await useFetch("/api/mounts");
-
+const session = authClient.useSession();
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
 // })
@@ -79,6 +80,23 @@ mountsGlobal.forEach((item, i) => {
     });
   });
 });
+
+async function pinMount(
+  mountName: string,
+  mountId: number,
+  mountIcon: string,
+  userId: string | undefined,
+) {
+  await $fetch("/api/pin-mount", {
+    method: "POST",
+    body: {
+      mountName: mountName,
+      mountId: mountId,
+      mountIcon: mountIcon,
+      userId: userId,
+    },
+  });
+}
 </script>
 
 <template>
@@ -124,8 +142,11 @@ mountsGlobal.forEach((item, i) => {
                   <button
                     v-if="!ownedMountArray.includes(mount.ID)"
                     @click="
-                      console.log(
-                        `${mount.name}, ${mount.ID}, ${mount.icon} clicked`,
+                      pinMount(
+                        mount.name,
+                        mount.ID,
+                        mount.icon,
+                        session.data?.user.id,
                       )
                     "
                     class="mount-item__pin-btn"

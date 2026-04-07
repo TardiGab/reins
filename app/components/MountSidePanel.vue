@@ -36,13 +36,6 @@ let randomResponse = ref(getRandomInInclusive(0, randomMountArrayLength));
 function getRandomMount() {
   randomResponse.value = getRandomInInclusive(0, randomMountArrayLength);
 }
-
-// async function pinMount(mountName, mountId, mountIcon, userId) {
-//   await $fetch("/api/pin-mount", {
-//     method: "POST",
-//     body: mountName, mountId, mountIcon, userId
-//   })
-// }
 </script>
 
 <template>
@@ -55,7 +48,7 @@ function getRandomMount() {
             <ul class="pinned-mounts__list">
               <li
                 class="mount-item"
-                v-if="session.data?.user.id === mount.user"
+                v-if="session.data?.user.id === mount.userId"
               >
                 <a
                   :href="`https://wowhead.com/ptr/mount/${mount.mountId}`"

@@ -6,9 +6,14 @@ export default defineEventHandler(async (event) => {
   const session = await auth.api.getSession({
     headers: event.headers,
   });
-  console.log(session?.user.id);
-  return session;
-  // const pinMount = await sql`
-  // INSERT INTO pinned_mounts
-  // VALUES ('', '', '${session.data.user.id}',) `
+
+  const requestBody = await readBody(event);
+
+  console.log(requestBody);
+
+  const pinMount = await sql`
+  INSERT INTO pinned_mounts ("mountName", "mountId", "mountIcon", "userId")
+  VALUES (${requestBody.mountName}, ${requestBody.mountId}, ${requestBody.mountIcon}, ${requestBody.userId})`;
+
+  return pinMount;
 });
