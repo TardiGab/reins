@@ -1,9 +1,8 @@
 <script setup lang="ts">
-// console.clear();
-import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
-const { data: userMounts, error } = await useFetch("/api/mounts");
-
+import { authClient } from "~~/server/lib/auth-client";
+const { data: userMounts } = await useFetch("/api/mounts");
+const session = authClient.useSession();
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
 // })
@@ -79,6 +78,24 @@ mountsGlobal.forEach((item, i) => {
     });
   });
 });
+
+async function pinMount(
+  mountName: string,
+  mountId: number,
+  mountIcon: string,
+  userId: string | undefined,
+) {
+  await $fetch("/api/pin-mount", {
+    method: "POST",
+    body: {
+      mountName: mountName,
+      mountId: mountId,
+      mountIcon: mountIcon,
+      userId: userId,
+    },
+  });
+  await refreshNuxtData("pinned-mounts");
+}
 </script>
 
 <template>
@@ -122,10 +139,15 @@ mountsGlobal.forEach((item, i) => {
                     <span>{{ mount.name }}</span>
                   </a>
                   <button
-                    v-if="!ownedMountArray.includes(mount.ID)"
+                    v-if="
+                      !ownedMountArray.includes(mount.ID) && session.data?.user
+                    "
                     @click="
-                      console.log(
-                        `${mount.name}, ${mount.ID}, ${mount.icon} clicked`,
+                      pinMount(
+                        mount.name,
+                        mount.ID,
+                        mount.icon,
+                        session.data?.user.id,
                       )
                     "
                     class="mount-item__pin-btn"
