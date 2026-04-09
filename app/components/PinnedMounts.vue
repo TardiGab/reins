@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
-const { data: pinnedMounts, refresh } = await useFetch("/api/pinned-mounts");
+const { data: pinnedMounts } = await useFetch("/api/pinned-mounts", {
+  key: "pinned-mounts",
+});
 const session = authClient.useSession();
 </script>
 
 <template>
   <div class="pinned-mounts">
     <h2 class="pinned-mounts__h2">Pinned mounts</h2>
-    <button @click="() => refresh()">Refresh</button>
     <div v-for="mount in pinnedMounts" v-if="session.data">
       <ul class="pinned-mounts__list">
         <li class="mount-item" v-if="session.data?.user.id === mount.userId">

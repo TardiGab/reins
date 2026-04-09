@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
-const { data: userMounts, error } = await useFetch("/api/mounts");
+const { data: userMounts } = await useFetch("/api/mounts");
 
 const userMountsIds = userMounts.value?.map((item: any) => {
   return item.mount.id;
@@ -56,6 +56,7 @@ function getRandomMount() {
       <a
         :href="`https://wowhead.com/ptr/mount/${randomMountArray[randomResponse].ID}`"
         class="mount-item__link"
+        target="_blank"
       >
         <img
           :src="`https://wow.zamimg.com/images/wow/icons/medium/${randomMountArray[randomResponse].icon?.toLowerCase()}.jpg`"

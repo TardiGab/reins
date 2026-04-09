@@ -1,9 +1,7 @@
 <script setup lang="ts">
-// console.clear();
-import { onMounted, ref } from "vue";
 import mountsGlobal from "@/assets/data/mounts.json";
 import { authClient } from "~~/server/lib/auth-client";
-const { data: userMounts, error } = await useFetch("/api/mounts");
+const { data: userMounts } = await useFetch("/api/mounts");
 const session = authClient.useSession();
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"
@@ -96,6 +94,7 @@ async function pinMount(
       userId: userId,
     },
   });
+  await refreshNuxtData("pinned-mounts");
 }
 </script>
 

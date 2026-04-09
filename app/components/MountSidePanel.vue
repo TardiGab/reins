@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { refresh } = await useFetch("/api/pinned-mounts");
+import PinnedMounts from "./PinnedMounts.vue";
+import RandomMount from "./RandomMount.vue";
 </script>
 
 <template>
