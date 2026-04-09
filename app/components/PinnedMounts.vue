@@ -5,21 +5,11 @@ const { data: pinnedMounts } = await useFetch("/api/pinned-mounts", {
 });
 const session = authClient.useSession();
 
-async function unpinMount(
-  id: number,
-  // mountName: string,
-  // mountId: number,
-  // mountIcon: string,
-  // userId: string | undefined,
-) {
+async function unpinMount(id: number) {
   await $fetch("/api/unpin-mount", {
     method: "POST",
     body: {
       id: id,
-      // mountName: mountName,
-      // mountId: mountId,
-      // mountIcon: mountIcon,
-      // userId: userId,
     },
   });
   await refreshNuxtData("pinned-mounts");
