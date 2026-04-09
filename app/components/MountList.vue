@@ -139,7 +139,9 @@ async function pinMount(
                     <span>{{ mount.name }}</span>
                   </a>
                   <button
-                    v-if="!ownedMountArray.includes(mount.ID)"
+                    v-if="
+                      !ownedMountArray.includes(mount.ID) && session.data?.user
+                    "
                     @click="
                       pinMount(
                         mount.name,
