@@ -66,6 +66,12 @@ async function unpinMount(id: number) {
   &--not-logged {
     margin-bottom: 1rem;
   }
+  // Fix temporaire le temps de ne fetch que les montures épinglées de l'utilisateur
+  &__list {
+    li:empty {
+      display: none;
+    }
+  }
 }
 .mount-item {
   filter: grayscale(100%);

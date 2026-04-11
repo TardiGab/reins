@@ -48,6 +48,7 @@ ul {
   &-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: calc(100% - 4rem);
     justify-content: space-between;
     padding: 2rem;
@@ -64,6 +65,22 @@ ul {
     &::-webkit-scrollbar-thumb {
       background-color: white;
       border-radius: 32px;
+    }
+    &--top {
+      width: 100%;
+    }
+    &--bottom {
+      width: 100%;
+      position: relative;
+      &::before {
+        content: "";
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: -1rem;
+        height: 1px;
+        background-color: $yellow;
+      }
     }
   }
 }

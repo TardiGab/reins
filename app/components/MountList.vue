@@ -196,9 +196,6 @@ ul {
   border-radius: 1rem;
   border: 2px solid $border-container;
   overflow: hidden;
-  // max-height: calc(85vh - 2rem);
-  // max-width: calc(95vw - 2rem);
-  // max-width: 80%;
   width: 80%;
   margin: auto;
   position: relative;
