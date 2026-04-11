@@ -107,6 +107,7 @@ h1 {
     border-color: $yellow;
   }
   &:focus-visible {
+    border-color: $yellow;
   }
 }
 </style>

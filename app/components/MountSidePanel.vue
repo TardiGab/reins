@@ -77,7 +77,7 @@ ul {
         display: block;
         width: 100%;
         position: absolute;
-        top: -0.5rem;
+        top: -1rem;
         height: 1px;
         background-color: $yellow;
       }
