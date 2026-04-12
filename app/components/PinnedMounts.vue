@@ -5,6 +5,10 @@ const { data: pinnedMounts } = await useFetch("/api/pinned-mounts", {
 });
 const session = authClient.useSession();
 
+let pinnedMountsLength = pinnedMounts.value?.length;
+
+console.log(pinnedMountsLength);
+
 async function unpinMount(id: number) {
   await $fetch("/api/unpin-mount", {
     method: "POST",
@@ -13,6 +17,7 @@ async function unpinMount(id: number) {
     },
   });
   await refreshNuxtData("pinned-mounts");
+  pinnedMountsLength = pinnedMounts.value?.length;
 }
 </script>
 
@@ -48,6 +53,9 @@ async function unpinMount(id: number) {
         </div>
       </li>
     </ul>
+    <!-- <div v-else-if="pinnedMountsLength === 0">
+      <span>You don't have any mounts pinned</span>
+    </div> -->
     <div v-else class="pinned-mounts--not-logged">
       <span>Please login to start pinning mounts</span>
     </div>
@@ -66,7 +74,6 @@ async function unpinMount(id: number) {
   &--not-logged {
     margin-bottom: 1rem;
   }
-  // Fix temporaire le temps de ne fetch que les montures épinglées de l'utilisateur
   &__list {
     li:empty {
       display: none;
