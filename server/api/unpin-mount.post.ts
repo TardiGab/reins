@@ -9,8 +9,6 @@ export default defineEventHandler(async (event) => {
 
   const requestBody = await readBody(event);
 
-  // console.log(requestBody);
-
   const unpinMount = await sql`
   DELETE FROM pinned_mounts
   WHERE id=(${requestBody.id})`;
