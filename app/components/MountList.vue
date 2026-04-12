@@ -95,6 +95,7 @@ async function pinMount(
     },
   });
   await refreshNuxtData("pinned-mounts");
+  window.$WowheadPower.refreshLinks();
 }
 </script>
 
