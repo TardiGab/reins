@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import gsap from "gsap";
 
 defineProps({
   title: String,
@@ -8,54 +7,19 @@ defineProps({
   amount: Number,
 });
 
-const isOpen = ref(true);
+let isOpen = ref(false);
 
-declare global {
-  interface Window {
-    $WowheadPower: any;
-  }
-}
-
-onMounted(() => {
-  if (window.$WowheadPower) {
+function openAccordion() {
+  isOpen.value = !isOpen.value;
+  // Les liens ne se refresh pas instantanément, il faut attendre un peu visiblement
+  setTimeout(() => {
     window.$WowheadPower.refreshLinks();
-  }
-});
-
-// interface ExpansionsWrappers {
-//   wrapperHeight: number;
-// }
-
-// const expansionsWrapper = document.querySelectorAll(".expansion__wrapper");
-
-// let expansionsWrapperSizes: ExpansionsWrappers[] = [];
-
-// expansionsWrapper.forEach((item) => {
-//   let rect = item.getBoundingClientRect();
-
-//   expansionsWrapperSizes.push({
-//     wrapperHeight: rect.height,
-//   });
-
-//   item.style.height = `${rect.height}px`;
-//   // if (!isOpen) {
-//   //   gsap.to(item, {
-//   //     height: 0,
-//   //     ease: "power1.inOut",
-//   //   });
-//   // } else {
-//   //   gsap.to(item, {
-//   //     height: rect.height,
-//   //     ease: "power1.inOut",
-//   //   });
-//   // }
-
-//   // console.log(expansionsWrapperSizes);
-// });
+  }, 10);
+}
 </script>
 
 <template>
-  <button class="expansion-title" @click="() => (isOpen = !isOpen)">
+  <button class="expansion-title" @click="openAccordion">
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
@@ -83,10 +47,7 @@ onMounted(() => {
       </div>
     </slot>
   </button>
-  <div
-    class="expansion__wrapper"
-    :class="{ 'expansion__wrapper--closed': !isOpen }"
-  >
+  <div class="expansion__wrapper" v-if="isOpen">
     <Transition>
       <slot />
     </Transition>
