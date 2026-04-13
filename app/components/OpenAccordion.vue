@@ -7,7 +7,7 @@ defineProps({
   amount: Number,
 });
 
-let isOpen = ref(false);
+let isOpen = ref(true);
 
 function openAccordion() {
   isOpen.value = !isOpen.value;
