@@ -70,11 +70,19 @@ function openAccordion() {
     align-items: center;
     background-color: #28221c;
     border: 2px solid $border-container;
+    box-shadow: inset 0 0 0 1px black;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     margin-bottom: 2rem;
     width: 100%;
     cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translate(1px, 1px);
+    }
+    &:active {
+      transform: translate(2px, 2px);
+    }
     &__name,
     span {
       font-family: "Sentient-Variable";

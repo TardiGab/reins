@@ -278,11 +278,19 @@ ul {
   overflow-y: scroll;
   &::-webkit-scrollbar {
     background-color: transparent;
-    width: 0.5rem;
+    width: 0.3rem;
+    margin: 0.3rem;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: white;
+    background: $border-container;
     border-radius: 32px;
+    cursor: pointer;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+    }
+    &:hover {
+      background: $container-bg;
+    }
   }
 }
 

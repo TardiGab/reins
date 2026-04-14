@@ -32,6 +32,7 @@ header {
   justify-content: space-between;
   border: 2px solid $border-container;
   background-color: $container-bg;
+  box-shadow: inset 0 0 0 1px black;
   padding: 0.5rem;
   padding-left: 2rem;
   border-radius: 1rem;
