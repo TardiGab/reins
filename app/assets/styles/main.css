@@ -184,8 +184,10 @@ template {
 
 body {
   font-family: "Sentient-Variable";
-  background-image: url("/images/body-background.webp");
+  background-image: url("/images/body-background-1.webp");
   color: white;
   margin: 1rem;
+  background-repeat: repeat;
+  background-position: center;
   /* text-shadow: 1px 1px 0 #000; */
 }
