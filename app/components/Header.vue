@@ -14,9 +14,9 @@ function logout() {
   <header>
     <h1>Reins</h1>
     <div class="header-content">
-      <form action="" method="post" class="search">
+      <!-- <form action="" method="post" class="search">
         <input type="text" placeholder="Search mount" class="search__input" />
-      </form>
+      </form> -->
       <nav class="nav">
         <NuxtLink to="/compare" class="nav__link">Compare mounts</NuxtLink>
       </nav>
