@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
 import { authClient } from "~~/server/lib/auth-client";
-const { data: userMounts } = await useFetch("/api/mounts");
+const { data: userMounts } = await useFetch("/api/mounts", {
+  key: "user-mounts",
+});
 const session = authClient.useSession();
 // const isLogged = document.cookie.get({
 //   name: "better-auth.session_token"

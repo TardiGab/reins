@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
 const session = authClient.useSession();
+// const { data: userMounts } = await useFetch("/api/mounts", {
+//   key: "user-mounts",
+// });
+
+// console.log(userMounts.value);
 
 function logout() {
   authClient.signOut();
@@ -8,6 +13,10 @@ function logout() {
     window.location.reload();
   }, 100);
 }
+
+// async function refreshMounts() {
+//   await refreshNuxtData("user-mounts");
+// }
 </script>
 
 <template>
@@ -17,6 +26,7 @@ function logout() {
       <!-- <form action="" method="post" class="search">
         <input type="text" placeholder="Search mount" class="search__input" />
       </form> -->
+      <!-- <button @click="refreshMounts()">Refresh user mounts data</button> -->
       <nav class="nav">
         <NuxtLink to="/compare" class="nav__link">Compare mounts</NuxtLink>
       </nav>

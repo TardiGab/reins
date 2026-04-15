@@ -28,8 +28,8 @@ export default defineEventHandler(async (event) => {
       })
       .then((data) => {
         const realms = data.realms;
-        return realms;
-        // return mounts;
+        const links = data._links;
+        return [realms, links];
       })
       .catch((error) => {
         console.error("Error fetching EU realms index:", error);
