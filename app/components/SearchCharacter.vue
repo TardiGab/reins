@@ -86,7 +86,7 @@ const filteredRegions = computed(() => {
         @click="showList = !showList"
         class=""
       />
-      <span>{{ selectedRegion }}</span>
+      <span>{{ searchTerm || selectedRegion }}</span>
       <div class="region-list" v-show="showList">
         <span
           v-for="region in filteredRegions"
