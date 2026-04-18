@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
       .then((data) => {
         const realms = data.realms;
         const links = data._links;
+        return realms;
         return [realms, links];
       })
       .catch((error) => {
