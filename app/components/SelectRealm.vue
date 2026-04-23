@@ -39,8 +39,8 @@ const realmsTw = ref(realmsTwArray);
 const selectedRealm = ref("");
 const searchTerm = ref("");
 const showList = ref(false);
-const boxContainer = ref(null);
-const searchInput = ref(null);
+const boxContainer = ref<HTMLDivElement>();
+const searchInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
   (e: "realm", realm: string): void;
