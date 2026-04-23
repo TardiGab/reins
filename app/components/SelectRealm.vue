@@ -9,62 +9,42 @@ const { data: realmsIndexTw } = await useFetch("/api/realms-tw");
 // console.log(realmsIndexCn.value);
 
 const realmsEuArray: string[] = [];
+const realmsUsArray: string[] = [];
+const realmsKrArray: string[] = [];
+const realmsTwArray: string[] = [];
 
 realmsIndexEu.value.forEach((realm: any) => {
   realmsEuArray.push(realm.name);
 });
-
-const realmsEu = ref(realmsEuArray);
-
-console.log(realmsEu.value);
-
-// realmsIndexEu.value.forEach((item: any) => {
-//   // console.log(item.id);
-//   realmsEuId.push(item.id);
-// });
-// realmsIndexUs.value.forEach((item: any) => {
-//   // console.log(item.id);
-//   realmsUsId.push(item.id);
-// });
-
-// console.log("EU", realmsEuId);
-// console.log("US", realmsUsId);
-
-// const character = ref();
-// const realmSelect = ref();
-// const region = ref();
-// const realmName = ref();
-
-// console.log(realmsIndexEu.value);
-
-// function regionChange() {
-//   console.log(region.value);
-//   // return region.value;
-// }
+realmsIndexUs.value.forEach((realm: any) => {
+  realmsUsArray.push(realm.name);
+});
+realmsIndexKr.value.forEach((realm: any) => {
+  realmsKrArray.push(realm.name);
+});
+realmsIndexTw.value.forEach((realm: any) => {
+  realmsTwArray.push(realm.name);
+});
 
 // Combobox créé à l'aide de ce tutoriel : https://www.youtube.com/watch?v=KlMIf0_48b8, à mettre en page
 const props = defineProps<{
   regionChoosed?: string;
 }>();
 
-// const logRegion = computed(() => {
-//   return `La région choisie est ${props.regionChoosed}`;
-//   if (!props.regionChoosed) {
-//     console.log("En attente d'une region");
-//     return "En attente d'une région";
-//   } else {
-//     return `La région choisie est ${props.regionChoosed}`;
-//   }
-// });
-// console.log(logRegion);
-
-const realms = ref(["EU", "US", "KR", "TW"]);
+const realmsEu = ref(realmsEuArray);
+const realmsUs = ref(realmsUsArray);
+const realmsKr = ref(realmsKrArray);
+const realmsTw = ref(realmsTwArray);
 
 const selectedRealm = ref("");
 const searchTerm = ref("");
 const showList = ref(false);
 const boxContainer = ref(null);
 const searchInput = ref(null);
+
+const emit = defineEmits<{
+  (e: "realm", realm: string): void;
+}>();
 
 function selectRealm(realm: string) {
   selectedRealm.value = realm;
@@ -75,11 +55,29 @@ function selectRealm(realm: string) {
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
     return realmsEu.value.filter((realmEu: string) =>
-      realmEu.startsWith(searchTerm.value.toLocaleLowerCase()),
+      realmEu
+        .toLocaleLowerCase()
+        .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
-  } // else if (props.regionChoosed === "US") {
-
-  // }
+  } else if (props.regionChoosed === "US") {
+    return realmsUs.value.filter((realmUs: string) =>
+      realmUs
+        .toLocaleLowerCase()
+        .startsWith(searchTerm.value.toLocaleLowerCase()),
+    );
+  } else if (props.regionChoosed === "KR") {
+    return realmsKr.value.filter((realmKr: string) =>
+      realmKr
+        .toLocaleLowerCase()
+        .startsWith(searchTerm.value.toLocaleLowerCase()),
+    );
+  } else if (props.regionChoosed === "TW") {
+    return realmsTw.value.filter((realmTw: string) =>
+      realmTw
+        .toLocaleLowerCase()
+        .startsWith(searchTerm.value.toLocaleLowerCase()),
+    );
+  }
 });
 
 function closeDropdown(event: any) {
@@ -103,20 +101,89 @@ onUnmounted(() => {
 
 <template>
   <div class="realm-choice">
-    <div class="realm-choice__container">
-      <div v-if="props.regionChoosed === 'EU'" class="realm-list">
-        <div
-          v-for="realm in filteredRealms"
-          :key="realm"
-          @click="selectRealm(realm)"
-          class="realm-list__value"
-        >
-          {{ realm }}
+    <div class="realm-choice__container" ref="boxContainer">
+      <button @click="showList = !showList" class="realm-choice__button">
+        {{ selectedRealm || "Select a realm" }}
+      </button>
+      <div v-if="props.regionChoosed === 'EU' && showList" class="realm-choice">
+        <input
+          type="text"
+          v-model="searchTerm"
+          ref="searchInput"
+          class="realm-choice__input"
+          placeholder="Select a realm"
+        />
+        <div class="realm-list">
+          <span
+            v-for="realm in filteredRealms"
+            :key="realm"
+            @click="selectRealm(realm)"
+            class="realm-list__value"
+          >
+            {{ realm }}
+          </span>
         </div>
       </div>
-      <div v-if="props.regionChoosed === 'US'">C'est US</div>
-      <div v-if="props.regionChoosed === 'TW'">C'est TW</div>
-      <div v-if="props.regionChoosed === 'KR'">C'est KR</div>
+      <div v-if="props.regionChoosed === 'US' && showList">
+        <input
+          type="text"
+          v-model="searchTerm"
+          ref="searchInput"
+          class="realm-choice__input"
+          placeholder="Select a realm"
+        />
+        <div class="realm-list">
+          <span
+            v-for="realm in filteredRealms"
+            :key="realm"
+            @click="selectRealm(realm)"
+            class="realm-list__value"
+          >
+            {{ realm }}
+          </span>
+        </div>
+      </div>
+      <div v-if="props.regionChoosed === 'TW' && showList">
+        <input
+          type="text"
+          v-model="searchTerm"
+          ref="searchInput"
+          class="realm-choice__input"
+          placeholder="Select a realm"
+        />
+        <div class="realm-list">
+          <span
+            v-for="realm in filteredRealms"
+            :key="realm"
+            @click="selectRealm(realm)"
+            class="realm-list__value"
+          >
+            {{ realm }}
+          </span>
+        </div>
+      </div>
+      <div v-if="props.regionChoosed === 'KR' && showList">
+        <input
+          type="text"
+          v-model="searchTerm"
+          ref="searchInput"
+          class="realm-choice__input"
+          placeholder="Select a realm"
+        />
+        <div class="realm-list">
+          <span
+            v-for="realm in filteredRealms"
+            :key="realm"
+            @click="selectRealm(realm)"
+            class="realm-list__value"
+          >
+            {{ realm }}
+          </span>
+        </div>
+      </div>
+      <div v-if="!props.regionChoosed && showList">
+        <span>Please choose a region before</span>
+      </div>
     </div>
   </div>
 </template>
@@ -136,7 +203,7 @@ onUnmounted(() => {
   }
 }
 
-.region-choice {
+.realm-choice {
   position: relative;
   &__container {
     position: absolute;
@@ -165,12 +232,13 @@ onUnmounted(() => {
     line-height: 1;
   }
 }
-.region-list {
+.realm-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-
+  max-height: 50vh;
+  overflow-y: scroll;
   &__value {
     padding: 0.25rem;
     cursor: pointer;
