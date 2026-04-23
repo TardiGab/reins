@@ -29,7 +29,6 @@ export default defineEventHandler(async (event) => {
       .then((data) => {
         const realms = data.realms;
         return realms;
-        // return mounts;
       })
       .catch((error) => {
         console.error("Error fetching CN realms index:", error);
