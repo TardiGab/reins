@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { resolveTypeElements } from "vue/compiler-sfc";
-
 const { data: realmsIndexEu } = await useFetch("/api/realms-eu");
 const { data: realmsIndexUs } = await useFetch("/api/realms-us");
 const { data: realmsIndexKr } = await useFetch("/api/realms-kr");
@@ -10,10 +8,13 @@ const { data: realmsIndexTw } = await useFetch("/api/realms-tw");
 
 // console.log(realmsIndexCn.value);
 
-let realmsEuId: number[] = [];
-let realmsUsId: number[] = [];
+const realmsEuArray: string[] = [];
 
-const realmsEu = ref(realmsIndexEu.value);
+realmsIndexEu.value.forEach((realm: any) => {
+  realmsEuArray.push(realm.name);
+});
+
+const realmsEu = ref(realmsEuArray);
 
 console.log(realmsEu.value);
 
@@ -73,10 +74,8 @@ function selectRealm(realm: string) {
 
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
-    return realmsEu.value.filter((realmsEu) =>
-      realmsEu
-        .toLocaleLowerCase()
-        .startsWith(searchTerm.value.toLocaleLowerCase()),
+    return realmsEu.value.filter((realmEu: string) =>
+      realmEu.startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } // else if (props.regionChoosed === "US") {
 
@@ -105,8 +104,15 @@ onUnmounted(() => {
 <template>
   <div class="realm-choice">
     <div class="realm-choice__container">
-      <div v-if="props.regionChoosed === 'EU'">
-        <!-- <div v-for="value in source"></div> -->
+      <div v-if="props.regionChoosed === 'EU'" class="realm-list">
+        <div
+          v-for="realm in filteredRealms"
+          :key="realm"
+          @click="selectRealm(realm)"
+          class="realm-list__value"
+        >
+          {{ realm }}
+        </div>
       </div>
       <div v-if="props.regionChoosed === 'US'">C'est US</div>
       <div v-if="props.regionChoosed === 'TW'">C'est TW</div>
