@@ -76,23 +76,11 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .input-container {
   position: relative;
-  &::after {
-    content: attr(data-value) "";
-    font: inherit;
-    min-width: 2px;
-    height: auto;
-    position: absolute;
-    left: 1rem;
-    top: 0.5rem;
-    z-index: 10;
-  }
 }
 
 .region-choice {
   position: relative;
   &__container {
-    // position: absolute;
-    z-index: 10;
     min-width: 10%;
     overflow: hidden;
   }

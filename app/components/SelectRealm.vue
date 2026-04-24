@@ -32,7 +32,6 @@ function selectRealm(realm: SelectedRealm) {
   selectedRealm.value = realm;
   searchTerm.value = "";
   showList.value = false;
-  console.log(realm.slug);
   emit("realm", realm.slug);
 }
 
@@ -184,20 +183,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.input-container {
-  position: relative;
-  &::after {
-    content: attr(data-value) "";
-    font: inherit;
-    min-width: 2px;
-    height: auto;
-    position: absolute;
-    left: 1rem;
-    top: 0.5rem;
-    z-index: 10;
-  }
-}
-
 .realm-choice {
   &__container {
     min-width: 10%;
