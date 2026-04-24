@@ -8,35 +8,17 @@ const { data: realmsIndexTw } = await useFetch("/api/realms-tw");
 
 // console.log(realmsIndexCn.value);
 
-// const realmsEuArray: string[] = [];
-// const realmsUsArray: string[] = [];
-// const realmsKrArray: string[] = [];
-// const realmsTwArray: string[] = [];
-
-// realmsIndexEu.value.forEach((realm: any) => {
-//   realmsEuArray.push(realm.name);
-// });
-// realmsIndexUs.value.forEach((realm: any) => {
-//   realmsUsArray.push(realm.name);
-// });
-// realmsIndexKr.value.forEach((realm: any) => {
-//   realmsKrArray.push(realm.name);
-// });
-// realmsIndexTw.value.forEach((realm: any) => {
-//   realmsTwArray.push(realm.name);
-// });
-
 // Combobox créé à l'aide de ce tutoriel : https://www.youtube.com/watch?v=KlMIf0_48b8, à mettre en page
 const props = defineProps<{
   regionChoosed?: string;
 }>();
 
-// const realmsEu = ref(realmsEuArray);
-// const realmsUs = ref(realmsUsArray);
-// const realmsKr = ref(realmsKrArray);
-// const realmsTw = ref(realmsTwArray);
+interface SelectedRealm {
+  name: string;
+  slug: string;
+}
 
-const selectedRealm = ref("");
+const selectedRealm = ref<SelectedRealm>();
 const searchTerm = ref("");
 const showList = ref(false);
 const boxContainer = ref<HTMLDivElement>();
@@ -46,7 +28,7 @@ const emit = defineEmits<{
   (e: "realm", realm: string): void;
 }>();
 
-function selectRealm(realm) {
+function selectRealm(realm: SelectedRealm) {
   selectedRealm.value = realm;
   searchTerm.value = "";
   showList.value = false;
@@ -54,27 +36,28 @@ function selectRealm(realm) {
   emit("realm", realm.slug);
 }
 
+// Fonction de recherche
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
-    return realmsIndexEu.value.filter((realmEu) =>
+    return realmsIndexEu.value.filter((realmEu: SelectedRealm) =>
       realmEu.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "US") {
-    return realmsIndexUs.value.filter((realmUs) =>
+    return realmsIndexUs.value.filter((realmUs: SelectedRealm) =>
       realmUs.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "KR") {
-    return realmsIndexKr.value.filter((realmKr) =>
+    return realmsIndexKr.value.filter((realmKr: SelectedRealm) =>
       realmKr.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "TW") {
-    return realmsIndexTw.value.filter((realmTw) =>
+    return realmsIndexTw.value.filter((realmTw: SelectedRealm) =>
       realmTw.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
@@ -99,13 +82,23 @@ onMounted(() => {
 onUnmounted(() => {
   window.addEventListener("click", closeDropdown);
 });
+
+// Reset du serveur sélectionné lorsqu'on change de région
+watch(
+  () => props.regionChoosed,
+  () => {
+    if (selectedRealm.value?.name) {
+      selectedRealm.value.name = "";
+    }
+  },
+);
 </script>
 
 <template>
   <div class="realm-choice">
     <div class="realm-choice__container" ref="boxContainer">
       <button @click="showList = !showList" class="realm-choice__button">
-        {{ selectedRealm.name || "Select a realm" }}
+        {{ selectedRealm?.name || "Select a realm" }}
       </button>
       <div v-if="props.regionChoosed === 'EU' && showList" class="realm-choice">
         <input
@@ -122,7 +115,7 @@ onUnmounted(() => {
             @click="selectRealm(realm)"
             class="realm-list__value"
           >
-            {{ realm.name }} - {{ realm.slug }}
+            {{ realm.name }}
           </span>
         </div>
       </div>
