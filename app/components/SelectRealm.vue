@@ -62,20 +62,20 @@ const filteredRealms = computed(() => {
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "US") {
-    return realmsUs.value.filter((realmUs: string) =>
-      realmUs
+    return realmsIndexUs.value.filter((realmUs) =>
+      realmUs.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "KR") {
-    return realmsKr.value.filter((realmKr: string) =>
-      realmKr
+    return realmsIndexKr.value.filter((realmKr) =>
+      realmKr.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "TW") {
-    return realmsTw.value.filter((realmTw: string) =>
-      realmTw
+    return realmsIndexTw.value.filter((realmTw) =>
+      realmTw.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
@@ -141,7 +141,7 @@ onUnmounted(() => {
             @click="selectRealm(realm)"
             class="realm-list__value"
           >
-            {{ realm }}
+            {{ realm.name }}
           </span>
         </div>
       </div>
@@ -160,7 +160,7 @@ onUnmounted(() => {
             @click="selectRealm(realm)"
             class="realm-list__value"
           >
-            {{ realm }}
+            {{ realm.name }}
           </span>
         </div>
       </div>
@@ -179,7 +179,7 @@ onUnmounted(() => {
             @click="selectRealm(realm)"
             class="realm-list__value"
           >
-            {{ realm }}
+            {{ realm.name }}
           </span>
         </div>
       </div>
