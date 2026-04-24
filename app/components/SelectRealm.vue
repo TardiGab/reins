@@ -8,33 +8,33 @@ const { data: realmsIndexTw } = await useFetch("/api/realms-tw");
 
 // console.log(realmsIndexCn.value);
 
-const realmsEuArray: string[] = [];
-const realmsUsArray: string[] = [];
-const realmsKrArray: string[] = [];
-const realmsTwArray: string[] = [];
+// const realmsEuArray: string[] = [];
+// const realmsUsArray: string[] = [];
+// const realmsKrArray: string[] = [];
+// const realmsTwArray: string[] = [];
 
-realmsIndexEu.value.forEach((realm: any) => {
-  realmsEuArray.push(realm.name);
-});
-realmsIndexUs.value.forEach((realm: any) => {
-  realmsUsArray.push(realm.name);
-});
-realmsIndexKr.value.forEach((realm: any) => {
-  realmsKrArray.push(realm.name);
-});
-realmsIndexTw.value.forEach((realm: any) => {
-  realmsTwArray.push(realm.name);
-});
+// realmsIndexEu.value.forEach((realm: any) => {
+//   realmsEuArray.push(realm.name);
+// });
+// realmsIndexUs.value.forEach((realm: any) => {
+//   realmsUsArray.push(realm.name);
+// });
+// realmsIndexKr.value.forEach((realm: any) => {
+//   realmsKrArray.push(realm.name);
+// });
+// realmsIndexTw.value.forEach((realm: any) => {
+//   realmsTwArray.push(realm.name);
+// });
 
 // Combobox créé à l'aide de ce tutoriel : https://www.youtube.com/watch?v=KlMIf0_48b8, à mettre en page
 const props = defineProps<{
   regionChoosed?: string;
 }>();
 
-const realmsEu = ref(realmsEuArray);
-const realmsUs = ref(realmsUsArray);
-const realmsKr = ref(realmsKrArray);
-const realmsTw = ref(realmsTwArray);
+// const realmsEu = ref(realmsEuArray);
+// const realmsUs = ref(realmsUsArray);
+// const realmsKr = ref(realmsKrArray);
+// const realmsTw = ref(realmsTwArray);
 
 const selectedRealm = ref("");
 const searchTerm = ref("");
@@ -46,16 +46,18 @@ const emit = defineEmits<{
   (e: "realm", realm: string): void;
 }>();
 
-function selectRealm(realm: string) {
+function selectRealm(realm) {
   selectedRealm.value = realm;
   searchTerm.value = "";
   showList.value = false;
+  console.log(realm.slug);
+  emit("realm", realm.slug);
 }
 
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
-    return realmsEu.value.filter((realmEu: string) =>
-      realmEu
+    return realmsIndexEu.value.filter((realmEu) =>
+      realmEu.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
@@ -103,7 +105,7 @@ onUnmounted(() => {
   <div class="realm-choice">
     <div class="realm-choice__container" ref="boxContainer">
       <button @click="showList = !showList" class="realm-choice__button">
-        {{ selectedRealm || "Select a realm" }}
+        {{ selectedRealm.name || "Select a realm" }}
       </button>
       <div v-if="props.regionChoosed === 'EU' && showList" class="realm-choice">
         <input
@@ -120,7 +122,7 @@ onUnmounted(() => {
             @click="selectRealm(realm)"
             class="realm-list__value"
           >
-            {{ realm }}
+            {{ realm.name }} - {{ realm.slug }}
           </span>
         </div>
       </div>
@@ -204,10 +206,7 @@ onUnmounted(() => {
 }
 
 .realm-choice {
-  position: relative;
   &__container {
-    position: absolute;
-    z-index: 10;
     min-width: 10%;
     overflow: hidden;
   }
