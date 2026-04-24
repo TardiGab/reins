@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// const { data: characterMounts } = await useFetch("/api/character-mounts");
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -7,20 +8,51 @@ const realmChoosed = ref<string>("");
 const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
+
+const character = ref<string>();
+
+// async function getCharacter(
+//   region: string,
+//   realm: string,
+//   character: string | undefined,
+// ) {
+//   await $fetch("/api/character-mounts", {
+//     method: "GET",
+//     body: {
+//       region: region,
+//       realm: realm,
+//       character: character,
+//     },
+//   });
+// }
+
+const { data: characterMounts, execute } = await useLazyFetch(
+  "/api/character-mounts",
+  {
+    query: {
+      region: regionChoosed,
+      realm: realmChoosed,
+      character: character,
+    },
+    watch: false,
+    immediate: false,
+  },
+);
+
+const search = async () => {
+  await execute();
+  console.log(characterMounts.value);
+};
 </script>
 
 <template>
   <div class="search">
     <SelectRegion @region="regionSelected" />
     <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
-    <SelectCharacter />
-    <button @click="console.log(realmChoosed)">Click</button>
+    <input type="text" v-model="character" placeholder="Character's name" />
+    <button @click="search">Search</button>
   </div>
+  <pre>{{ characterMounts }}</pre>
 </template>
 
-<style scoped lang="scss">
-.search {
-  display: flex;
-  height: auto;
-}
-</style>
+<style scoped lang="scss"></style>
