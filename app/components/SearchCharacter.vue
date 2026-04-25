@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // const { data: characterMounts } = await useFetch("/api/character-mounts");
+
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -12,33 +13,42 @@ const realmSelected = (realm: string) => {
 
 const character = ref<string>();
 
-const { data: characterMounts, execute } = await useLazyFetch(
-  "/api/character-mounts",
-  {
-    query: {
-      region: regionChoosed,
-      realm: realmChoosed,
-      character: character,
-    },
-    watch: false,
-    immediate: false,
+const {
+  data: characterMounts,
+  execute,
+  status,
+} = await useLazyFetch("/api/character-mounts", {
+  query: {
+    region: regionChoosed,
+    realm: realmChoosed,
+    character: character,
   },
-);
+  watch: false,
+  immediate: false,
+});
 
 const search = async () => {
   await execute();
   console.log(characterMounts.value);
 };
+
+async function token() {
+  await $fetch("/api/access-token", {
+    method: "POST",
+  });
+}
 </script>
 
 <template>
+  <button @click="token">Get access token</button>
   <div class="search">
     <SelectRegion @region="regionSelected" />
     <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
     <input type="text" v-model="character" placeholder="Character's name" />
     <button @click="search">Search</button>
   </div>
-  <pre>{{ characterMounts }}</pre>
+  <pre v-if="status === 'pending'">Loading...</pre>
+  <pre v-else>{{ characterMounts }}</pre>
 </template>
 
 <style scoped lang="scss"></style>
