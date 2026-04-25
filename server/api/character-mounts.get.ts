@@ -18,12 +18,8 @@ export default defineEventHandler(async (event) => {
 
   const token = tokenData?.accessToken;
 
-  console.log(
-    `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region}&locale=en_US`,
-  );
-
   const mountsResponse = fetch(
-    `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region}&locale=en_US`,
+    `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
