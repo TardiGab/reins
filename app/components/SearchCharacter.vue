@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const { data: accessToken } = await useFetch("/api/access-token");
 
-console.log(accessToken.value.access_token);
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -34,16 +32,9 @@ const search = async () => {
   await execute();
   console.log(characterMounts.value);
 };
-
-async function token() {
-  await $fetch("/api/access-token", {
-    method: "GET",
-  });
-}
 </script>
 
 <template>
-  <button @click="token">Get access token</button>
   <div class="search">
     <SelectRegion @region="regionSelected" />
     <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />

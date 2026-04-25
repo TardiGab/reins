@@ -15,7 +15,6 @@ export default defineEventHandler(async () => {
     })
     .then((data) => {
       const userAccessToken = data;
-      console.log(data);
       return userAccessToken;
     })
     .catch((error) => {
