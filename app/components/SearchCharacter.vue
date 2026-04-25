@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// const { data: characterMounts } = await useFetch("/api/character-mounts");
+const { data: accessToken } = await useFetch("/api/access-token");
+
+console.log(accessToken.value.access_token);
 
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
@@ -22,6 +24,7 @@ const {
     region: regionChoosed,
     realm: realmChoosed,
     character: character,
+    accessToken: accessToken.value.access_token,
   },
   watch: false,
   immediate: false,
@@ -34,7 +37,7 @@ const search = async () => {
 
 async function token() {
   await $fetch("/api/access-token", {
-    method: "POST",
+    method: "GET",
   });
 }
 </script>
