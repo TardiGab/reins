@@ -38,7 +38,12 @@ const search = async () => {
   <div class="search">
     <SelectRegion @region="regionSelected" />
     <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
-    <input type="text" v-model="character" placeholder="Character's name" />
+    <input
+      type="text"
+      v-model="character"
+      placeholder="Character's name"
+      @change="search"
+    />
     <button @click="search">Search</button>
   </div>
   <pre v-if="status === 'pending'">Loading...</pre>
