@@ -4,27 +4,13 @@ const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
 };
+
 const realmChoosed = ref<string>("");
 const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
 const character = ref<string>();
-
-// async function getCharacter(
-//   region: string,
-//   realm: string,
-//   character: string | undefined,
-// ) {
-//   await $fetch("/api/character-mounts", {
-//     method: "GET",
-//     body: {
-//       region: region,
-//       realm: realm,
-//       character: character,
-//     },
-//   });
-// }
 
 const { data: characterMounts, execute } = await useLazyFetch(
   "/api/character-mounts",
