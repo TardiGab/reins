@@ -1,3 +1,5 @@
+const KEY = "token";
+
 export default defineEventHandler(async (event) => {
   interface Query {
     region: string;
@@ -6,13 +8,22 @@ export default defineEventHandler(async (event) => {
     accessToken: string;
   }
 
+  interface AccessToken {
+    access_token: string;
+    expires_in: number;
+  }
+
   const query: Query = getQuery(event);
+
+  const storage = useStorage("assets:server");
+
+  const token = await storage.getItem<AccessToken>(KEY);
 
   const mountsResponse = fetch(
     `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`,
     {
       headers: {
-        Authorization: `Bearer ${query.accessToken}`,
+        Authorization: `Bearer ${token?.access_token}`,
       },
     },
   )

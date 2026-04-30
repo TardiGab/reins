@@ -9,8 +9,6 @@ interface CharactersMounts {
   };
 }
 
-const { data: accessToken } = await useFetch("/api/access-token");
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -38,7 +36,6 @@ const {
     region: regionChoosed,
     realm: realmChoosed,
     character: characterSearch,
-    accessToken: accessToken.value.access_token,
   },
   watch: false,
   immediate: false,

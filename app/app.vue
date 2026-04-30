@@ -11,6 +11,12 @@ useHead({
       // defer: true,
     },
   ],
+  link: [
+    {
+      rel: "stylesheet",
+      href: "https://use.typekit.net/wyy1zbc.css",
+    },
+  ],
 });
 </script>
 
