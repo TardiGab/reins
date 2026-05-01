@@ -7,6 +7,7 @@ interface CharactersMounts {
       id: number;
     };
   };
+  // length: number;
 }
 
 const regionChoosed = ref<string>("");
@@ -48,10 +49,12 @@ const baseSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   baseCharacterName.value = baseCharacterSearch.value;
   baseCharacterMountsData.value = characterMounts.value;
-  console.log(
-    `${baseCharacterName.value} mounts data:`,
-    baseCharacterMountsData.value,
-  );
+  // console.log(
+  //   `${baseCharacterName.value} mounts data:`,
+  //   baseCharacterMountsData.value,
+  //   "Total mounts owned:",
+  //   baseCharacterMountsData.value?.length,
+  // );
 };
 
 const comparedCharacterMountsData = ref<CharactersMounts>();
@@ -61,17 +64,19 @@ const comparedSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   comparedCharacterName.value = comparedCharacterSearch.value;
   comparedCharacterMountsData.value = characterMounts.value;
-  console.log(
-    `${comparedCharacterName.value} mounts data:`,
-    comparedCharacterMountsData.value,
-  );
+  // console.log(
+  //   `${comparedCharacterName.value} mounts data:`,
+  //   comparedCharacterMountsData.value,
+  //   "Total mounts owned:",
+  //   comparedCharacterMountsData.value?.length,
+  // );
 };
 </script>
 
 <template>
   <div class="compare">
     <div class="left">
-      <div class="search" v-if="!baseCharacterMountsData">
+      <div class="search">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
         <input
@@ -82,9 +87,10 @@ const comparedSearch = async () => {
         />
         <button @click="baseSearch">Search</button>
       </div>
-      <pre v-if="loading === 'pending'">Loading...</pre>
-      <div v-if="loading === 'success'">
-        <span>{{ baseCharacterName }}'s mount collection</span>
+      <pre v-if="loading === 'pending' && baseCharacterName">Loading...</pre>
+      <div v-if="loading === 'success' && baseCharacterMountsData">
+        <p>{{ baseCharacterName }}'s mount collection</p>
+        <p>Total mounts owned : {{ baseCharacterMountsData.length }}</p>
         <!-- <pre>{{ baseCharacterMounts }}</pre> -->
         <ul>
           <li
@@ -95,12 +101,17 @@ const comparedSearch = async () => {
           </li>
         </ul>
       </div>
-      <pre v-if="loading === 'error'">
+      <pre
+        v-if="
+          loading === 'error' ||
+          (baseCharacterName && baseCharacterMountsData === undefined)
+        "
+      >
         The character named {{ baseCharacterName }} was not found.
       </pre>
     </div>
     <div class="right">
-      <div class="search" v-if="!comparedCharacterMountsData">
+      <div class="search">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
         <input
@@ -111,9 +122,12 @@ const comparedSearch = async () => {
         />
         <button @click="comparedSearch">Search</button>
       </div>
-      <pre v-if="loading === 'pending'">Loading...</pre>
-      <div v-if="loading === 'success'">
-        <span>{{ comparedCharacterName }}'s mount collection</span>
+      <pre v-if="loading === 'pending' && comparedCharacterName">
+        Loading...
+      </pre>
+      <div v-if="loading === 'success' && comparedCharacterMountsData">
+        <p>{{ comparedCharacterName }}'s mount collection</p>
+        <p>Total mounts owned : {{ comparedCharacterMountsData.length }}</p>
         <ul>
           <li
             v-for="mounts in comparedCharacterMountsData"
@@ -123,7 +137,12 @@ const comparedSearch = async () => {
           </li>
         </ul>
       </div>
-      <pre v-if="loading === 'error'">
+      <pre
+        v-if="
+          loading === 'error' ||
+          (comparedCharacterName && comparedCharacterMountsData === undefined)
+        "
+      >
         The character named {{ comparedCharacterName }} was not found.
       </pre>
     </div>
