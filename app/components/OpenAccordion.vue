@@ -16,6 +16,10 @@ function openAccordion() {
     window.$WowheadPower.refreshLinks();
   }, 10);
 }
+
+onMounted(() => {
+  window.$WowheadPower.refreshLinks();
+});
 </script>
 
 <template>

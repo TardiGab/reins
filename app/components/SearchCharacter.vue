@@ -92,6 +92,7 @@ const comparedSearch = async () => {
         <p>{{ baseCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ baseCharacterMountsData.length }}</p>
         <!-- <pre>{{ baseCharacterMounts }}</pre> -->
+        <CompareMountList :character-mounts="baseCharacterMountsData" />
         <ul>
           <li
             v-for="mounts in baseCharacterMountsData"
@@ -128,6 +129,7 @@ const comparedSearch = async () => {
       <div v-if="loading === 'success' && comparedCharacterMountsData">
         <p>{{ comparedCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ comparedCharacterMountsData.length }}</p>
+        <CompareMountList :character-mounts="comparedCharacterMountsData" />
         <ul>
           <li
             v-for="mounts in comparedCharacterMountsData"
