@@ -11,7 +11,6 @@ export default defineEventHandler(async (event) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("EU:", response.status);
     if (!response.ok) {
       getBlizzToken = await getBlizzAccessToken(response.status);
       accessToken = getBlizzToken.access_token;

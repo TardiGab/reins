@@ -5,14 +5,12 @@ export default defineEventHandler(async (event) => {
     "https://us.api.blizzard.com/data/wow/realm/index?namespace=dynamic-us&locale=en_US";
   let getBlizzToken;
   let accessToken = await event.context.blizzToken;
-  console.log(accessToken);
   try {
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log("EU:", response.status);
     if (!response.ok) {
       getBlizzToken = await getBlizzAccessToken(response.status);
       accessToken = getBlizzToken.access_token;
