@@ -1,33 +1,33 @@
-const KEY = "token";
+import { getBlizzAccessToken } from "./token";
 
 export default defineEventHandler(async (event) => {
-  interface AccessToken {
-    access_token: string;
-    expires_in: number;
+  const url =
+    "https://tw.api.blizzard.com/data/wow/realm/index?namespace=dynamic-tw&locale=en_US";
+  let getBlizzToken;
+  let accessToken = await event.context.blizzToken;
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log("EU:", response.status);
+    if (!response.ok) {
+      getBlizzToken = await getBlizzAccessToken(response.status);
+      accessToken = getBlizzToken.access_token;
+      handleFailure(accessToken);
+    }
+    return response;
+  } catch (error) {
+    console.error("Error fetching EU realms index:", error);
   }
 
-  const storage = useStorage("assets:server");
-
-  const token = await storage.getItem<AccessToken>(KEY);
-
-  const realmsResponse = fetch(
-    "https://tw.api.blizzard.com/data/wow/realm/index?namespace=dynamic-tw&locale=en_US",
-    {
+  async function handleFailure(accessToken: string) {
+    const response = await $fetch(url, {
       headers: {
-        Authorization: `Bearer ${token?.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-    },
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      const realms = data.realms;
-      return realms;
-    })
-    .catch((error) => {
-      console.error("Error fetching TW realms index:", error);
     });
-
-  return realmsResponse;
+    return response;
+  }
 });

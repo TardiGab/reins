@@ -87,20 +87,20 @@ const comparedSearch = async () => {
         />
         <button @click="baseSearch">Search</button>
       </div>
-      <pre v-if="loading === 'pending' && baseCharacterName">Loading...</pre>
+      <span v-if="loading === 'pending' && baseCharacterName">Loading...</span>
       <div v-if="loading === 'success' && baseCharacterMountsData">
         <p>{{ baseCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ baseCharacterMountsData.length }}</p>
         <!-- <pre>{{ baseCharacterMounts }}</pre> -->
         <CompareMountList :character-mounts="baseCharacterMountsData" />
-        <ul>
+        <!-- <ul>
           <li
             v-for="mounts in baseCharacterMountsData"
             :key="mounts.mount.key.href"
           >
             {{ mounts.mount.name }}
           </li>
-        </ul>
+        </ul> -->
       </div>
       <pre
         v-if="
@@ -123,21 +123,21 @@ const comparedSearch = async () => {
         />
         <button @click="comparedSearch">Search</button>
       </div>
-      <pre v-if="loading === 'pending' && comparedCharacterName">
+      <span v-if="loading === 'pending' && comparedCharacterName">
         Loading...
-      </pre>
+      </span>
       <div v-if="loading === 'success' && comparedCharacterMountsData">
         <p>{{ comparedCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ comparedCharacterMountsData.length }}</p>
         <CompareMountList :character-mounts="comparedCharacterMountsData" />
-        <ul>
+        <!-- <ul>
           <li
             v-for="mounts in comparedCharacterMountsData"
             :key="mounts.mount.key.href"
           >
             {{ mounts.mount.name }}
           </li>
-        </ul>
+        </ul> -->
       </div>
       <pre
         v-if="
@@ -156,5 +156,16 @@ const comparedSearch = async () => {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+.left,
+.right {
+  width: 100%;
+}
+
+.search {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
 }
 </style>

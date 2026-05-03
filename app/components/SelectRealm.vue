@@ -38,25 +38,25 @@ function selectRealm(realm: SelectedRealm) {
 // Fonction de recherche
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
-    return realmsIndexEu.value.filter((realmEu: SelectedRealm) =>
+    return realmsIndexEu.value.realms.filter((realmEu: SelectedRealm) =>
       realmEu.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "US") {
-    return realmsIndexUs.value.filter((realmUs: SelectedRealm) =>
+    return realmsIndexUs.value.realms.filter((realmUs: SelectedRealm) =>
       realmUs.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "KR") {
-    return realmsIndexKr.value.filter((realmKr: SelectedRealm) =>
+    return realmsIndexKr.value.realms.filter((realmKr: SelectedRealm) =>
       realmKr.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "TW") {
-    return realmsIndexTw.value.filter((realmTw: SelectedRealm) =>
+    return realmsIndexTw.value.realms.filter((realmTw: SelectedRealm) =>
       realmTw.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
@@ -184,12 +184,23 @@ watch(
 
 <style scoped lang="scss">
 .realm-choice {
+  position: relative;
+  width: 100%;
   &__container {
     min-width: 10%;
     overflow: hidden;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
   }
   &__button {
     width: 100%;
+    background-color: #191612;
+    border: 1px solid $border-container;
+    border-radius: 0.5rem;
+    color: white;
+    text-align: left;
+    padding: 1rem;
   }
   &__input {
     background-color: #191612;

@@ -51,13 +51,13 @@ onUnmounted(() => {
         {{ selectedRegion || "Select a region" }}
       </button>
       <div class="input-container" v-if="showList">
-        <input
+        <!-- <input
           type="text"
           v-model="searchTerm"
           ref="searchInput"
           class="region-choice__input"
           placeholder="Select a region"
-        />
+        /> -->
         <div class="region-list">
           <span
             v-for="region in filteredRegions"
@@ -76,16 +76,29 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .input-container {
   position: relative;
+  width: 100%;
 }
 
 .region-choice {
   position: relative;
+  width: 100%;
+  // cursor: pointer;
   &__container {
     min-width: 10%;
+    // width: 100%;
     overflow: hidden;
+    position: absolute;
+    z-index: 10;
   }
   &__button {
     width: 100%;
+    background-color: #191612;
+    border: 1px solid $border-container;
+    border-radius: 0.5rem;
+    color: white;
+    text-align: left;
+    padding: 1rem;
+    cursor: pointer;
   }
   &__input {
     background-color: #191612;
@@ -95,6 +108,7 @@ onUnmounted(() => {
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     line-height: 1;
+    width: calc(100% - 2rem);
   }
   &__value {
     position: absolute;
@@ -108,8 +122,8 @@ onUnmounted(() => {
 .region-list {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
-  padding: 1rem;
 
   &__value {
     padding: 0.25rem;
