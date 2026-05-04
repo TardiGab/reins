@@ -57,12 +57,7 @@ function openAccordion() {
 <style lang="scss" scoped>
 .expansion {
   &__wrapper {
-    max-height: 10000px;
-    // transition: all 0.5s ease-in-out;
     overflow: hidden;
-    &--closed {
-      max-height: 0px;
-    }
   }
   &-title {
     display: flex;
@@ -77,16 +72,20 @@ function openAccordion() {
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: $dark-gray;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
     &:hover {
-      transform: translate(1px, 1px);
+      color: $light-gray;
+      background-color: hsl(27, 16%, 16%);
     }
     &:active {
       transform: translate(2px, 2px);
     }
     &__name,
     span {
-      font-family: "Sentient-Variable";
-      color: $dark-gray;
       font-weight: 400;
       text-shadow: 1px 1px 0 #000;
       font-size: $main-size;

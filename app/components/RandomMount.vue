@@ -27,10 +27,18 @@ function getRandomInInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
-let randomResponse = ref(getRandomInInclusive(0, randomMountArrayLength));
+let randomResponse = ref(0);
+
+onMounted(() => {
+  randomResponse.value = getRandomInInclusive(0, randomMountArrayLength);
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 
 function getRandomMount() {
   randomResponse.value = getRandomInInclusive(0, randomMountArrayLength);
+  window.$WowheadPower.refreshLinks();
 }
 </script>
 
@@ -91,41 +99,6 @@ function getRandomMount() {
     font-size: $main-size;
     margin: 0;
     font-weight: 400;
-  }
-}
-.mount-item {
-  filter: grayscale(100%);
-  font-family: "Sentient-Variable";
-  font-size: $small;
-  transition: all 0.3s;
-  padding: 0.5rem;
-  box-sizing: border-box;
-  span {
-    text-shadow: 1px 1px 0 #000;
-  }
-  &:hover {
-    filter: grayscale(0%);
-    background-color: #28221c;
-    border-radius: 0.5rem;
-    box-shadow: inset 0px 0px 0px 2px $border-container;
-  }
-  &__owned {
-    filter: grayscale(0%);
-    .mount-item__link {
-      color: white;
-    }
-  }
-  &__link {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    color: #595959;
-  }
-  &__icon {
-    position: relative;
-    border-radius: 0.25rem;
-    border: $border-container solid 2px;
   }
 }
 </style>

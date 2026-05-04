@@ -44,6 +44,10 @@ ul {
     width: 20%;
     min-width: 320px;
     position: relative;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-m;
+    }
   }
   &-container {
     display: flex;

@@ -183,8 +183,8 @@ template {
 }
 
 body {
-  font-family: "Sentient-Variable";
-  // font-family: "tiller", sans-serif;
+  // font-family: "Sentient-Variable";
+  font-family: "tiller", sans-serif;
   background-image: url("/images/body-background-1.webp");
   color: white;
   margin: 1rem;
@@ -199,6 +199,11 @@ body {
   // width: 80%;
   margin: auto;
   position: relative;
+
+  @supports (corner-shape: bevel) {
+    corner-shape: bevel;
+    border-radius: $corner-shape-m;
+  }
 }
 
 .mounts-container {
@@ -234,7 +239,6 @@ body {
 
 .expansion {
   &__subcat {
-    font-family: "Sentient-Variable";
     color: $yellow;
     text-shadow: 1px 1px 0 #000;
     line-height: 100%;
@@ -256,7 +260,6 @@ body {
   list-style: none;
 
   filter: grayscale(100%);
-  font-family: "Sentient-Variable";
   font-size: $small;
   transition: all 0.3s;
   padding: 0.5rem;
@@ -292,7 +295,12 @@ body {
     filter: grayscale(0%);
     background-color: #28221c;
     border-radius: 0.5rem;
-    box-shadow: inset 0px 0px 0px 2px $border-container;
+    box-shadow: inset 0px 0px 0px 2px $border-container, inset 0px 0px 0px 3px black;
+
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
 
     .mount-item__pin-btn {
       opacity: 100%;
@@ -320,5 +328,11 @@ body {
     position: relative;
     border-radius: 0.25rem;
     border: $border-container solid 2px;
+
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-xs;
+    }
   }
+
 }

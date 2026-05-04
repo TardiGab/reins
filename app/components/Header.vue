@@ -78,13 +78,21 @@ h1 {
   &__link {
     color: $yellow;
     padding: 0.5rem 2rem;
+    background-image: url("/images/body-background-1.webp");
     background-color: $red;
-    border: solid 2px $dark-red;
+    background-blend-mode: luminosity;
+    border: solid 2px #382d2d;
     border-radius: 0.5rem;
     font-size: $small;
+    transition: all 0.3s ease;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: 0.25rem;
+    }
     &:hover {
-      background-color: transparent;
-      background: radial-gradient(50% 50% at 50% 50%, #a10100 0%, #6c0100 100%);
+      background-image: url("/images/body-background-1.webp");
+      background-color: hsl(1, 100%, 50%);
+      background-blend-mode: hard-light;
     }
     &:active {
       transform: scale(0.9);
