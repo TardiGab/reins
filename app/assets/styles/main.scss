@@ -183,7 +183,7 @@ template {
 }
 
 body {
-  // font-family: "Sentient-Variable";
+  font-family: "Sentient-Variable";
   font-family: "tiller", sans-serif;
   background-image: url("/images/body-background-1.webp");
   color: white;
@@ -331,7 +331,7 @@ body {
 
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
-      border-radius: $corner-shape-xs;
+      border-radius: $corner-shape-s;
     }
   }
 

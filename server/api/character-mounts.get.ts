@@ -1,4 +1,4 @@
-const KEY = "token";
+import { getBlizzAccessToken } from "./token";
 
 export default defineEventHandler(async (event) => {
   interface Query {
@@ -8,26 +8,24 @@ export default defineEventHandler(async (event) => {
     accessToken: string;
   }
 
-  interface AccessToken {
-    access_token: string;
-    expires_in: number;
-  }
+  let getBlizzToken;
+  let accessToken = await event.context.blizzToken;
 
   const query: Query = getQuery(event);
 
-  const storage = useStorage("assets:server");
+  const url = `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`;
 
-  const token = await storage.getItem<AccessToken>(KEY);
-
-  const mountsResponse = fetch(
-    `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`,
-    {
-      headers: {
-        Authorization: `Bearer ${token?.access_token}`,
-      },
+  const mountsResponse = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-  )
-    .then((res) => {
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        getBlizzToken = await getBlizzAccessToken(res.status);
+        accessToken = getBlizzToken.access_token;
+        handleFailure(accessToken);
+      }
       return res.json();
     })
     .then((data) => {
@@ -37,5 +35,14 @@ export default defineEventHandler(async (event) => {
     .catch((error) => {
       console.error("Error fetching user mounts:", error);
     });
+
+  async function handleFailure(accessToken: string) {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return await response.json();
+  }
   return mountsResponse;
 });

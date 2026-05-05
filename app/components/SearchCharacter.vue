@@ -10,6 +10,8 @@ interface CharactersMounts {
   // length: number;
 }
 
+const showSearch = ref(true);
+
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -49,6 +51,7 @@ const baseSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   baseCharacterName.value = baseCharacterSearch.value;
   baseCharacterMountsData.value = characterMounts.value;
+  showSearch.value = false;
   // console.log(
   //   `${baseCharacterName.value} mounts data:`,
   //   baseCharacterMountsData.value,
@@ -75,8 +78,8 @@ const comparedSearch = async () => {
 
 <template>
   <div class="compare">
-    <div class="left">
-      <div class="search">
+    <div class="left" :class="{ 'left--half': !baseCharacterMountsData }">
+      <div class="search" v-if="showSearch">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
         <input
@@ -84,23 +87,17 @@ const comparedSearch = async () => {
           v-model="baseCharacterSearch"
           placeholder="Character's name"
           @change="baseSearch"
+          class="search__input"
         />
-        <button @click="baseSearch">Search</button>
+        <button @click="baseSearch" class="search__button">
+          <span class="search__button--label">Search</span>
+        </button>
       </div>
       <span v-if="loading === 'pending' && baseCharacterName">Loading...</span>
       <div v-if="loading === 'success' && baseCharacterMountsData">
         <p>{{ baseCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ baseCharacterMountsData.length }}</p>
-        <!-- <pre>{{ baseCharacterMounts }}</pre> -->
         <CompareMountList :character-mounts="baseCharacterMountsData" />
-        <!-- <ul>
-          <li
-            v-for="mounts in baseCharacterMountsData"
-            :key="mounts.mount.key.href"
-          >
-            {{ mounts.mount.name }}
-          </li>
-        </ul> -->
       </div>
       <pre
         v-if="
@@ -111,7 +108,7 @@ const comparedSearch = async () => {
         The character named {{ baseCharacterName }} was not found.
       </pre>
     </div>
-    <div class="right">
+    <div class="right" v-if="baseCharacterMountsData">
       <div class="search">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
@@ -130,14 +127,6 @@ const comparedSearch = async () => {
         <p>{{ comparedCharacterName }}'s mount collection</p>
         <p>Total mounts owned : {{ comparedCharacterMountsData.length }}</p>
         <CompareMountList :character-mounts="comparedCharacterMountsData" />
-        <!-- <ul>
-          <li
-            v-for="mounts in comparedCharacterMountsData"
-            :key="mounts.mount.key.href"
-          >
-            {{ mounts.mount.name }}
-          </li>
-        </ul> -->
       </div>
       <pre
         v-if="
@@ -161,11 +150,78 @@ const comparedSearch = async () => {
 .left,
 .right {
   width: 100%;
+  &--half {
+    width: 75%;
+    margin: auto;
+  }
 }
 
 .search {
   display: flex;
-  align-items: flex-start;
   width: 100%;
+  gap: 1rem;
+  &__input {
+    background-color: #191612;
+    box-shadow: inset 0 0 0 1px black;
+    border: 2px solid $border-container;
+    color: $dark-gray;
+    text-shadow: 1px 1px black;
+    font-size: $small;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
+    &:hover {
+      background-color: hsl(27, 16%, 16%);
+    }
+    &:active,
+    &:focus {
+      border: 2px solid $dark-gray;
+      outline: none;
+    }
+  }
+  &__button {
+    color: $yellow;
+    padding: 0.5rem 2rem;
+    background-image: url("/images/body-background-1.webp");
+    background-color: $red;
+    background-blend-mode: luminosity;
+    border: solid 2px #2d0000;
+    border-radius: 0.5rem;
+    font-size: $small;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: 0.25rem;
+    }
+    &--label {
+      z-index: 1;
+      position: relative;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ff0400;
+      background: radial-gradient(rgba(182, 3, 0, 0.7), rgba(0, 0, 0, 0));
+      opacity: 0;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
 }
 </style>

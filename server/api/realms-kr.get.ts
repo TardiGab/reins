@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
       accessToken = getBlizzToken.access_token;
       handleFailure(accessToken);
     }
-    return response;
+    return await response.json();
   } catch (error) {
     console.error("Error fetching EU realms index:", error);
   }

@@ -58,14 +58,14 @@ onUnmounted(() => {
         ref="dropdownHeight"
       >
         <div class="region-list" v-if="showList">
-          <span
+          <div
+            class="region-list__value"
             v-for="region in filteredRegions"
             :key="region"
             @click="selectRegion(region)"
-            class="region-list__value"
           >
-            {{ region }}
-          </span>
+            <span class="region-list__value--span">{{ region }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ onUnmounted(() => {
 
 .region-choice {
   position: relative;
-  width: 100%;
+  width: 40%;
   &__container {
     min-width: 10%;
     width: 100%;
@@ -109,6 +109,10 @@ onUnmounted(() => {
     border: 2px solid $border-container;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
   }
   &__button {
     width: 100%;
@@ -122,6 +126,7 @@ onUnmounted(() => {
     transition: all 0.3s ease;
     position: relative;
     z-index: 2;
+    text-shadow: 1px 1px black;
     &:hover {
       background-color: hsl(27, 16%, 16%);
     }
@@ -129,6 +134,7 @@ onUnmounted(() => {
   &__input {
     background-color: #191612;
     border: 1px solid $border-container;
+    outline: 1px solid $yellow;
     color: $dark-gray;
     font-size: $small;
     border-radius: 0.5rem;
@@ -157,21 +163,33 @@ onUnmounted(() => {
     transition: all 0.3s ease;
     width: 100%;
     text-align: center;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 209, 0, 0) 0%,
-      rgba(255, 208, 0, 0) 50%,
-      rgba(255, 209, 0, 0) 100%
-    );
     text-shadow: 1px 1px black;
     position: relative;
-    &:hover {
+    &--span {
+      position: relative;
+      z-index: 1;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 0;
       background: linear-gradient(
         90deg,
         rgba(255, 209, 0, 0) 0%,
         rgba(255, 208, 0, 0.3) 50%,
         rgba(255, 209, 0, 0) 100%
       );
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
     }
   }
 }

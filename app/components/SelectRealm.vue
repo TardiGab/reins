@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-const { data: realmsIndexEu } = await useFetch("/api/realms-eu");
-const { data: realmsIndexUs } = await useFetch("/api/realms-us");
-const { data: realmsIndexKr } = await useFetch("/api/realms-kr");
-const { data: realmsIndexTw } = await useFetch("/api/realms-tw");
+const { data: realmsIndexEu } = await useFetch<Realms>("/api/realms-eu");
+const { data: realmsIndexUs } = await useFetch<Realms>("/api/realms-us");
+const { data: realmsIndexKr } = await useFetch<Realms>("/api/realms-kr");
+const { data: realmsIndexTw } = await useFetch<Realms>("/api/realms-tw");
+
 // const { data: realmsIndexCn } = await useFetch("/api/realms-cn");
 
 // console.log(realmsIndexCn.value);
@@ -16,6 +17,11 @@ const props = defineProps<{
 interface SelectedRealm {
   name: string;
   slug: string;
+  id: number;
+}
+
+interface Realms {
+  realms: SelectedRealm[];
 }
 
 const selectedRealm = ref<SelectedRealm>();
@@ -38,25 +44,25 @@ function selectRealm(realm: SelectedRealm) {
 // Fonction de recherche
 const filteredRealms = computed(() => {
   if (props.regionChoosed === "EU") {
-    return realmsIndexEu.value.realms.filter((realmEu: SelectedRealm) =>
+    return realmsIndexEu.value?.realms.filter((realmEu: SelectedRealm) =>
       realmEu.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "US") {
-    return realmsIndexUs.value.realms.filter((realmUs: SelectedRealm) =>
+    return realmsIndexUs.value?.realms.filter((realmUs: SelectedRealm) =>
       realmUs.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "KR") {
-    return realmsIndexKr.value.realms.filter((realmKr: SelectedRealm) =>
+    return realmsIndexKr.value?.realms.filter((realmKr: SelectedRealm) =>
       realmKr.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
     );
   } else if (props.regionChoosed === "TW") {
-    return realmsIndexTw.value.realms.filter((realmTw: SelectedRealm) =>
+    return realmsIndexTw.value?.realms.filter((realmTw: SelectedRealm) =>
       realmTw.name
         .toLocaleLowerCase()
         .startsWith(searchTerm.value.toLocaleLowerCase()),
@@ -73,6 +79,10 @@ function closeDropdown(event: any) {
     showList.value = false;
   }
 }
+
+const vFocus = {
+  mounted: (el: HTMLElement) => el.focus(),
+};
 
 onMounted(() => {
   window.addEventListener("click", closeDropdown);
@@ -96,26 +106,32 @@ watch(
 <template>
   <div class="realm-choice">
     <div class="realm-choice__container" ref="boxContainer">
-      <button @click="showList = !showList" class="realm-choice__button">
+      <button
+        @click="showList = !showList"
+        class="realm-choice__button"
+        :class="{ 'hide-button': showList }"
+        :disabled="!props.regionChoosed"
+      >
         {{ selectedRealm?.name || "Select a realm" }}
       </button>
-      <div v-if="props.regionChoosed === 'EU' && showList" class="realm-choice">
+      <div v-if="props.regionChoosed === 'EU' && showList">
         <input
           type="text"
           v-model="searchTerm"
           ref="searchInput"
           class="realm-choice__input"
           placeholder="Select a realm"
+          v-focus
         />
         <div class="realm-list">
-          <span
-            v-for="realm in filteredRealms"
-            :key="realm"
-            @click="selectRealm(realm)"
+          <div
             class="realm-list__value"
+            v-for="realm in filteredRealms"
+            :key="realm.id"
+            @click="selectRealm(realm)"
           >
-            {{ realm.name }}
-          </span>
+            <span class="realm-list__value--span">{{ realm.name }}</span>
+          </div>
         </div>
       </div>
       <div v-if="props.regionChoosed === 'US' && showList">
@@ -125,16 +141,17 @@ watch(
           ref="searchInput"
           class="realm-choice__input"
           placeholder="Select a realm"
+          v-focus
         />
         <div class="realm-list">
-          <span
-            v-for="realm in filteredRealms"
-            :key="realm"
-            @click="selectRealm(realm)"
+          <div
             class="realm-list__value"
+            v-for="realm in filteredRealms"
+            :key="realm.id"
+            @click="selectRealm(realm)"
           >
-            {{ realm.name }}
-          </span>
+            <span class="realm-list__value--span">{{ realm.name }}</span>
+          </div>
         </div>
       </div>
       <div v-if="props.regionChoosed === 'TW' && showList">
@@ -144,16 +161,17 @@ watch(
           ref="searchInput"
           class="realm-choice__input"
           placeholder="Select a realm"
+          v-focus
         />
         <div class="realm-list">
-          <span
-            v-for="realm in filteredRealms"
-            :key="realm"
-            @click="selectRealm(realm)"
+          <div
             class="realm-list__value"
+            v-for="realm in filteredRealms"
+            :key="realm.id"
+            @click="selectRealm(realm)"
           >
-            {{ realm.name }}
-          </span>
+            <span class="realm-list__value--span">{{ realm.name }}</span>
+          </div>
         </div>
       </div>
       <div v-if="props.regionChoosed === 'KR' && showList">
@@ -163,16 +181,17 @@ watch(
           ref="searchInput"
           class="realm-choice__input"
           placeholder="Select a realm"
+          v-focus
         />
         <div class="realm-list">
-          <span
-            v-for="realm in filteredRealms"
-            :key="realm"
-            @click="selectRealm(realm)"
+          <div
             class="realm-list__value"
+            v-for="realm in filteredRealms"
+            :key="realm.id"
+            @click="selectRealm(realm)"
           >
-            {{ realm.name }}
-          </span>
+            <span class="realm-list__value--span">{{ realm.name }}</span>
+          </div>
         </div>
       </div>
       <div v-if="!props.regionChoosed && showList">
@@ -183,33 +202,58 @@ watch(
 </template>
 
 <style scoped lang="scss">
+.hide-button {
+  display: none;
+}
+
 .realm-choice {
   position: relative;
-  width: 100%;
+  width: 70%;
   &__container {
     min-width: 10%;
+    width: 100%;
     overflow: hidden;
     position: absolute;
     z-index: 10;
-    width: 100%;
+    background-color: #191612;
+    border: 2px solid $border-container;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
   }
   &__button {
     width: 100%;
+    box-shadow: inset 0 0 0 1px black;
     background-color: #191612;
-    border: 1px solid $border-container;
-    border-radius: 0.5rem;
+    border: none;
     color: white;
     text-align: left;
     padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    text-shadow: 1px 1px black;
+    &:hover {
+      background-color: hsl(27, 16%, 16%);
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
   &__input {
     background-color: #191612;
-    border: 1px solid $border-container;
+    border: none;
     color: $dark-gray;
     font-size: $small;
     border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     line-height: 1;
+    width: calc(100% - 2rem);
+    outline: none;
   }
   &__value {
     position: absolute;
@@ -223,16 +267,69 @@ watch(
 .realm-list {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
-  padding: 1rem;
-  max-height: 50vh;
+  max-height: 40vh;
   overflow-y: scroll;
+  overflow-x: hidden;
+  border-top: 2px solid $border-container;
+  padding: 0.5rem;
   &__value {
     padding: 0.25rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    text-shadow: 1px 1px black;
+    position: relative;
+    &--span {
+      position: relative;
+      z-index: 1;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 209, 0, 0) 0%,
+        rgba(255, 208, 0, 0.3) 50%,
+        rgba(255, 209, 0, 0) 100%
+      );
+      transition: all 0.3s ease;
+    }
     &:hover {
-      background-color: $dark-gray;
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0.3rem;
+    margin: 0.3rem;
+    &:hover {
+      width: 0.5rem;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $border-container;
+    border-radius: 32px;
+    cursor: pointer;
+
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+    }
+
+    &:hover {
+      background: $container-bg;
+      width: 0.5rem;
     }
   }
 }

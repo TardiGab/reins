@@ -13,8 +13,6 @@ const props = defineProps<{
   characterMounts?: Mount[];
 }>();
 
-console.log("Props: ", props.characterMounts);
-
 const userMountsIds = props.characterMounts?.map((item: any) => {
   return item.mount.id;
 });

@@ -28,7 +28,9 @@ function logout() {
       </form> -->
       <!-- <button @click="refreshMounts()">Refresh user mounts data</button> -->
       <nav class="nav">
-        <NuxtLink to="/compare" class="nav__link">Compare mounts</NuxtLink>
+        <NuxtLink to="/compare" class="nav__link">
+          <span class="nav__link--label">Compare with a friend</span>
+        </NuxtLink>
       </nav>
     </div>
   </header>
@@ -48,6 +50,10 @@ header {
   border-radius: 1rem;
   width: calc(100% - 3rem);
   margin-bottom: 1rem;
+  @supports (corner-shape: bevel) {
+    corner-shape: bevel;
+    border-radius: $corner-shape-m;
+  }
 }
 
 h1 {
@@ -71,7 +77,7 @@ h1 {
     left: -0.5rem;
     top: 50%;
     transform: translateY(-50%);
-    height: 150%;
+    height: 80%;
     width: 1px;
     background-color: $yellow;
   }
@@ -81,21 +87,39 @@ h1 {
     background-image: url("/images/body-background-1.webp");
     background-color: $red;
     background-blend-mode: luminosity;
-    border: solid 2px #382d2d;
+    border: solid 2px #2d0000;
     border-radius: 0.5rem;
     font-size: $small;
     transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    display: block;
+    overflow: hidden;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: 0.25rem;
     }
-    &:hover {
-      background-image: url("/images/body-background-1.webp");
-      background-color: hsl(1, 100%, 50%);
-      background-blend-mode: hard-light;
+    &--label {
+      z-index: 1;
+      position: relative;
     }
-    &:active {
-      transform: scale(0.9);
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ff0400;
+      background: radial-gradient(rgba(182, 3, 0, 0.7), rgba(0, 0, 0, 0));
+      opacity: 0;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
     }
   }
 }
