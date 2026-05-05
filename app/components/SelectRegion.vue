@@ -49,8 +49,23 @@ onUnmounted(() => {
 <template>
   <div class="region-choice">
     <div class="region-choice__container" ref="boxContainer">
-      <button @click="showList = !showList" class="region-choice__button">
-        {{ selectedRegion || "Select a region" }}
+      <button
+        @click="showList = !showList"
+        class="region-choice__button"
+        :class="{ 'region-choice__button--open': showList }"
+      >
+        <span>{{ selectedRegion || "Select a region" }}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="m5.84 9.59l5.66 5.66l5.66-5.66l-.71-.7l-4.95 4.95l-4.95-4.95z"
+          />
+        </svg>
       </button>
       <div
         class="input-container"
@@ -98,14 +113,14 @@ onUnmounted(() => {
 
 .region-choice {
   position: relative;
-  width: 40%;
+  width: 50%;
   &__container {
     min-width: 10%;
     width: 100%;
     overflow: hidden;
     position: absolute;
     z-index: 10;
-    background-color: #191612;
+    background-color: $button-bg-dark;
     border: 2px solid $border-container;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
@@ -117,7 +132,7 @@ onUnmounted(() => {
   &__button {
     width: 100%;
     box-shadow: inset 0 0 0 1px black;
-    background-color: #191612;
+    background-color: $button-bg-dark;
     border: none;
     color: white;
     text-align: left;
@@ -127,28 +142,39 @@ onUnmounted(() => {
     position: relative;
     z-index: 2;
     text-shadow: 1px 1px black;
-    &:hover {
-      background-color: hsl(27, 16%, 16%);
+    font-size: $main-size;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    svg {
+      transition: all 0.3s ease;
+      transform: rotate(0deg);
     }
+    &:hover {
+      background-color: $button-bg-hover;
+    }
+    &--open {
+      svg {
+        transform: rotate(-180deg);
+      }
+    }
+    // &:active,
+    // &:focus {
+    //   border: 2px solid $dark-gray;
+    //   outline: none;
+    // }
   }
   &__input {
-    background-color: #191612;
+    background-color: $button-bg-dark;
     border: 1px solid $border-container;
     outline: 1px solid $yellow;
     color: $dark-gray;
-    font-size: $small;
+    font-size: $main-size;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     line-height: 1;
     width: calc(100% - 2rem);
-  }
-  &__value {
-    position: absolute;
-    top: 0.7rem;
-    left: 1rem;
-    color: $dark-gray;
-    font-size: $small;
-    line-height: 1;
   }
 }
 .region-list {
@@ -165,6 +191,7 @@ onUnmounted(() => {
     text-align: center;
     text-shadow: 1px 1px black;
     position: relative;
+    font-size: $main-size;
     &--span {
       position: relative;
       z-index: 1;

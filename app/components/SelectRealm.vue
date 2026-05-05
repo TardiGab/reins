@@ -105,7 +105,22 @@ watch(
 
 <template>
   <div class="realm-choice">
-    <div class="realm-choice__container" ref="boxContainer">
+    <div
+      class="realm-choice__container"
+      :class="{ 'realm-choice__container--open': showList }"
+      ref="boxContainer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="m5.84 9.59l5.66 5.66l5.66-5.66l-.71-.7l-4.95 4.95l-4.95-4.95z"
+        />
+      </svg>
       <button
         @click="showList = !showList"
         class="realm-choice__button"
@@ -209,6 +224,7 @@ watch(
 .realm-choice {
   position: relative;
   width: 70%;
+  font-size: $main-size;
   &__container {
     min-width: 10%;
     width: 100%;
@@ -219,6 +235,19 @@ watch(
     border: 2px solid $border-container;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
+    svg {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      transform: rotate(0deg);
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+    &--open {
+      svg {
+        transform: rotate(-180deg);
+      }
+    }
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
@@ -242,26 +271,26 @@ watch(
     }
     &:disabled {
       cursor: not-allowed;
+      &:hover {
+        background-color: $button-bg-dark;
+      }
     }
+    // &:active,
+    // &:focus {
+    //   border: 2px solid $dark-gray;
+    //   // outline: none;
+    // }
   }
   &__input {
     background-color: #191612;
     border: none;
     color: $dark-gray;
-    font-size: $small;
+    font-size: $main-size;
     border-radius: 0.5rem;
     padding: 1rem;
     line-height: 1;
     width: calc(100% - 2rem);
     outline: none;
-  }
-  &__value {
-    position: absolute;
-    top: 0.7rem;
-    left: 1rem;
-    color: $dark-gray;
-    font-size: $small;
-    line-height: 1;
   }
 }
 .realm-list {

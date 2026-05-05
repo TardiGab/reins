@@ -82,13 +82,27 @@ const comparedSearch = async () => {
       <div class="search" v-if="showSearch">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
-        <input
-          type="text"
-          v-model="baseCharacterSearch"
-          placeholder="Character's name"
-          @change="baseSearch"
-          class="search__input"
-        />
+        <div class="search__input-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="M9.5 4a6.5 6.5 0 0 1 6.5 6.5c0 1.62-.59 3.1-1.57 4.23l5.65 5.65l-.71.71l-5.65-5.65A6.47 6.47 0 0 1 9.5 17A6.5 6.5 0 0 1 3 10.5A6.5 6.5 0 0 1 9.5 4m0 1A5.5 5.5 0 0 0 4 10.5A5.5 5.5 0 0 0 9.5 16a5.5 5.5 0 0 0 5.5-5.5A5.5 5.5 0 0 0 9.5 5"
+            />
+          </svg>
+          <input
+            type="text"
+            v-model="baseCharacterSearch"
+            placeholder="Character's name"
+            @change="baseSearch"
+            class="search__input"
+          />
+        </div>
+
         <button @click="baseSearch" class="search__button">
           <span class="search__button--label">Search</span>
         </button>
@@ -160,23 +174,33 @@ const comparedSearch = async () => {
   display: flex;
   width: 100%;
   gap: 1rem;
+  &__input-container {
+    position: relative;
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+    }
+  }
   &__input {
-    background-color: #191612;
+    background-color: $button-bg-dark;
     box-shadow: inset 0 0 0 1px black;
     border: 2px solid $border-container;
     color: $dark-gray;
     text-shadow: 1px 1px black;
-    font-size: $small;
+    font-size: $main-size;
     border-radius: 0.5rem;
     padding: 1rem;
+    padding-left: 3rem;
     transition: background-color 0.3s ease;
-    width: 100%;
+    width: stretch;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
     }
     &:hover {
-      background-color: hsl(27, 16%, 16%);
+      background-color: $button-bg-hover;
     }
     &:active,
     &:focus {
@@ -190,12 +214,13 @@ const comparedSearch = async () => {
     background-image: url("/images/body-background-1.webp");
     background-color: $red;
     background-blend-mode: luminosity;
-    border: solid 2px #2d0000;
+    border: solid 2px $dark-red;
     border-radius: 0.5rem;
-    font-size: $small;
+    font-size: $main-size;
     transition: all 0.3s ease;
     text-decoration: none;
     position: relative;
+    cursor: pointer;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: 0.25rem;
@@ -203,6 +228,7 @@ const comparedSearch = async () => {
     &--label {
       z-index: 1;
       position: relative;
+      text-shadow: 1px 1px black;
     }
     &::after {
       content: "";
@@ -211,7 +237,6 @@ const comparedSearch = async () => {
       left: 0;
       width: 100%;
       height: 100%;
-      background: #ff0400;
       background: radial-gradient(rgba(182, 3, 0, 0.7), rgba(0, 0, 0, 0));
       opacity: 0;
       z-index: 0;
