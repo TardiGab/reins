@@ -167,6 +167,9 @@ const comparedSearch = async () => {
   &--half {
     width: 75%;
     margin: auto;
+    @media screen and (max-width: 1440px) {
+      width: 90%;
+    }
   }
 }
 
@@ -174,19 +177,23 @@ const comparedSearch = async () => {
   display: flex;
   width: 100%;
   gap: 1rem;
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+  }
   &__input-container {
     position: relative;
     svg {
       position: absolute;
-      top: 50%;
+      top: 1rem;
       left: 1rem;
-      transform: translateY(-50%);
     }
   }
   &__input {
     background-color: $button-bg-dark;
-    box-shadow: inset 0 0 0 1px black;
-    border: 2px solid $border-container;
+    border: none;
+    box-shadow:
+      inset 0px 0px 0px 2px $border-container,
+      inset 0 0 0 3px black;
     color: $dark-gray;
     text-shadow: 1px 1px black;
     font-size: $main-size;
@@ -204,7 +211,9 @@ const comparedSearch = async () => {
     }
     &:active,
     &:focus {
-      border: 2px solid $dark-gray;
+      box-shadow:
+        inset 0px 0px 0px 2px $dark-gray,
+        inset 0 0 0 3px black;
       outline: none;
     }
   }
@@ -223,7 +232,7 @@ const comparedSearch = async () => {
     cursor: pointer;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
-      border-radius: 0.25rem;
+      border-radius: $corner-shape-s;
     }
     &--label {
       z-index: 1;

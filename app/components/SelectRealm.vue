@@ -217,22 +217,18 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.hide-button {
-  display: none;
-}
-
 .realm-choice {
   position: relative;
   width: 70%;
   font-size: $main-size;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
   &__container {
     min-width: 10%;
     width: 100%;
     overflow: hidden;
-    position: absolute;
     z-index: 10;
-    background-color: #191612;
-    border: 2px solid $border-container;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
     svg {
@@ -242,6 +238,7 @@ watch(
       transform: rotate(0deg);
       z-index: 10;
       transition: all 0.3s ease;
+      pointer-events: none;
     }
     &--open {
       svg {
@@ -254,10 +251,19 @@ watch(
     }
   }
   &__button {
-    width: 100%;
-    box-shadow: inset 0 0 0 1px black;
-    background-color: #191612;
+    background-color: $button-bg-dark;
     border: none;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
+    width: 100%;
+    box-shadow:
+      inset 0px 0px 0px 2px $border-container,
+      inset 0 0 0 3px black;
+    background-color: $button-bg-dark;
     color: white;
     text-align: left;
     padding: 1rem;
@@ -266,20 +272,31 @@ watch(
     position: relative;
     z-index: 2;
     text-shadow: 1px 1px black;
+    font-size: $main-size;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    svg {
+      transition: all 0.3s ease;
+      transform: rotate(0deg);
+      pointer-events: all;
+    }
     &:hover {
-      background-color: hsl(27, 16%, 16%);
+      background-color: $button-bg-hover;
+    }
+    &--open {
+      svg {
+        transform: rotate(-180deg);
+      }
     }
     &:disabled {
       cursor: not-allowed;
+      color: $dark-gray;
       &:hover {
         background-color: $button-bg-dark;
       }
     }
-    // &:active,
-    // &:focus {
-    //   border: 2px solid $dark-gray;
-    //   // outline: none;
-    // }
   }
   &__input {
     background-color: #191612;
@@ -288,9 +305,16 @@ watch(
     font-size: $main-size;
     border-radius: 0.5rem;
     padding: 1rem;
-    line-height: 1;
-    width: calc(100% - 2rem);
+    padding-right: 3rem;
+    width: calc(100% - 4rem);
     outline: none;
+    box-shadow:
+      inset 0px 0px 0px 2px $border-container,
+      inset 0px 0px 0px 3px black;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
   }
 }
 .realm-list {
@@ -301,8 +325,18 @@ watch(
   max-height: 40vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  border-top: 2px solid $border-container;
+  background-color: $button-bg-dark;
   padding: 0.5rem;
+  box-shadow:
+    inset 0px 0px 0px 2px $border-container,
+    inset 0px 0px 0px 3px black;
+  position: absolute;
+  width: calc(100% - 1rem);
+  z-index: 10;
+  @supports (corner-shape: bevel) {
+    corner-shape: bevel;
+    border-radius: $corner-shape-s;
+  }
   &__value {
     padding: 0.25rem;
     cursor: pointer;
@@ -340,8 +374,7 @@ watch(
   }
   &::-webkit-scrollbar {
     background-color: transparent;
-    width: 0.3rem;
-    margin: 0.3rem;
+    width: 0.5rem;
     &:hover {
       width: 0.5rem;
     }
@@ -361,5 +394,8 @@ watch(
       width: 0.5rem;
     }
   }
+}
+.hide-button {
+  display: none;
 }
 </style>

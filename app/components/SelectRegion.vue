@@ -100,40 +100,39 @@ onUnmounted(() => {
 .input-container {
   position: relative;
   width: 100%;
-  max-height: 1000px;
   height: 0;
   transition: height 0.3s ease;
-  z-index: 1;
+  z-index: 2;
   &--open {
-    border-top: 2px solid $border-container;
     height: 100%;
-    padding: 0.5rem 0;
   }
 }
 
 .region-choice {
   position: relative;
   width: 50%;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
   &__container {
     min-width: 10%;
-    width: 100%;
-    overflow: hidden;
-    position: absolute;
+    position: relative;
     z-index: 10;
+  }
+  &__button {
     background-color: $button-bg-dark;
-    border: 2px solid $border-container;
+    border: none;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
     }
-  }
-  &__button {
     width: 100%;
-    box-shadow: inset 0 0 0 1px black;
+    box-shadow:
+      inset 0px 0px 0px 2px $border-container,
+      inset 0 0 0 3px black;
     background-color: $button-bg-dark;
-    border: none;
     color: white;
     text-align: left;
     padding: 1rem;
@@ -182,7 +181,22 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-
+  background-color: $button-bg-dark;
+  // outline: 2px solid $border-container;
+  box-shadow:
+    inset 0px 0px 0px 2px $border-container,
+    inset 0px 0px 0px 3px black;
+  padding: 0.5rem 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  border-radius: 0.5rem;
+  z-index: 10;
+  @supports (corner-shape: bevel) {
+    corner-shape: bevel;
+    border-radius: $corner-shape-s;
+  }
   &__value {
     padding: 0.25rem;
     cursor: pointer;
