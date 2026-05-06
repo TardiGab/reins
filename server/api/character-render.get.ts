@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
 
   const query: Query = getQuery(event);
 
-  const url = `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/collections/mounts?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`;
+  const url = `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}/character-media?namespace=profile-${query.region}&locale=en_US`;
 
-  const mountsResponse = await fetch(url, {
+  const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -28,8 +28,8 @@ export default defineEventHandler(async (event) => {
       return res.json();
     })
     .then((data) => {
-      const mounts = data.mounts;
-      return mounts;
+      const assets = data.assets;
+      return assets;
     })
     .catch((error) => {
       console.error("Error fetching user mounts:", error);
@@ -43,5 +43,5 @@ export default defineEventHandler(async (event) => {
     });
     return await response.json();
   }
-  return mountsResponse;
+  return response;
 });

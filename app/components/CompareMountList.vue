@@ -98,7 +98,7 @@ mountsGlobal.forEach((item, i) => {
                   }"
                 >
                   <a
-                    :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
                     target="_blank"
                     class="mount-item__link"
                   >
@@ -166,5 +166,6 @@ mountsGlobal.forEach((item, i) => {
 <style lang="scss" scoped>
 .mounts-wrapper {
   width: calc(50vw - 2rem);
+  height: 80vh;
 }
 </style>

@@ -236,7 +236,7 @@ watch(
       top: 1rem;
       right: 1rem;
       transform: rotate(0deg);
-      z-index: 10;
+      z-index: 3;
       transition: all 0.3s ease;
       pointer-events: none;
     }

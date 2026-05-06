@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { random } from "#imports";
+
 interface CharactersMounts {
   mounts: {
     mount: {
@@ -51,13 +53,14 @@ const baseSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   baseCharacterName.value = baseCharacterSearch.value;
   baseCharacterMountsData.value = characterMounts.value;
-  showSearch.value = false;
-  // console.log(
-  //   `${baseCharacterName.value} mounts data:`,
-  //   baseCharacterMountsData.value,
-  //   "Total mounts owned:",
-  //   baseCharacterMountsData.value?.length,
-  // );
+  await navigateTo({
+    path: "/compare-result",
+    query: {
+      region: regionChoosed.value.toLocaleLowerCase(),
+      realm: realmChoosed.value,
+      character: baseCharacterSearch.value,
+    },
+  });
 };
 
 const comparedCharacterMountsData = ref<CharactersMounts>();
@@ -67,46 +70,53 @@ const comparedSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   comparedCharacterName.value = comparedCharacterSearch.value;
   comparedCharacterMountsData.value = characterMounts.value;
-  // console.log(
-  //   `${comparedCharacterName.value} mounts data:`,
-  //   comparedCharacterMountsData.value,
-  //   "Total mounts owned:",
-  //   comparedCharacterMountsData.value?.length,
-  // );
 };
+let loadingText = ref([
+  "Searching saddles...",
+  "Looking for Invincible...",
+  "These webs will summon Nerubians, don't stand in 'em!",
+  "Cleaning stable...",
+  "Gathering horseshoes...",
+]);
+
+let randomLoadingValue = random(0, loadingText.value.length - 1);
 </script>
 
 <template>
   <div class="compare">
-    <div class="left" :class="{ 'left--half': !baseCharacterMountsData }">
-      <div class="search" v-if="showSearch">
-        <SelectRegion @region="regionSelected" />
-        <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
-        <div class="search__input-container">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M9.5 4a6.5 6.5 0 0 1 6.5 6.5c0 1.62-.59 3.1-1.57 4.23l5.65 5.65l-.71.71l-5.65-5.65A6.47 6.47 0 0 1 9.5 17A6.5 6.5 0 0 1 3 10.5A6.5 6.5 0 0 1 9.5 4m0 1A5.5 5.5 0 0 0 4 10.5A5.5 5.5 0 0 0 9.5 16a5.5 5.5 0 0 0 5.5-5.5A5.5 5.5 0 0 0 9.5 5"
-            />
-          </svg>
-          <input
-            type="text"
-            v-model="baseCharacterSearch"
-            placeholder="Character's name"
-            @change="baseSearch"
-            class="search__input"
+    <div class="search">
+      <SelectRegion @region="regionSelected" />
+      <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
+      <div class="search__input-container">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M9.5 4a6.5 6.5 0 0 1 6.5 6.5c0 1.62-.59 3.1-1.57 4.23l5.65 5.65l-.71.71l-5.65-5.65A6.47 6.47 0 0 1 9.5 17A6.5 6.5 0 0 1 3 10.5A6.5 6.5 0 0 1 9.5 4m0 1A5.5 5.5 0 0 0 4 10.5A5.5 5.5 0 0 0 9.5 16a5.5 5.5 0 0 0 5.5-5.5A5.5 5.5 0 0 0 9.5 5"
           />
-        </div>
-
-        <button @click="baseSearch" class="search__button">
-          <span class="search__button--label">Search</span>
-        </button>
+        </svg>
+        <input
+          type="text"
+          v-model="baseCharacterSearch"
+          placeholder="Character's name"
+          @change="baseSearch"
+          class="search__input"
+        />
       </div>
+
+      <button @click="baseSearch" class="search__button">
+        <span class="search__button--label">Search</span>
+      </button>
+    </div>
+    <div class="loading" v-if="loading === 'pending' || loading === 'success'">
+      <span class="loading__text">{{ loadingText[randomLoadingValue] }}</span>
+    </div>
+    <!-- <div class="left" :class="{ 'left--half': !baseCharacterMountsData }">
+
       <span v-if="loading === 'pending' && baseCharacterName">Loading...</span>
       <div v-if="loading === 'success' && baseCharacterMountsData">
         <p>{{ baseCharacterName }}'s mount collection</p>
@@ -121,8 +131,8 @@ const comparedSearch = async () => {
       >
         The character named {{ baseCharacterName }} was not found.
       </pre>
-    </div>
-    <div class="right" v-if="baseCharacterMountsData">
+    </div> -->
+    <!-- <div class="right" v-if="baseCharacterMountsData">
       <div class="search">
         <SelectRegion @region="regionSelected" />
         <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
@@ -150,26 +160,30 @@ const comparedSearch = async () => {
       >
         The character named {{ comparedCharacterName }} was not found.
       </pre>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <style scoped lang="scss">
 .compare {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+  width: 60%;
+  margin: auto;
+  @media screen and (min-width: 1441px) and (max-width: 1670px) {
+    width: 75%;
+  }
+  @media screen and (max-width: 1440px) {
+    width: 90%;
+  }
 }
 
-.left,
-.right {
+.loading {
+  margin-top: 2rem;
   width: 100%;
-  &--half {
-    width: 75%;
-    margin: auto;
-    @media screen and (max-width: 1440px) {
-      width: 90%;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__text {
+    font-size: $main-size;
   }
 }
 

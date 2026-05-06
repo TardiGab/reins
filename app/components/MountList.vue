@@ -196,7 +196,7 @@ async function pinMount(
                   }"
                 >
                   <a
-                    :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
                     target="_blank"
                     class="mount-item__link"
                   >

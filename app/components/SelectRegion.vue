@@ -38,7 +38,6 @@ function closeDropdown(event: any) {
 
 onMounted(() => {
   window.addEventListener("click", closeDropdown);
-  console.log(dropdownHeight.value.clientHeight);
 });
 
 onUnmounted(() => {
@@ -158,11 +157,6 @@ onUnmounted(() => {
         transform: rotate(-180deg);
       }
     }
-    // &:active,
-    // &:focus {
-    //   border: 2px solid $dark-gray;
-    //   outline: none;
-    // }
   }
   &__input {
     background-color: $button-bg-dark;
@@ -182,7 +176,6 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   background-color: $button-bg-dark;
-  // outline: 2px solid $border-container;
   box-shadow:
     inset 0px 0px 0px 2px $border-container,
     inset 0px 0px 0px 3px black;
