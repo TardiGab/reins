@@ -103,6 +103,7 @@ if (region.value && realm.value && character.value) {
             {{ route.query.character }}'s mount collection
           </span>
         </div>
+        <button class="comparison__clear">Query again</button>
       </div>
       <MountList v-if="session.data?.user" class="user-mounts" />
       <CompareMountList
@@ -138,12 +139,13 @@ if (region.value && realm.value && character.value) {
             class="comparison__profile"
           />
           <span class="comparison__name">
-            {{ route.query.character }}'s mount collection
+            {{ character }}'s mount collection
           </span>
         </div>
         <button class="comparison__clear">Query again</button>
       </div>
       <div class="comparison__search">
+        <h2 class="search-h2">Add a character</h2>
         <CompareSearchCharacter
           @realm="realm"
           @region="region"
@@ -202,5 +204,29 @@ if (region.value && realm.value && character.value) {
   &__name {
     font-family: $main-size;
   }
+  &__search {
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 2px solid $border-container;
+    background-image: url("/images/wooden-background-2.webp");
+    box-shadow: 0 0 40px 0 #000 inset;
+    background-repeat: repeat;
+    background-attachment: local;
+    height: calc(80vh - 4rem);
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
+  }
+}
+.search-h2 {
+  font-size: $h2-size;
+  background: linear-gradient(180deg, #ffd100 0%, #dfaa03 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 2rem;
 }
 </style>

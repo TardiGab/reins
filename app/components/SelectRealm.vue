@@ -333,6 +333,7 @@ watch(
   position: absolute;
   width: calc(100% - 1rem);
   z-index: 10;
+  border-radius: 0.5rem;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
     border-radius: $corner-shape-s;
