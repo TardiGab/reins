@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
 
 const route = useRoute();
@@ -55,26 +56,29 @@ const { data: characterRender, execute: renderGo } = await useLazyFetch(
 
 const firstAvatar = ref<string>();
 
-const { data: comparedCharacterRender, execute: comparedRenderGo } =
-  await useLazyFetch("/api/character-render", {
-    query: {
-      region: comparedRegion,
-      realm: comparedRealm,
-      character: comparedCharacterName,
-    },
-    immediate: false,
-  });
-
-if (comparedCharacterName.value) {
-  comparedAvatar.value = await comparedCharacterRender.value[0].value;
-  console.log(comparedAvatar.value);
-}
-
 onMounted(async () => {
   await charGo();
   await renderGo();
   firstAvatar.value = await characterRender.value[0].value;
 });
+
+watch(
+  () => comparedCharacterName.value,
+  () => {
+    if (
+      comparedRegion.value &&
+      comparedRealm.value &&
+      comparedCharacterName.value
+    ) {
+      console.log("Coucou j'ai tout");
+      let url = new URL(window?.location.href);
+      url.searchParams.set("cregion", comparedRegion.value!);
+      url.searchParams.set("crealm", comparedRealm.value!);
+      url.searchParams.set("ccharacter", comparedCharacterName.value!);
+      history.pushState({}, "", url.href);
+    }
+  },
+);
 </script>
 
 <template>
@@ -157,10 +161,12 @@ onMounted(async () => {
           @avatar="comparedAvatarChoosed"
         />
       </div>
+      <!-- Si l'utilisateur est connecté -->
       <CompareMountList
         :character-mounts="characterMounts"
         v-if="characterMounts && session.data?.user"
       />
+      <!-- S'il n'est pas connecté et qu'il a fait la recherche -->
       <CompareMountList
         :character-mounts="comparedMounts"
         v-if="comparedMounts"
