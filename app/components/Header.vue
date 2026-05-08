@@ -1,19 +1,6 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
 const session = authClient.useSession();
-// const { data: userMounts } = await useFetch("/api/mounts", {
-//   key: "user-mounts",
-// });
-
-// console.log(userMounts.value);
-
-function logout() {
-  authClient.signOut();
-  setTimeout(() => {
-    window.location.reload();
-  }, 100);
-}
-
 // async function refreshMounts() {
 //   await refreshNuxtData("user-mounts");
 // }

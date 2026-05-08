@@ -5,21 +5,6 @@ const { data: userMounts } = await useFetch("/api/mounts", {
   key: "user-mounts",
 });
 const session = authClient.useSession();
-// const isLogged = document.cookie.get({
-//   name: "better-auth.session_token"
-// })
-
-// console.log(document.cookie);
-
-// function getCookie(name: any) {
-//   const value = `; ${document.cookie}`;
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) return (parts.pop() as any).split(";").shift();
-// }
-
-// const cookies = getCookie("better-auth.session_token");
-
-// console.log(cookies);
 
 const userMountsIds = userMounts.value?.map((item: any) => {
   return item.mount.id;

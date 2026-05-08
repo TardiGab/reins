@@ -4,6 +4,35 @@ import { authClient } from "~~/server/lib/auth-client";
 const route = useRoute();
 const session = authClient.useSession();
 
+// const props = defineProps<{
+//   character: string;
+//   characterMounts: []
+// }>();
+
+const comparedCharacterName = ref<string>();
+const comparedCharacterChoosed = (character: string) => {
+  comparedCharacterName.value = character;
+};
+
+if (comparedCharacterName.value) {
+}
+
+const comparedMounts = ref();
+const comparedMountsChoosed = (character: []) => {
+  comparedMounts.value = character;
+  console.log("Et voilà les montures:", comparedMounts.value);
+};
+
+const comparedRealm = ref<string>();
+const comparedRealmChoosed = (realm: string) => {
+  comparedRealm.value = realm;
+};
+
+const comparedRegion = ref<string>();
+const comparedRegionChoosed = (region: string) => {
+  comparedRegion.value = region;
+};
+
 const {
   data: characterMounts,
   execute: charGo,
@@ -15,17 +44,20 @@ const {
     character: route.query.character,
   },
 });
-const {
-  data: comparedMounts,
-  execute: comparedGo,
-  status: comparedLoading,
-} = await useLazyFetch(`/api/character-mounts/`, {
-  query: {
-    region: route.query.region,
-    realm: route.query.realm,
-    character: route.query.character,
-  },
-});
+
+// const {
+//   data: comparedCharacterMounts,
+//   execute: comparedCharGo,
+//   status: comparedLoading,
+// } = await useLazyFetch("/api/character-mounts", {
+//   query: {
+//     region: comparedRegion,
+//     realm: comparedRealm,
+//     character: comparedCharacterName,
+//   },
+//   immediate: false,
+//   watch: false,
+// });
 
 const { data: characterRender, execute: renderGo } = await useLazyFetch(
   "/api/character-render",
@@ -35,43 +67,33 @@ const { data: characterRender, execute: renderGo } = await useLazyFetch(
       realm: route.query.realm,
       character: route.query.character,
     },
+    immediate: false,
   },
 );
-const { data: comparedCharacterRender, execute: comparedRenderGo } =
-  await useLazyFetch("/api/character-render", {
-    query: {
-      region: route.query.region,
-      realm: route.query.realm,
-      character: route.query.character,
-    },
-  });
 
 const firstAvatar = ref<string>();
 const comparedAvatar = ref<string>();
 
+const { data: comparedCharacterRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: comparedRegion,
+      realm: comparedRealm,
+      character: comparedCharacterName,
+    },
+    immediate: false,
+    watch: false,
+  });
+
+if (comparedCharacterName.value) {
+  comparedAvatar.value = await comparedCharacterRender.value[0].value;
+}
+
 onMounted(async () => {
-  charGo();
-  renderGo();
+  await charGo();
+  await renderGo();
   firstAvatar.value = await characterRender.value[0].value;
 });
-
-let loadingText = ref([
-  "Searching saddles...",
-  "Looking for Invincible...",
-  "These webs will summon Nerubians, don't stand in 'em!",
-  "Cleaning stable...",
-  "Gathering horseshoes...",
-]);
-
-let randomLoadingValue = random(0, loadingText.value.length - 1);
-
-let region = ref();
-let realm = ref();
-let character = ref();
-
-if (region.value && realm.value && character.value) {
-  console.log(region.value, realm.value, character.value);
-}
 </script>
 
 <template>
@@ -130,7 +152,7 @@ if (region.value && realm.value && character.value) {
       </div>
       <div
         class="comparison__header"
-        v-if="comparedMounts && !session.data?.user"
+        v-if="!session.data?.user && comparedCharacterName"
       >
         <div class="comparison__character">
           <img
@@ -139,27 +161,28 @@ if (region.value && realm.value && character.value) {
             class="comparison__profile"
           />
           <span class="comparison__name">
-            {{ character }}'s mount collection
+            {{ comparedCharacterName }}'s mount collection
           </span>
         </div>
         <button class="comparison__clear">Query again</button>
       </div>
-      <div class="comparison__search">
+      <div class="comparison__search" v-if="!comparedMounts">
         <h2 class="search-h2">Add a character</h2>
         <CompareSearchCharacter
-          @realm="realm"
-          @region="region"
-          @character="character"
+          @compared-mounts="comparedMountsChoosed"
+          @character="comparedCharacterChoosed"
+          @realm="comparedRealmChoosed"
+          @region="comparedRegionChoosed"
         />
       </div>
-      <!-- <CompareMountList
+      <CompareMountList
         :character-mounts="characterMounts"
         v-if="characterMounts && session.data?.user"
       />
       <CompareMountList
         :character-mounts="comparedMounts"
-        v-if="comparedMounts && !session.data?.user"
-      /> -->
+        v-if="comparedMounts"
+      />
     </div>
   </div>
 </template>
@@ -173,6 +196,7 @@ if (region.value && realm.value && character.value) {
 .comparison {
   display: flex;
   gap: 1rem;
+  align-items: flex-end;
   &__left,
   &__right {
     width: 100%;

@@ -1,17 +1,6 @@
 <script setup lang="ts">
 import { random } from "#imports";
 
-interface CharactersMounts {
-  mounts: {
-    mount: {
-      key: { href: string };
-      name: string;
-      id: number;
-    };
-  };
-  // length: number;
-}
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -24,12 +13,39 @@ const realmSelected = (realm: string) => {
 
 const characterSearch = ref<string>();
 
-const emit = defineEmits(["region", "realm", "character"]);
+const emit = defineEmits(["region", "realm", "character", "compared-mounts"]);
 
-const search = () => {
-  emit("region", regionSelected);
-  emit("realm", realmSelected);
-  emit("character", characterSearch);
+const {
+  data: comparedMounts,
+  execute: go,
+  status: loading,
+} = await useLazyFetch("/api/character-mounts", {
+  query: {
+    region: regionChoosed,
+    realm: realmChoosed,
+    character: characterSearch,
+  },
+  immediate: false,
+});
+
+let loadingText = ref([
+  "Searching saddles...",
+  "Looking for Invincible...",
+  "These webs will summon Nerubians, don't stand in 'em!",
+  "Cleaning stable...",
+  "Gathering horseshoes...",
+]);
+
+let randomLoadingValue: number;
+
+const search = async () => {
+  await go();
+  emit("compared-mounts", comparedMounts.value);
+  emit("character", characterSearch.value);
+  emit("realm", realmChoosed.value);
+  emit("region", regionChoosed.value);
+  randomLoadingValue = random(0, loadingText.value.length - 1);
+  console.log(comparedMounts.value);
 };
 </script>
 
@@ -65,20 +81,13 @@ const search = () => {
     <button @click="search" class="search__button">
       <span class="search__button--label">Search</span>
     </button>
+
+    <div class="loader" v-if="loading === 'pending'">
+      <span class="loader__text">{{ loadingText[randomLoadingValue] }}</span>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
-.compare {
-  width: 60%;
-  margin: auto;
-  @media screen and (min-width: 1441px) and (max-width: 1670px) {
-    width: 75%;
-  }
-  @media screen and (max-width: 1440px) {
-    width: 90%;
-  }
-}
-
 .loading {
   margin-top: 2rem;
   width: 100%;

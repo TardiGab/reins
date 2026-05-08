@@ -12,8 +12,6 @@ interface CharactersMounts {
   // length: number;
 }
 
-const showSearch = ref(true);
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
@@ -27,10 +25,8 @@ const realmSelected = (realm: string) => {
 const characterSearch = ref<string>();
 
 const baseCharacterName = ref<string>();
-const comparedCharacterName = ref<string>();
 
 const baseCharacterSearch = ref<string>();
-const comparedCharacterSearch = ref<string>();
 
 const {
   data: characterMounts,
@@ -61,15 +57,6 @@ const baseSearch = async () => {
       character: baseCharacterSearch.value,
     },
   });
-};
-
-const comparedCharacterMountsData = ref<CharactersMounts>();
-const comparedSearch = async () => {
-  characterSearch.value = comparedCharacterSearch.value;
-  await go();
-  // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
-  comparedCharacterName.value = comparedCharacterSearch.value;
-  comparedCharacterMountsData.value = characterMounts.value;
 };
 let loadingText = ref([
   "Searching saddles...",
@@ -115,52 +102,6 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
     <div class="loading" v-if="loading === 'pending' || loading === 'success'">
       <span class="loading__text">{{ loadingText[randomLoadingValue] }}</span>
     </div>
-    <!-- <div class="left" :class="{ 'left--half': !baseCharacterMountsData }">
-
-      <span v-if="loading === 'pending' && baseCharacterName">Loading...</span>
-      <div v-if="loading === 'success' && baseCharacterMountsData">
-        <p>{{ baseCharacterName }}'s mount collection</p>
-        <p>Total mounts owned : {{ baseCharacterMountsData.length }}</p>
-        <CompareMountList :character-mounts="baseCharacterMountsData" />
-      </div>
-      <pre
-        v-if="
-          loading === 'error' ||
-          (baseCharacterName && baseCharacterMountsData === undefined)
-        "
-      >
-        The character named {{ baseCharacterName }} was not found.
-      </pre>
-    </div> -->
-    <!-- <div class="right" v-if="baseCharacterMountsData">
-      <div class="search">
-        <SelectRegion @region="regionSelected" />
-        <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
-        <input
-          type="text"
-          v-model="comparedCharacterSearch"
-          placeholder="Character's name"
-          @change="comparedSearch"
-        />
-        <button @click="comparedSearch">Search</button>
-      </div>
-      <span v-if="loading === 'pending' && comparedCharacterName">
-        Loading...
-      </span>
-      <div v-if="loading === 'success' && comparedCharacterMountsData">
-        <p>{{ comparedCharacterName }}'s mount collection</p>
-        <p>Total mounts owned : {{ comparedCharacterMountsData.length }}</p>
-        <CompareMountList :character-mounts="comparedCharacterMountsData" />
-      </div>
-      <pre
-        v-if="
-          loading === 'error' ||
-          (comparedCharacterName && comparedCharacterMountsData === undefined)
-        "
-      >
-        The character named {{ comparedCharacterName }} was not found.
-      </pre>
-    </div> -->
   </div>
 </template>
 
