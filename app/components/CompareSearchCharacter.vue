@@ -13,7 +13,13 @@ const realmSelected = (realm: string) => {
 
 const characterSearch = ref<string>();
 
-const emit = defineEmits(["region", "realm", "character", "compared-mounts"]);
+const emit = defineEmits([
+  "region",
+  "realm",
+  "character",
+  "compared-mounts",
+  "avatar",
+]);
 
 const {
   data: comparedMounts,
@@ -28,6 +34,16 @@ const {
   immediate: false,
 });
 
+const { data: comparedCharacterRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: regionChoosed,
+      realm: realmChoosed,
+      character: characterSearch,
+    },
+    immediate: false,
+  });
+
 let loadingText = ref([
   "Searching saddles...",
   "Looking for Invincible...",
@@ -38,14 +54,18 @@ let loadingText = ref([
 
 let randomLoadingValue: number;
 
+let avatar = ref();
+
 const search = async () => {
   await go();
+  await comparedRenderGo();
+  avatar.value = await comparedCharacterRender.value[0].value;
   emit("compared-mounts", comparedMounts.value);
   emit("character", characterSearch.value);
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
+  emit("avatar", avatar.value);
   randomLoadingValue = random(0, loadingText.value.length - 1);
-  console.log(comparedMounts.value);
 };
 </script>
 

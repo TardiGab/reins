@@ -4,23 +4,14 @@ import { authClient } from "~~/server/lib/auth-client";
 const route = useRoute();
 const session = authClient.useSession();
 
-// const props = defineProps<{
-//   character: string;
-//   characterMounts: []
-// }>();
-
 const comparedCharacterName = ref<string>();
 const comparedCharacterChoosed = (character: string) => {
   comparedCharacterName.value = character;
 };
 
-if (comparedCharacterName.value) {
-}
-
 const comparedMounts = ref();
 const comparedMountsChoosed = (character: []) => {
   comparedMounts.value = character;
-  console.log("Et voilà les montures:", comparedMounts.value);
 };
 
 const comparedRealm = ref<string>();
@@ -31,6 +22,11 @@ const comparedRealmChoosed = (realm: string) => {
 const comparedRegion = ref<string>();
 const comparedRegionChoosed = (region: string) => {
   comparedRegion.value = region;
+};
+
+const comparedAvatar = ref<string>();
+const comparedAvatarChoosed = (avatar: string) => {
+  comparedAvatar.value = avatar;
 };
 
 const {
@@ -45,20 +41,6 @@ const {
   },
 });
 
-// const {
-//   data: comparedCharacterMounts,
-//   execute: comparedCharGo,
-//   status: comparedLoading,
-// } = await useLazyFetch("/api/character-mounts", {
-//   query: {
-//     region: comparedRegion,
-//     realm: comparedRealm,
-//     character: comparedCharacterName,
-//   },
-//   immediate: false,
-//   watch: false,
-// });
-
 const { data: characterRender, execute: renderGo } = await useLazyFetch(
   "/api/character-render",
   {
@@ -72,7 +54,6 @@ const { data: characterRender, execute: renderGo } = await useLazyFetch(
 );
 
 const firstAvatar = ref<string>();
-const comparedAvatar = ref<string>();
 
 const { data: comparedCharacterRender, execute: comparedRenderGo } =
   await useLazyFetch("/api/character-render", {
@@ -82,11 +63,11 @@ const { data: comparedCharacterRender, execute: comparedRenderGo } =
       character: comparedCharacterName,
     },
     immediate: false,
-    watch: false,
   });
 
 if (comparedCharacterName.value) {
   comparedAvatar.value = await comparedCharacterRender.value[0].value;
+  console.log(comparedAvatar.value);
 }
 
 onMounted(async () => {
@@ -173,6 +154,7 @@ onMounted(async () => {
           @character="comparedCharacterChoosed"
           @realm="comparedRealmChoosed"
           @region="comparedRegionChoosed"
+          @avatar="comparedAvatarChoosed"
         />
       </div>
       <CompareMountList
@@ -216,10 +198,12 @@ onMounted(async () => {
   }
   &__profile {
     border: solid 2px $border-container;
-    box-shadow: inset 0px 0px 0px 3px black;
     border-radius: 0.5rem;
     height: 3rem;
     width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
