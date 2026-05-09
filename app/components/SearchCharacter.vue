@@ -153,6 +153,8 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
   &__p,
   .characters-list-component {
     margin: auto;
+  }
+  .characters-list-component {
     z-index: 11;
   }
 }
