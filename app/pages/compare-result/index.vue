@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
+const { data: userMounts } = await useFetch("/api/mounts");
 
 const route = useRoute();
 const session = authClient.useSession();
@@ -10,10 +11,46 @@ const comparedCharacterChoosed = (character: string) => {
   comparedCharacterName.value = character;
 };
 
+const { data: comparedMountsLink, execute: go } = await useLazyFetch(
+  "/api/character-mounts",
+  {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  },
+);
+
+const { data: comparedCharRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  });
+
 const comparedMounts = ref();
-const comparedMountsChoosed = (character: []) => {
-  comparedMounts.value = character;
-};
+
+let comparedMountsChoosed;
+
+if (!comparedMounts.value && route.query.ccharacter) {
+  await go();
+  await comparedRenderGo();
+  comparedMounts.value = comparedMountsLink.value;
+} else if (
+  !comparedMounts.value &&
+  !route.query.cregion &&
+  !route.query.crealm &&
+  !route.query.ccharacter
+) {
+  comparedMountsChoosed = (character: any[]) => {
+    comparedMounts.value = character;
+  };
+}
 
 const comparedRealm = ref<string>();
 const comparedRealmChoosed = (realm: string) => {
@@ -60,6 +97,9 @@ onMounted(async () => {
   await charGo();
   await renderGo();
   firstAvatar.value = await characterRender.value[0].value;
+  if (comparedCharRender.value) {
+    comparedAvatar.value = await comparedCharRender.value[0].value;
+  }
 });
 
 watch(
@@ -70,7 +110,6 @@ watch(
       comparedRealm.value &&
       comparedCharacterName.value
     ) {
-      console.log("Coucou j'ai tout");
       let url = new URL(window?.location.href);
       url.searchParams.set("cregion", comparedRegion.value!);
       url.searchParams.set("crealm", comparedRealm.value!);
@@ -112,7 +151,10 @@ watch(
         </div>
         <button class="comparison__clear">Query again</button>
       </div>
-      <MountList v-if="session.data?.user" class="user-mounts" />
+      <CompareMountList
+        :character-mounts="userMounts"
+        v-if="userMounts && session.data?.user"
+      />
       <CompareMountList
         :character-mounts="characterMounts"
         v-if="characterMounts && !session.data?.user"
@@ -137,7 +179,7 @@ watch(
       </div>
       <div
         class="comparison__header"
-        v-if="!session.data?.user && comparedCharacterName"
+        v-else-if="!session.data?.user && comparedCharacterName"
       >
         <div class="comparison__character">
           <img
@@ -151,7 +193,24 @@ watch(
         </div>
         <button class="comparison__clear">Query again</button>
       </div>
-      <div class="comparison__search" v-if="!comparedMounts">
+      <div
+        class="comparison__header"
+        v-else-if="!comparedMounts.value && route.query.ccharacter"
+      >
+        <div class="comparison__character">
+          <img
+            :src="comparedAvatar"
+            alt="Character profile"
+            class="comparison__profile"
+          />
+          <span class="comparison__name">
+            {{ route.query.ccharacter }}'s mount collection
+          </span>
+        </div>
+        <button class="comparison__clear">Query again</button>
+      </div>
+
+      <div class="comparison__search" v-if="!comparedMounts && !userMounts">
         <h2 class="search-h2">Add a character</h2>
         <CompareSearchCharacter
           @compared-mounts="comparedMountsChoosed"

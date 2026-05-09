@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { random } from "#imports";
+import { authClient } from "~~/server/lib/auth-client";
+
+const session = authClient.useSession();
 
 interface CharactersMounts {
   mounts: {
@@ -71,6 +74,12 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
 
 <template>
   <div class="compare">
+    <div class="logged-compare">
+      <span class="logged-compare__p">
+        Choose one of your characters to be compared with.
+      </span>
+      <CharactersList v-if="session.data?.user.name" />
+    </div>
     <div class="search">
       <SelectRegion @region="regionSelected" />
       <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
@@ -115,6 +124,11 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
   @media screen and (max-width: 1440px) {
     width: 90%;
   }
+}
+
+.logged-compare {
+  max-width: 600px;
+  margin: auto;
 }
 
 .loading {
