@@ -28,13 +28,13 @@ const searchInput = ref<HTMLInputElement>();
 
 const emit = defineEmits(["region", "realm", "character"]);
 
-function selectCharacter(character: any) {
+async function selectCharacter(character: any) {
   selectedCharacter.value = character;
   searchTerm.value = "";
   showList.value = false;
-  emit("region", region.value);
-  emit("realm", selectedCharacter.value.realm.name);
-  emit("character", selectedCharacter.value.name);
+  emit("region", await region.value);
+  emit("realm", await selectedCharacter.value.realm.slug);
+  emit("character", await selectedCharacter.value.name);
 }
 
 const filteredCharacters = computed(() => {
@@ -256,7 +256,6 @@ onUnmounted(() => {
     &--span {
       position: relative;
       z-index: 1;
-      // line-height: 1;
       &.realm {
         opacity: 0.7;
         font-size: 0.8em;

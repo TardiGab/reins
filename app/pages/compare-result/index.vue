@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
-const { data: userMounts } = await useFetch("/api/mounts");
+// const { data: userMounts } = await useFetch("/api/mounts");
 
 const route = useRoute();
 const session = authClient.useSession();
@@ -71,7 +71,7 @@ const {
   data: characterMounts,
   execute: charGo,
   status: loading,
-} = await useLazyFetch(`/api/character-mounts/`, {
+} = await useLazyFetch("/api/character-mounts/", {
   query: {
     region: route.query.region,
     realm: route.query.realm,
@@ -124,25 +124,14 @@ watch(
   <Header />
   <div class="comparison">
     <div class="comparison__left">
-      <div class="comparison__header" v-if="session.data?.user">
-        <div class="comparison__character">
-          <img
-            src="/images/battlenet.png"
-            alt="Battle.net logo"
-            class="comparison__profile"
-          />
-          <span class="comparison__name"> Your mount collection </span>
-        </div>
-        <button class="comparison__clear">Query again</button>
-      </div>
       <div
         class="comparison__header"
-        v-if="characterMounts && !session.data?.user"
+        v-if="route.query.region && route.query.realm && route.query.character"
       >
         <div class="comparison__character">
           <img
             :src="firstAvatar"
-            alt="Character profile"
+            alt="Character's profile"
             class="comparison__profile"
           />
           <span class="comparison__name">
@@ -152,50 +141,16 @@ watch(
         <button class="comparison__clear">Query again</button>
       </div>
       <CompareMountList
-        :character-mounts="userMounts"
-        v-if="userMounts && session.data?.user"
-      />
-      <CompareMountList
         :character-mounts="characterMounts"
-        v-if="characterMounts && !session.data?.user"
+        v-if="characterMounts"
       />
     </div>
     <div class="comparison__right">
       <div
         class="comparison__header"
-        v-if="characterMounts && session.data?.user"
-      >
-        <div class="comparison__character">
-          <img
-            :src="firstAvatar"
-            alt="Character profile"
-            class="comparison__profile"
-          />
-          <span class="comparison__name">
-            {{ route.query.character }}'s mount collection
-          </span>
-        </div>
-        <button class="comparison__clear">Query again</button>
-      </div>
-      <div
-        class="comparison__header"
-        v-else-if="!session.data?.user && comparedCharacterName"
-      >
-        <div class="comparison__character">
-          <img
-            :src="comparedAvatar"
-            alt="Character profile"
-            class="comparison__profile"
-          />
-          <span class="comparison__name">
-            {{ comparedCharacterName }}'s mount collection
-          </span>
-        </div>
-        <button class="comparison__clear">Query again</button>
-      </div>
-      <div
-        class="comparison__header"
-        v-else-if="!comparedMounts.value && route.query.ccharacter"
+        v-if="
+          route.query.cregion && route.query.crealm && route.query.ccharacter
+        "
       >
         <div class="comparison__character">
           <img
@@ -210,7 +165,12 @@ watch(
         <button class="comparison__clear">Query again</button>
       </div>
 
-      <div class="comparison__search" v-if="!comparedMounts && !userMounts">
+      <div
+        class="comparison__search"
+        v-else-if="
+          !route.query.cregion && !route.query.crealm && !route.query.ccharacter
+        "
+      >
         <h2 class="search-h2">Add a character</h2>
         <CompareSearchCharacter
           @compared-mounts="comparedMountsChoosed"
@@ -220,12 +180,6 @@ watch(
           @avatar="comparedAvatarChoosed"
         />
       </div>
-      <!-- Si l'utilisateur est connecté -->
-      <CompareMountList
-        :character-mounts="characterMounts"
-        v-if="characterMounts && session.data?.user"
-      />
-      <!-- S'il n'est pas connecté et qu'il a fait la recherche -->
       <CompareMountList
         :character-mounts="comparedMounts"
         v-if="comparedMounts"

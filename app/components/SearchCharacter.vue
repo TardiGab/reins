@@ -29,6 +29,14 @@ const loggedRegion = ref<string>("");
 const loggedRegionSelected = (region: string) => {
   loggedRegion.value = region;
 };
+const loggedRealm = ref<string>("");
+const loggedRealmSelected = (realm: string) => {
+  loggedRealm.value = realm;
+};
+const loggedCharacter = ref<string>("");
+const loggedCharacterSelected = (character: string) => {
+  loggedCharacter.value = character;
+};
 
 const characterSearch = ref<string>();
 
@@ -57,14 +65,28 @@ const baseSearch = async () => {
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   baseCharacterName.value = baseCharacterSearch.value;
   baseCharacterMountsData.value = characterMounts.value;
-  await navigateTo({
-    path: "/compare-result",
-    query: {
-      region: regionChoosed.value.toLocaleLowerCase(),
-      realm: realmChoosed.value,
-      character: baseCharacterSearch.value,
-    },
-  });
+  if (session.value.data?.user) {
+    await navigateTo({
+      path: "/compare-result",
+      query: {
+        region: loggedRegion.value.toLocaleLowerCase(),
+        realm: loggedRealm.value,
+        character: loggedCharacter.value,
+        cregion: regionChoosed.value.toLocaleLowerCase(),
+        crealm: realmChoosed.value,
+        ccharacter: baseCharacterSearch.value,
+      },
+    });
+  } else {
+    await navigateTo({
+      path: "/compare-result",
+      query: {
+        region: regionChoosed.value.toLocaleLowerCase(),
+        realm: realmChoosed.value,
+        character: baseCharacterSearch.value,
+      },
+    });
+  }
 };
 let loadingText = ref([
   "Searching saddles...",
@@ -84,10 +106,15 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         <strong>Step 1:</strong> Choose one of your characters to be compared
         with.
       </span>
-      <CharactersList class="characters-list-component" />
+      <CharactersList
+        class="characters-list-component"
+        @realm="loggedRealmSelected"
+        @region="loggedRegionSelected"
+        @character="loggedCharacterSelected"
+      />
     </div>
     <div class="search">
-      <span class="logged-compare__p">
+      <span class="logged-compare__p" v-if="session.data?.user">
         <strong>Step 2:</strong> Search for your friend's character.
       </span>
       <div class="search__container">
