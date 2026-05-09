@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
-// const { data: userMounts } = await useFetch("/api/mounts");
 
 const route = useRoute();
 const session = authClient.useSession();
@@ -11,7 +10,7 @@ const comparedCharacterChoosed = (character: string) => {
   comparedCharacterName.value = character;
 };
 
-const { data: comparedMountsLink, execute: go } = await useLazyFetch(
+const { data: comparedMountsLink, execute: comparedGo } = await useLazyFetch(
   "/api/character-mounts",
   {
     query: {
@@ -23,22 +22,25 @@ const { data: comparedMountsLink, execute: go } = await useLazyFetch(
   },
 );
 
-const { data: comparedCharRender, execute: comparedRenderGo } =
-  await useLazyFetch("/api/character-render", {
-    query: {
-      region: route.query.cregion,
-      realm: route.query.crealm,
-      character: route.query.ccharacter,
-    },
-    immediate: false,
-  });
+const {
+  data: comparedCharRender,
+  execute: comparedRenderGo,
+  clear: comparedClear,
+} = await useLazyFetch("/api/character-render", {
+  query: {
+    region: route.query.cregion,
+    realm: route.query.crealm,
+    character: route.query.ccharacter,
+  },
+  immediate: false,
+});
 
 const comparedMounts = ref();
 
 let comparedMountsChoosed;
 
 if (!comparedMounts.value && route.query.ccharacter) {
-  await go();
+  await comparedGo();
   await comparedRenderGo();
   comparedMounts.value = comparedMountsLink.value;
 } else if (
@@ -71,6 +73,7 @@ const {
   data: characterMounts,
   execute: charGo,
   status: loading,
+  clear: charClear,
 } = await useLazyFetch("/api/character-mounts/", {
   query: {
     region: route.query.region,
@@ -103,7 +106,7 @@ onMounted(async () => {
 });
 
 const showLeft = ref(true);
-const showRight = ref(false);
+const showRight = ref();
 
 watch(
   () => comparedCharacterName.value,
@@ -119,6 +122,22 @@ watch(
       url.searchParams.set("ccharacter", comparedCharacterName.value!);
       history.pushState({}, "", url.href);
       showRight.value = true;
+    }
+  },
+);
+
+watch(
+  () => showRight.value,
+  () => {
+    console.log(showRight.value);
+
+    if (showRight.value === false) {
+      comparedClear();
+      let url = new URL(window?.location.href);
+      url.searchParams.delete("cregion", comparedRegion.value!);
+      url.searchParams.delete("crealm", comparedRealm.value!);
+      url.searchParams.delete("ccharacter", comparedCharacterName.value!);
+      history.pushState({}, "", url.href);
     }
   },
 );
@@ -165,16 +184,7 @@ watch(
       />
     </div>
     <div class="comparison__right">
-      <div
-        class="comparison__header"
-        v-if="
-          (route.query.cregion &&
-            route.query.crealm &&
-            route.query.ccharacter) ||
-          showRight ||
-          comparedMounts
-        "
-      >
+      <div class="comparison__header" v-if="showRight">
         <div class="comparison__character">
           <img
             :src="comparedAvatar"
@@ -204,7 +214,10 @@ watch(
       <div
         class="comparison__search"
         v-else-if="
-          !route.query.cregion && !route.query.crealm && !route.query.ccharacter
+          !showRight &&
+          !route.query.cregion &&
+          !route.query.crealm &&
+          !route.query.ccharacter
         "
       >
         <h2 class="search-h2">Add a character</h2>
@@ -218,7 +231,13 @@ watch(
       </div>
       <CompareMountList
         :character-mounts="comparedMounts"
-        v-if="comparedMounts"
+        v-if="
+          comparedMounts &&
+          showRight &&
+          !route.query.cregion &&
+          !route.query.crealm &&
+          !route.query.ccharacter
+        "
       />
     </div>
   </div>
