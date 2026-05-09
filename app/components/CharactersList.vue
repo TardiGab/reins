@@ -4,7 +4,6 @@ const { data: profile } = await useFetch("/api/account-profile");
 const region = ref();
 
 if (profile.value) {
-  console.log(profile.value);
   profile.value.forEach((array: any) => {
     // Source - https://stackoverflow.com/a/4444497
     // Posted by kemiller2002, modified by community. See post 'Timeline' for change history
@@ -21,15 +20,21 @@ if (profile.value) {
 }
 
 const selectedCharacter = ref();
+const selectedCharacterRealm = ref();
 const searchTerm = ref("");
 const showList = ref(false);
 const boxContainer = ref<HTMLDivElement>();
 const searchInput = ref<HTMLInputElement>();
 
+const emit = defineEmits(["region", "realm", "character"]);
+
 function selectCharacter(character: any) {
   selectedCharacter.value = character;
   searchTerm.value = "";
   showList.value = false;
+  emit("region", region.value);
+  emit("realm", selectedCharacter.value.realm.name);
+  emit("character", selectedCharacter.value.name);
 }
 
 const filteredCharacters = computed(() => {
@@ -63,10 +68,10 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="realm-choice">
+  <div class="character-choice">
     <div
-      class="realm-choice__container"
-      :class="{ 'realm-choice__container--open': showList }"
+      class="character-choice__container"
+      :class="{ 'character-choice__container--open': showList }"
       ref="boxContainer"
     >
       <svg
@@ -82,7 +87,7 @@ onUnmounted(() => {
       </svg>
       <button
         @click="showList = !showList"
-        class="realm-choice__button"
+        class="character-choice__button"
         :class="{ 'hide-button': showList }"
       >
         {{ selectedCharacter?.name || "Select a character" }}
@@ -91,18 +96,23 @@ onUnmounted(() => {
         type="text"
         v-model="searchTerm"
         ref="searchInput"
-        class="realm-choice__input"
+        class="character-choice__input"
         placeholder="Select a character"
         v-focus
         v-if="showList"
       />
-      <div class="realm-list" v-if="showList">
+      <div class="character-list" v-if="showList">
         <div
-          class="realm-list__value"
+          class="character-list__value"
           v-for="character in filteredCharacters"
           @click="selectCharacter(character)"
         >
-          <span class="realm-list__value--span">{{ character.name }}</span>
+          <span class="character-list__value--span">
+            {{ character.name }}
+          </span>
+          <span class="character-list__value--span realm">
+            {{ character.realm.name }}</span
+          >
         </div>
       </div>
     </div>
@@ -110,7 +120,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-.realm-choice {
+.character-choice {
   position: relative;
   width: 70%;
   font-size: $main-size;
@@ -210,7 +220,7 @@ onUnmounted(() => {
     }
   }
 }
-.realm-list {
+.character-list {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -239,9 +249,18 @@ onUnmounted(() => {
     text-align: center;
     text-shadow: 1px 1px black;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
     &--span {
       position: relative;
       z-index: 1;
+      // line-height: 1;
+      &.realm {
+        opacity: 0.7;
+        font-size: 0.8em;
+      }
     }
     &::after {
       content: "";

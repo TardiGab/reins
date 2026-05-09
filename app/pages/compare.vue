@@ -6,8 +6,8 @@
     <h1 class="compare-h1">Check your friends' mount collection!</h1>
     <p class="compare-p">
       Search for your friend's character's realm and enter their name to view
-      their mount collection. Your collection will also be loaded automatically,
-      but you can remove it to compare the collections of two different people.
+      their mount collection. If you've linked your Battle.net account to Reins,
+      you can choose one of your own characters to be compared with.
     </p>
   </div>
 
