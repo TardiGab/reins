@@ -102,6 +102,9 @@ onMounted(async () => {
   }
 });
 
+const showLeft = ref(true);
+const showRight = ref(false);
+
 watch(
   () => comparedCharacterName.value,
   () => {
@@ -115,6 +118,7 @@ watch(
       url.searchParams.set("crealm", comparedRealm.value!);
       url.searchParams.set("ccharacter", comparedCharacterName.value!);
       history.pushState({}, "", url.href);
+      showRight.value = true;
     }
   },
 );
@@ -126,7 +130,10 @@ watch(
     <div class="comparison__left">
       <div
         class="comparison__header"
-        v-if="route.query.region && route.query.realm && route.query.character"
+        v-if="
+          (route.query.region && route.query.realm && route.query.character) ||
+          showLeft
+        "
       >
         <div class="comparison__character">
           <img
@@ -138,7 +145,19 @@ watch(
             {{ route.query.character }}'s mount collection
           </span>
         </div>
-        <button class="comparison__clear">Query again</button>
+        <button class="comparison__clear" @click="showLeft = !showLeft">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#FFD100"
+              d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
+            />
+          </svg>
+        </button>
       </div>
       <CompareMountList
         :character-mounts="characterMounts"
@@ -149,7 +168,11 @@ watch(
       <div
         class="comparison__header"
         v-if="
-          route.query.cregion && route.query.crealm && route.query.ccharacter
+          (route.query.cregion &&
+            route.query.crealm &&
+            route.query.ccharacter) ||
+          showRight ||
+          comparedMounts
         "
       >
         <div class="comparison__character">
@@ -159,10 +182,23 @@ watch(
             class="comparison__profile"
           />
           <span class="comparison__name">
-            {{ route.query.ccharacter }}'s mount collection
+            {{ route.query.ccharacter || comparedCharacterName }}'s mount
+            collection
           </span>
         </div>
-        <button class="comparison__clear">Query again</button>
+        <button class="comparison__clear" @click="showRight = !showRight">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="#FFD100"
+              d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
+            />
+          </svg>
+        </button>
       </div>
 
       <div
@@ -243,6 +279,18 @@ watch(
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
+    }
+  }
+  &__clear {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      filter: brightness(75%);
     }
   }
 }

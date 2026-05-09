@@ -91,9 +91,9 @@ const baseSearch = async () => {
 let loadingText = ref([
   "Searching saddles...",
   "Looking for Invincible...",
-  "These webs will summon Nerubians, don't stand in 'em!",
   "Cleaning stable...",
   "Gathering horseshoes...",
+  "Fighting Nullaeus...",
 ]);
 
 let randomLoadingValue = random(0, loadingText.value.length - 1);
