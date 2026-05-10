@@ -134,6 +134,11 @@ const comparedOpenAccordionDiffValue = (value: number) => {
   comparedOpenAccordionDiff.value = value;
 };
 
+const compareClosedAccordionDiff = ref<number>();
+const comparedAccordionDiffValue = (value: number) => {
+  compareClosedAccordionDiff.value = value;
+};
+
 const firstAvatar = ref<string>();
 const showLeft = ref(true);
 const showRight = ref(true);
@@ -147,14 +152,6 @@ onMounted(async () => {
   if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
     showRight.value = false;
   }
-  console.log("Base Open:", baseOpenAccordionDiff.value);
-  console.log("Compared Open:", comparedOpenAccordionDiff.value);
-  console.log(
-    "Diff:",
-    comparedOpenAccordionDiff.value! - baseOpenAccordionDiff.value!,
-  );
-
-  // console.log("Base closed:", baseClosedAccordionDiff.value);
 });
 
 watch(
@@ -349,10 +346,13 @@ watch(
         />
       </div>
       <CompareMountList
+        :open-base-diff="baseOpenAccordionDiff"
+        :open-compared-diff="comparedOpenAccordionDiff"
+        :base-diff="baseClosedAccordionDiff"
+        :compared-diff="compareClosedAccordionDiff"
         :character-mounts="comparedMounts"
-        :base-diff="baseOpenAccordionDiff"
-        :compared-diff="comparedOpenAccordionDiff"
         @unlocked-amount-o="comparedOpenAccordionDiffValue"
+        @unlocked-amount="comparedAccordionDiffValue"
         v-if="
           comparedMounts &&
           showRight &&

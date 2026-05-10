@@ -11,6 +11,8 @@ interface Mount {
 
 const props = defineProps<{
   characterMounts?: Mount[];
+  openBaseDiff?: number;
+  openComparedDiff?: number;
   baseDiff?: number;
   comparedDiff?: number;
 }>();
@@ -37,6 +39,8 @@ const ownedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
 let numberOfMountsUnlocked = 0;
 let totalMountNumber: number = 0;
+
+let comparedDiffValue: any[] = [];
 
 mountsGlobal.forEach((item, i) => {
   categoryOwnedMountsArray.push({
@@ -69,13 +73,17 @@ mountsGlobal.forEach((item, i) => {
         ) {
           categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
           categoryOwnedMountsArray[i].unlockedAmount += 1;
+
+          comparedDiffValue.push(
+            categoryOwnedMountsArray[i].categoryName,
+            categoryOwnedMountsArray[i].unlockedAmount,
+          );
+
           emit(
             "unlocked-amount-O",
             categoryOwnedMountsArray[0]?.unlockedAmount,
           );
-          emit("unlocked-amount", [
-            categoryOwnedMountsArray[index + 1]?.unlockedAmount,
-          ]);
+          emit("unlocked-amount", categoryOwnedMountsArray[i]?.unlockedAmount);
         }
       }
     });
@@ -91,8 +99,8 @@ mountsGlobal.forEach((item, i) => {
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
-          :compared-diff="props.comparedDiff"
-          :base-diff="props.baseDiff"
+          :compared-diff="props.openComparedDiff"
+          :base-diff="props.openBaseDiff"
         >
           <div class="expansion__container">
             <div
@@ -137,6 +145,8 @@ mountsGlobal.forEach((item, i) => {
               categoryOwnedMountsArray[index + 1]?.unlockedAmount
             "
             :amount="categoryOwnedMountsArray[index + 1]?.amount"
+            :base-diff="props.baseDiff"
+            :compared-diff="props.comparedDiff"
           >
             <div class="expansion__container">
               <div

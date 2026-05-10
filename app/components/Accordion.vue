@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   title: String,
   unlockedAmount: Number,
   amount: Number,
-  diff: Number,
+  baseDiff: Number,
+  comparedDiff: Number,
 });
 
 let isOpen = ref(false);
@@ -17,6 +18,23 @@ function openAccordion() {
     window.$WowheadPower.refreshLinks();
   }, 10);
 }
+
+const negativeDiff = ref("negative-diff");
+const positive = ref(false);
+
+watch(
+  () => props.comparedDiff && props.baseDiff,
+  () => {
+    // console.log(props.comparedDiff);
+    console.log(props.baseDiff);
+
+    if (props.comparedDiff) {
+      if (props.comparedDiff! > props.baseDiff!) {
+        positive.value = true;
+      }
+    }
+  },
+);
 </script>
 
 <template>
@@ -24,7 +42,24 @@ function openAccordion() {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
-        <span>{{ diff }}</span>
+        <!-- <span
+          v-if="comparedDiff && baseDiff"
+          :class="[{ 'positive-diff': positive }, negativeDiff]"
+        >
+          {{ comparedDiff - baseDiff }}
+        </span> -->
+        <span
+          v-if="comparedDiff && baseDiff"
+          :class="[{ 'positive-diff': positive }, negativeDiff]"
+        >
+          {{ baseDiff }}
+        </span>
+        <span
+          v-if="comparedDiff && baseDiff"
+          :class="[{ 'positive-diff': positive }, negativeDiff]"
+        >
+          {{ comparedDiff }}
+        </span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
@@ -106,5 +141,21 @@ function openAccordion() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.negative-diff {
+  color: $bright-red;
+}
+
+.positive-diff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  color: $bright-green;
+  &::before {
+    content: "+";
+    line-height: 1;
+  }
 }
 </style>
