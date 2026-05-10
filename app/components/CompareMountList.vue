@@ -11,7 +11,11 @@ interface Mount {
 
 const props = defineProps<{
   characterMounts?: Mount[];
+  baseDiff?: number;
+  comparedDiff?: number;
 }>();
+
+const emit = defineEmits(["unlocked-amount-O", "unlocked-amount"]);
 
 const userMountsIds = props.characterMounts?.map((item: any) => {
   return item.mount.id;
@@ -65,6 +69,13 @@ mountsGlobal.forEach((item, i) => {
         ) {
           categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
           categoryOwnedMountsArray[i].unlockedAmount += 1;
+          emit(
+            "unlocked-amount-O",
+            categoryOwnedMountsArray[0]?.unlockedAmount,
+          );
+          emit("unlocked-amount", [
+            categoryOwnedMountsArray[index + 1]?.unlockedAmount,
+          ]);
         }
       }
     });
@@ -80,6 +91,8 @@ mountsGlobal.forEach((item, i) => {
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
+          :compared-diff="props.comparedDiff"
+          :base-diff="props.baseDiff"
         >
           <div class="expansion__container">
             <div
@@ -142,7 +155,7 @@ mountsGlobal.forEach((item, i) => {
                     }"
                   >
                     <a
-                      :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                      :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
                       target="_blank"
                       class="mount-item__link"
                     >

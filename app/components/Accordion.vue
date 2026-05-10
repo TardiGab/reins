@@ -5,6 +5,7 @@ defineProps({
   title: String,
   unlockedAmount: Number,
   amount: Number,
+  diff: Number,
 });
 
 let isOpen = ref(false);
@@ -23,6 +24,7 @@ function openAccordion() {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
+        <span>{{ diff }}</span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
@@ -99,5 +101,10 @@ function openAccordion() {
       gap: 1rem;
     }
   }
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

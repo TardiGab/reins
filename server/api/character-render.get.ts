@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       if (!res.ok) {
         getBlizzToken = await getBlizzAccessToken(res.status);
         accessToken = getBlizzToken.access_token;
-        handleFailure(accessToken);
+        return await handleFailure(accessToken);
       }
       return res.json();
     })
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
       return assets;
     })
     .catch((error) => {
-      console.error("Error fetching user mounts:", error);
+      console.error("Error fetching user render:", error);
     });
 
   async function handleFailure(accessToken: string) {

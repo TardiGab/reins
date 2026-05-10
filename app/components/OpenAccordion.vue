@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   title: String,
   unlockedAmount: Number,
   amount: Number,
+  baseDiff: Number,
+  comparedDiff: Number,
 });
 
 let isOpen = ref(true);
@@ -17,6 +19,20 @@ function openAccordion() {
   }, 10);
 }
 
+const negativeDiff = ref("negative-diff");
+const positive = ref(false);
+
+watch(
+  () => props.comparedDiff && props.baseDiff,
+  () => {
+    if (props.comparedDiff) {
+      if (props.comparedDiff! > props.baseDiff!) {
+        positive.value = true;
+      }
+    }
+  },
+);
+
 onMounted(() => {
   window.$WowheadPower.refreshLinks();
 });
@@ -27,6 +43,12 @@ onMounted(() => {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
+        <span
+          v-if="baseDiff && comparedDiff"
+          :class="[{ 'positive-diff': positive }, negativeDiff]"
+        >
+          {{ comparedDiff - baseDiff }}
+        </span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
@@ -102,6 +124,27 @@ onMounted(() => {
       align-items: center;
       gap: 1rem;
     }
+  }
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.negative-diff {
+  color: $bright-red;
+}
+
+.positive-diff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  color: $bright-green;
+  &::before {
+    content: "+";
+    line-height: 1;
   }
 }
 </style>

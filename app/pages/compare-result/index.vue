@@ -3,30 +3,16 @@ import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
 
 const route = useRoute();
+const router = useRouter();
 const session = authClient.useSession();
 
-const comparedCharacterName = ref<string>();
-const comparedCharacterChoosed = (character: string) => {
-  comparedCharacterName.value = character;
-};
-
-const { data: comparedMountsLink, execute: comparedGo } = await useLazyFetch(
-  "/api/character-mounts",
-  {
-    query: {
-      region: route.query.cregion,
-      realm: route.query.crealm,
-      character: route.query.ccharacter,
-    },
-    immediate: false,
-  },
-);
+const props = defineProps(["openBaseDiff", "openComparedDiff"]);
 
 const {
-  data: comparedCharRender,
-  execute: comparedRenderGo,
+  data: comparedMountsLink,
+  execute: comparedGo,
   clear: comparedClear,
-} = await useLazyFetch("/api/character-render", {
+} = await useLazyFetch("/api/character-mounts", {
   query: {
     region: route.query.cregion,
     realm: route.query.crealm,
@@ -35,45 +21,21 @@ const {
   immediate: false,
 });
 
-const comparedMounts = ref();
-
-let comparedMountsChoosed;
-
-if (!comparedMounts.value && route.query.ccharacter) {
-  await comparedGo();
-  await comparedRenderGo();
-  comparedMounts.value = comparedMountsLink.value;
-} else if (
-  !comparedMounts.value &&
-  !route.query.cregion &&
-  !route.query.crealm &&
-  !route.query.ccharacter
-) {
-  comparedMountsChoosed = (character: any[]) => {
-    comparedMounts.value = character;
-  };
-}
-
-const comparedRealm = ref<string>();
-const comparedRealmChoosed = (realm: string) => {
-  comparedRealm.value = realm;
-};
-
-const comparedRegion = ref<string>();
-const comparedRegionChoosed = (region: string) => {
-  comparedRegion.value = region;
-};
-
-const comparedAvatar = ref<string>();
-const comparedAvatarChoosed = (avatar: string) => {
-  comparedAvatar.value = avatar;
-};
+const { data: comparedCharRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  });
 
 const {
   data: characterMounts,
-  execute: charGo,
+  execute: baseGo,
   status: loading,
-  clear: charClear,
+  clear: baseClear,
 } = await useLazyFetch("/api/character-mounts/", {
   query: {
     region: route.query.region,
@@ -94,19 +56,106 @@ const { data: characterRender, execute: renderGo } = await useLazyFetch(
   },
 );
 
-const firstAvatar = ref<string>();
+const comparedMounts = ref();
 
+let baseMountsChoosed = (character: any[]) => {
+  characterMounts.value = character;
+};
+
+let comparedMountsChoosed;
+
+if (!comparedMounts.value && route.query.ccharacter) {
+  await comparedGo();
+  await comparedRenderGo();
+  comparedMounts.value = comparedMountsLink.value;
+} else if (
+  !comparedMounts.value &&
+  !route.query.cregion &&
+  !route.query.crealm &&
+  !route.query.ccharacter
+) {
+  comparedMountsChoosed = (character: any[]) => {
+    comparedMounts.value = character;
+  };
+}
+
+const baseRealm = ref<string>();
+const baseRealmChoosed = (realm: string) => {
+  baseRealm.value = realm;
+};
+
+const comparedRealm = ref<string>();
+const comparedRealmChoosed = (realm: string) => {
+  comparedRealm.value = realm;
+};
+
+const baseRegion = ref<string>();
+const baseRegionChoosed = (region: string) => {
+  baseRegion.value = region;
+};
+
+const comparedRegion = ref<string>();
+const comparedRegionChoosed = (region: string) => {
+  comparedRegion.value = region;
+};
+
+const baseCharacterName = ref<string>();
+const baseCharacterChoosed = (character: string) => {
+  baseCharacterName.value = character;
+};
+
+const comparedCharacterName = ref<string>();
+const comparedCharacterChoosed = (character: string) => {
+  comparedCharacterName.value = character;
+};
+
+// const baseAvatar = ref<string>();
+// const baseAvatarChoosed = (avatar: string) => {
+//   baseAvatar.value = avatar;
+// };
+
+const comparedAvatar = ref<string>();
+const comparedAvatarChoosed = (avatar: string) => {
+  comparedAvatar.value = avatar;
+};
+
+const baseOpenAccordionDiff = ref<number>();
+const baseOpenAccordionDiffValue = (value: number) => {
+  baseOpenAccordionDiff.value = value;
+};
+
+const baseClosedAccordionDiff = ref<number>();
+const baseClosedAccordionDiffValue = (value: number) => {
+  baseClosedAccordionDiff.value = value;
+};
+
+const comparedOpenAccordionDiff = ref<number>();
+const comparedOpenAccordionDiffValue = (value: number) => {
+  comparedOpenAccordionDiff.value = value;
+};
+
+const firstAvatar = ref<string>();
+const showLeft = ref(true);
+const showRight = ref(true);
 onMounted(async () => {
-  await charGo();
+  await baseGo();
   await renderGo();
   firstAvatar.value = await characterRender.value[0].value;
   if (comparedCharRender.value) {
     comparedAvatar.value = await comparedCharRender.value[0].value;
   }
-});
+  if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
+    showRight.value = false;
+  }
+  console.log("Base Open:", baseOpenAccordionDiff.value);
+  console.log("Compared Open:", comparedOpenAccordionDiff.value);
+  console.log(
+    "Diff:",
+    comparedOpenAccordionDiff.value! - baseOpenAccordionDiff.value!,
+  );
 
-const showLeft = ref(true);
-const showRight = ref();
+  // console.log("Base closed:", baseClosedAccordionDiff.value);
+});
 
 watch(
   () => comparedCharacterName.value,
@@ -116,12 +165,44 @@ watch(
       comparedRealm.value &&
       comparedCharacterName.value
     ) {
-      let url = new URL(window?.location.href);
-      url.searchParams.set("cregion", comparedRegion.value!);
-      url.searchParams.set("crealm", comparedRealm.value!);
-      url.searchParams.set("ccharacter", comparedCharacterName.value!);
-      history.pushState({}, "", url.href);
+      router.push({
+        path: `${route.fullPath}`,
+        query: {
+          region: route.query.region,
+          realm: route.query.realm,
+          character: route.query.character,
+          cregion: comparedRegion.value,
+          crealm: comparedRealm.value,
+          ccharacter: comparedCharacterName.value,
+        },
+      });
+      comparedGo();
       showRight.value = true;
+    }
+  },
+);
+watch(
+  () => baseCharacterName.value,
+  () => {
+    if (baseRegion.value && baseRealm.value && baseCharacterName.value) {
+      router.push({
+        path: `${route.fullPath}`,
+        query: {
+          region: baseRegion.value,
+          realm: baseRealm.value,
+          character: baseCharacterName.value,
+          cregion: route.query.cregion,
+          crealm: route.query.crealm,
+          ccharacter: route.query.ccharacter,
+        },
+      });
+      // let url = new URL(window?.location.href);
+      // url.searchParams.set("region", baseRegion.value!);
+      // url.searchParams.set("realm", baseRealm.value!);
+      // url.searchParams.set("character", baseCharacterName.value!);
+      // history.pushState({}, "", url.href);
+      baseGo();
+      showLeft.value = true;
     }
   },
 );
@@ -129,15 +210,48 @@ watch(
 watch(
   () => showRight.value,
   () => {
-    console.log(showRight.value);
+    console.log("Right:", showRight.value);
 
     if (showRight.value === false) {
-      comparedClear();
       let url = new URL(window?.location.href);
-      url.searchParams.delete("cregion", comparedRegion.value!);
-      url.searchParams.delete("crealm", comparedRealm.value!);
-      url.searchParams.delete("ccharacter", comparedCharacterName.value!);
+      url.searchParams.delete("cregion");
+      url.searchParams.delete("crealm");
+      url.searchParams.delete("ccharacter");
       history.pushState({}, "", url.href);
+      comparedClear();
+    }
+  },
+);
+
+watch(
+  () => showLeft.value,
+  () => {
+    console.log("Left:", showLeft.value);
+
+    if (showLeft.value === false) {
+      let url = new URL(window?.location.href);
+      url.searchParams.delete("region");
+      url.searchParams.delete("realm");
+      url.searchParams.delete("character");
+      history.pushState({}, "", url.href);
+      baseClear();
+    }
+  },
+);
+
+watch(
+  () => route.fullPath,
+  async () => {
+    if (route.query.region && route.query.realm && route.query.character) {
+      baseGo();
+      renderGo();
+    } else if (
+      route.query.cregion &&
+      route.query.crealm &&
+      route.query.ccharacter
+    ) {
+      await comparedGo();
+      await comparedRenderGo();
     }
   },
 );
@@ -147,13 +261,7 @@ watch(
   <Header />
   <div class="comparison">
     <div class="comparison__left">
-      <div
-        class="comparison__header"
-        v-if="
-          (route.query.region && route.query.realm && route.query.character) ||
-          showLeft
-        "
-      >
+      <div class="comparison__header" v-if="showLeft">
         <div class="comparison__character">
           <img
             :src="firstAvatar"
@@ -178,9 +286,20 @@ watch(
           </svg>
         </button>
       </div>
+      <div class="comparison__search" v-else-if="!showLeft">
+        <h2 class="search-h2">Add a character</h2>
+        <CompareSearchCharacter
+          @character="baseCharacterChoosed"
+          @realm="baseRealmChoosed"
+          @region="baseRegionChoosed"
+          @compared-mounts="baseMountsChoosed"
+        />
+      </div>
       <CompareMountList
         :character-mounts="characterMounts"
-        v-if="characterMounts"
+        v-if="characterMounts && showLeft"
+        @unlocked-amount-o="baseOpenAccordionDiffValue"
+        @unlocked-amount="baseClosedAccordionDiffValue"
       />
     </div>
     <div class="comparison__right">
@@ -214,10 +333,10 @@ watch(
       <div
         class="comparison__search"
         v-else-if="
-          !showRight &&
-          !route.query.cregion &&
-          !route.query.crealm &&
-          !route.query.ccharacter
+          !showRight ||
+          (!route.query.cregion &&
+            !route.query.crealm &&
+            !route.query.ccharacter)
         "
       >
         <h2 class="search-h2">Add a character</h2>
@@ -231,12 +350,15 @@ watch(
       </div>
       <CompareMountList
         :character-mounts="comparedMounts"
+        :base-diff="baseOpenAccordionDiff"
+        :compared-diff="comparedOpenAccordionDiff"
+        @unlocked-amount-o="comparedOpenAccordionDiffValue"
         v-if="
           comparedMounts &&
           showRight &&
-          !route.query.cregion &&
-          !route.query.crealm &&
-          !route.query.ccharacter
+          route.query.cregion &&
+          route.query.crealm &&
+          route.query.ccharacter
         "
       />
     </div>

@@ -59,6 +59,8 @@ let avatar = ref();
 const search = async () => {
   await go();
   await comparedRenderGo();
+  console.log(await comparedCharacterRender.value);
+
   avatar.value = await comparedCharacterRender.value[0].value;
   randomLoadingValue = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
