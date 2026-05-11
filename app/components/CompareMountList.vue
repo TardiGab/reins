@@ -14,7 +14,14 @@ const props = defineProps<{
   openComparedDiff?: number;
   baseDiff?: number;
   comparedDiff?: number;
+  amount?: number;
+  unlockedAmount?: number;
+  characterMounts: any;
 }>();
+
+const userMountsIds = props.characterMounts?.map((item: any) => {
+  return item.mount.id;
+});
 
 const emit = defineEmits(["unlocked-amount-O", "unlocked-amount"]);
 
@@ -32,18 +39,65 @@ interface CategoryOwnedMounts {
 }
 const ownedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
+let numberOfMountsUnlocked = 0;
+let totalMountNumber: number = 0;
+let comparedDiffValue: any[] = [];
+
+mountsGlobal.forEach((item, i) => {
+  categoryOwnedMountsArray.push({
+    categoryName: item.name,
+    subCategories: [],
+    amount: 0,
+    unlockedAmount: 0,
+  });
+
+  item?.subcats?.forEach((subcats, index) => {
+    if (categoryOwnedMountsArray[i])
+      categoryOwnedMountsArray[i].subCategories[index] = {
+        subcatName: subcats.name,
+        amount: 0,
+        unlockedAmount: 0,
+      };
+
+    subcats?.items?.forEach((mount) => {
+      // console.log(mount);
+      if (categoryOwnedMountsArray[i]?.subCategories[index]) {
+        categoryOwnedMountsArray[i].subCategories[index].amount += 1;
+        categoryOwnedMountsArray[i].amount += 1;
+      }
+      totalMountNumber += 1;
+      if (userMountsIds?.includes(mount.ID)) {
+        ownedMountArray.push(mount.ID);
+        numberOfMountsUnlocked = numberOfMountsUnlocked + 1;
+        if (
+          categoryOwnedMountsArray[i] &&
+          categoryOwnedMountsArray[i].subCategories[index]
+        ) {
+          categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
+          categoryOwnedMountsArray[i].unlockedAmount += 1;
+
+          comparedDiffValue.push(
+            categoryOwnedMountsArray[i].categoryName,
+            categoryOwnedMountsArray[i].unlockedAmount,
+          );
+        }
+      }
+    });
+  });
+});
 </script>
 
 <template>
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div class="expansion">
-        <OpenAccordion
+        <Accordion
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
           :compared-diff="props.openComparedDiff"
           :base-diff="props.openBaseDiff"
+          :open="true"
         >
           <div class="expansion__container">
             <div
@@ -76,7 +130,7 @@ let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
               </ul>
             </div>
           </div>
-        </OpenAccordion>
+        </Accordion>
         <div
           v-for="(expansion, index) in mountsGlobal.slice(1)"
           :key="expansion.name"

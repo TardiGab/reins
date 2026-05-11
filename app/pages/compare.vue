@@ -1,7 +1,6 @@
 <script></script>
 
 <template>
-  <Header />
   <div class="compare-text">
     <h1 class="compare-h1">Check your friends' mount collection!</h1>
     <p class="compare-p">

@@ -7,9 +7,14 @@ const props = defineProps({
   amount: Number,
   baseDiff: Number,
   comparedDiff: Number,
+  open: Boolean,
 });
 
 let isOpen = ref(false);
+
+if (props.open) {
+  isOpen.value = true;
+}
 
 function openAccordion() {
   isOpen.value = !isOpen.value;

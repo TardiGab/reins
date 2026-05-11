@@ -271,93 +271,10 @@ watch(
 </script>
 
 <template>
-  <Header />
-  <div class="comparison">
-    <ListCompare
-      :open-base-diff="openBaseDiff"
-      :open-compared-diff="openComparedDiff"
-    ></ListCompare>
-  </div>
+  <Comparison
+    :open-base-diff="openBaseDiff"
+    :open-compared-diff="openComparedDiff"
+  />
 </template>
 
-<style scoped lang="scss">
-.user-mounts {
-  width: 100% !important;
-  height: 80vh !important;
-}
-
-.comparison {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-end;
-  &__left,
-  &__right {
-    width: 100%;
-  }
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: calc(100% - 2rem);
-    margin-bottom: 1rem;
-    padding: 0 1rem;
-  }
-  &__character {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  &__profile {
-    border: solid 2px $border-container;
-    border-radius: 0.5rem;
-    height: 3rem;
-    width: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: $corner-shape-s;
-    }
-  }
-  &__name {
-    font-family: $main-size;
-  }
-  &__search {
-    padding: 2rem;
-    border-radius: 1rem;
-    border: 2px solid $border-container;
-    background-image: url("/images/wooden-background-2.webp");
-    box-shadow: 0 0 40px 0 #000 inset;
-    background-repeat: repeat;
-    background-attachment: local;
-    height: calc(80vh - 4rem);
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: $corner-shape-s;
-    }
-  }
-  &__clear {
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:hover {
-      filter: brightness(75%);
-    }
-  }
-}
-.search-h2 {
-  font-size: $h2-size;
-  background: linear-gradient(180deg, #ffd100 0%, #dfaa03 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin: 0;
-  margin-bottom: 2rem;
-}
-</style>
+<style scoped lang="scss"></style>

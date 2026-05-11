@@ -16,7 +16,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <Header />
   <main class="main">
     <MountSidePanel />
     <MountList />
