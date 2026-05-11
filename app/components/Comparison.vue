@@ -205,8 +205,8 @@ const baseOpenAccordionDiffValue = (value: number) => {
   baseOpenAccordionDiff.value = value;
 };
 
-const baseClosedAccordionDiff = ref<number>();
-const baseClosedAccordionDiffValue = (value: number) => {
+const baseClosedAccordionDiff = ref<number[]>();
+const baseClosedAccordionDiffValue = (value: number[]) => {
   baseClosedAccordionDiff.value = value;
 };
 
@@ -215,8 +215,8 @@ const comparedOpenAccordionDiffValue = (value: number) => {
   comparedOpenAccordionDiff.value = value;
 };
 
-const compareClosedAccordionDiff = ref<number>();
-const comparedAccordionDiffValue = (value: number) => {
+const compareClosedAccordionDiff = ref<number[]>();
+const comparedAccordionDiffValue = (value: number[]) => {
   compareClosedAccordionDiff.value = value;
 };
 
@@ -336,17 +336,20 @@ watch(
   },
 );
 
+const baseDiffArray = ref<number[]>([]);
+const comparedDiffArray = ref<number[]>([]);
+const baseDiff = ref<number>();
+const comparedDiff = ref<number>();
+
 watch(
   () => baseClosedAccordionDiff.value,
   () => {
-    const diffMountOwned =
-      compareClosedAccordionDiff.value! - baseClosedAccordionDiff.value!;
-
-    console.log(
-      diffMountOwned,
-      compareClosedAccordionDiff.value,
-      baseClosedAccordionDiff.value,
-    );
+    for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+      comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+      comparedDiffArray.value.push(comparedDiff.value);
+      baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+      baseDiffArray.value.push(baseDiff.value);
+    }
   },
 );
 </script>
@@ -446,8 +449,8 @@ watch(
       <CompareMountList
         :open-base-diff="baseOpenAccordionDiff"
         :open-compared-diff="comparedOpenAccordionDiff"
-        :base-diff="baseClosedAccordionDiff"
-        :compared-diff="compareClosedAccordionDiff"
+        :base-diff="baseDiffArray"
+        :compared-diff="comparedDiffArray"
         :character-mounts="comparedMounts"
         :mounts-owned-by-other="characterMounts"
         @unlocked-amount-o="comparedOpenAccordionDiffValue"

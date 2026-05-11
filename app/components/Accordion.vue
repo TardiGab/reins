@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const props = defineProps({
-  title: String,
-  unlockedAmount: Number,
-  amount: Number,
-  baseDiff: Number,
-  comparedDiff: Number,
-  open: Boolean,
-});
+const props = defineProps<{
+  title?: string;
+  unlockedAmount?: number;
+  amount?: number;
+  baseDiff?: number;
+  comparedDiff?: number;
+  open: boolean;
+}>();
 
 let isOpen = ref(false);
 
@@ -28,13 +28,10 @@ const negativeDiff = ref("negative-diff");
 const positive = ref(false);
 
 watch(
-  () => props.comparedDiff && props.baseDiff,
+  () => props.comparedDiff || props.baseDiff,
   () => {
-    // console.log(props.comparedDiff);
-    console.log(props.baseDiff);
-
     if (props.comparedDiff) {
-      if (props.comparedDiff! > props.baseDiff!) {
+      if (props.comparedDiff! >= props.baseDiff!) {
         positive.value = true;
       }
     }
@@ -53,18 +50,6 @@ watch(
         >
           {{ comparedDiff - baseDiff }}
         </span>
-        <!-- <span
-          v-if="comparedDiff && baseDiff"
-          :class="[{ 'positive-diff': positive }, negativeDiff]"
-        >
-          {{ baseDiff }}
-        </span>
-        <span
-          v-if="comparedDiff && baseDiff"
-          :class="[{ 'positive-diff': positive }, negativeDiff]"
-        >
-          {{ comparedDiff }} -->
-        <!-- </span> -->
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg

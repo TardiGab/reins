@@ -12,8 +12,8 @@ interface Mount {
 const props = defineProps<{
   openBaseDiff?: number;
   openComparedDiff?: number;
-  baseDiff?: number;
-  comparedDiff?: number;
+  baseDiff?: number[];
+  comparedDiff?: number[];
   amount?: number;
   unlockedAmount?: number;
   characterMounts: any;
@@ -23,7 +23,7 @@ const userMountsIds = props.characterMounts?.map((item: any) => {
   return item.mount.id;
 });
 
-const emit = defineEmits(["unlocked-amount-O", "unlocked-amount"]);
+const emit = defineEmits(["unlocked-amount-o", "unlocked-amount"]);
 
 interface SubCategoryOwnedMounts {
   subcatName: string;
@@ -41,7 +41,8 @@ const ownedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
 let numberOfMountsUnlocked = 0;
 let totalMountNumber: number = 0;
-let comparedDiffValue: any[] = [];
+
+let unlockedAmountByCat: number[] = [];
 
 mountsGlobal.forEach((item, i) => {
   categoryOwnedMountsArray.push({
@@ -75,16 +76,20 @@ mountsGlobal.forEach((item, i) => {
         ) {
           categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
           categoryOwnedMountsArray[i].unlockedAmount += 1;
-
-          comparedDiffValue.push(
-            categoryOwnedMountsArray[i].categoryName,
-            categoryOwnedMountsArray[i].unlockedAmount,
-          );
         }
       }
     });
   });
 });
+
+categoryOwnedMountsArray.forEach((item) => {
+  unlockedAmountByCat.push(item.unlockedAmount);
+});
+
+emit("unlocked-amount", unlockedAmountByCat);
+
+const baseDiff = ref(props.baseDiff);
+const comparedDiff = ref(props.comparedDiff);
 </script>
 
 <template>
@@ -95,8 +100,8 @@ mountsGlobal.forEach((item, i) => {
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
-          :compared-diff="props.openComparedDiff"
-          :base-diff="props.openBaseDiff"
+          :base-diff="baseDiff?.[0]"
+          :compared-diff="comparedDiff?.[0]"
           :open="true"
         >
           <div class="expansion__container">
@@ -142,8 +147,9 @@ mountsGlobal.forEach((item, i) => {
               categoryOwnedMountsArray[index + 1]?.unlockedAmount
             "
             :amount="categoryOwnedMountsArray[index + 1]?.amount"
-            :base-diff="props.baseDiff"
-            :compared-diff="props.comparedDiff"
+            :base-diff="props.baseDiff?.[index + 1]"
+            :compared-diff="props.comparedDiff?.[index + 1]"
+            :open="false"
           >
             <div class="expansion__container">
               <div
