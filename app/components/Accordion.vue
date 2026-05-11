@@ -42,13 +42,13 @@ watch(
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
-        <!-- <span
+        <span
           v-if="comparedDiff && baseDiff"
           :class="[{ 'positive-diff': positive }, negativeDiff]"
         >
           {{ comparedDiff - baseDiff }}
-        </span> -->
-        <span
+        </span>
+        <!-- <span
           v-if="comparedDiff && baseDiff"
           :class="[{ 'positive-diff': positive }, negativeDiff]"
         >
@@ -58,8 +58,8 @@ watch(
           v-if="comparedDiff && baseDiff"
           :class="[{ 'positive-diff': positive }, negativeDiff]"
         >
-          {{ comparedDiff }}
-        </span>
+          {{ comparedDiff }} -->
+        <!-- </span> -->
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg

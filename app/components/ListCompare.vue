@@ -1,12 +1,93 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import mountsGlobal from "@/assets/data/mounts.json";
 import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
+
+const props = defineProps<{
+  mountsOwnedByP1?: any;
+  mountsOwnedByP2?: any;
+  openBaseDiff: any;
+  openComparedDiff: any;
+}>();
+
+interface Mount {
+  mount: {
+    key: { href: string };
+    name: string;
+    id: number;
+  };
+}
+
+interface SubCategoryOwnedMounts {
+  subcatName: string;
+  amount: number;
+  unlockedAmount: number;
+}
+
+interface CategoryOwnedMounts {
+  categoryName: string;
+  subCategories: SubCategoryOwnedMounts[];
+  amount: number;
+  unlockedAmount: number;
+}
+
+const userMountsIds = props.mountsOwnedByP1?.map((item: any) => {
+  return item.mount.id;
+});
+
+const ownedMountArrayP1: number[] = [];
+let categoryOwnedMountsArrayP1: CategoryOwnedMounts[] = [];
+let numberOfMountsUnlockedP1 = 0;
+let totalMountNumberP1: number = 0;
+let comparedDiffValueP1: any[] = [];
+
+mountsGlobal.forEach((item, i) => {
+  categoryOwnedMountsArrayP1.push({
+    categoryName: item.name,
+    subCategories: [],
+    amount: 0,
+    unlockedAmount: 0,
+  });
+
+  item?.subcats?.forEach((subcats, index) => {
+    if (categoryOwnedMountsArrayP1[i])
+      categoryOwnedMountsArrayP1[i].subCategories[index] = {
+        subcatName: subcats.name,
+        amount: 0,
+        unlockedAmount: 0,
+      };
+
+    subcats?.items?.forEach((mount) => {
+      // console.log(mount);
+      if (categoryOwnedMountsArrayP1[i]?.subCategories[index]) {
+        categoryOwnedMountsArrayP1[i].subCategories[index].amount += 1;
+        categoryOwnedMountsArrayP1[i].amount += 1;
+      }
+      totalMountNumberP1 += 1;
+      if (userMountsIds?.includes(mount.ID)) {
+        ownedMountArrayP1.push(mount.ID);
+        numberOfMountsUnlockedP1 = numberOfMountsUnlockedP1 + 1;
+        if (
+          categoryOwnedMountsArrayP1[i] &&
+          categoryOwnedMountsArrayP1[i].subCategories[index]
+        ) {
+          categoryOwnedMountsArrayP1[i].subCategories[index].unlockedAmount +=
+            1;
+          categoryOwnedMountsArrayP1[i].unlockedAmount += 1;
+
+          comparedDiffValueP1.push(
+            categoryOwnedMountsArrayP1[i].categoryName,
+            categoryOwnedMountsArrayP1[i].unlockedAmount,
+          );
+        }
+      }
+    });
+  });
+});
 
 const route = useRoute();
 const router = useRouter();
 const session = authClient.useSession();
-
-const props = defineProps(["openBaseDiff", "openComparedDiff"]);
 
 const {
   data: comparedMountsLink,
@@ -271,93 +352,108 @@ watch(
 </script>
 
 <template>
-  <Header />
-  <div class="comparison">
-    <ListCompare
-      :open-base-diff="openBaseDiff"
-      :open-compared-diff="openComparedDiff"
-    ></ListCompare>
+  <div class="comparison__left">
+    <div class="comparison__header" v-if="showLeft">
+      <div class="comparison__character">
+        <img
+          :src="firstAvatar"
+          alt="Character's profile"
+          class="comparison__profile"
+        />
+        <span class="comparison__name">
+          {{ route.query.character }}'s mount collection
+        </span>
+      </div>
+      <button class="comparison__clear" @click="showLeft = !showLeft">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#FFD100"
+            d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="comparison__search" v-else-if="!showLeft">
+      <h2 class="search-h2">Add a character</h2>
+      <CompareSearchCharacter
+        @character="baseCharacterChoosed"
+        @realm="baseRealmChoosed"
+        @region="baseRegionChoosed"
+        @compared-mounts="baseMountsChoosed"
+      />
+    </div>
+    <CompareMountList
+      :character-mounts="characterMounts"
+      v-if="characterMounts && showLeft"
+      @unlocked-amount-o="baseOpenAccordionDiffValue"
+      @unlocked-amount="baseClosedAccordionDiffValue"
+    />
+  </div>
+  <div class="comparison__right">
+    <div class="comparison__header" v-if="showRight">
+      <div class="comparison__character">
+        <img
+          :src="comparedAvatar"
+          alt="Character profile"
+          class="comparison__profile"
+        />
+        <span class="comparison__name">
+          {{ route.query.ccharacter || comparedCharacterName }}'s mount
+          collection
+        </span>
+      </div>
+      <button class="comparison__clear" @click="showRight = !showRight">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="#FFD100"
+            d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div
+      class="comparison__search"
+      v-else-if="
+        !showRight ||
+        (!route.query.cregion && !route.query.crealm && !route.query.ccharacter)
+      "
+    >
+      <h2 class="search-h2">Add a character</h2>
+      <CompareSearchCharacter
+        @compared-mounts="comparedMountsChoosed"
+        @character="comparedCharacterChoosed"
+        @realm="comparedRealmChoosed"
+        @region="comparedRegionChoosed"
+        @avatar="comparedAvatarChoosed"
+      />
+    </div>
+    <CompareMountList
+      :open-base-diff="baseOpenAccordionDiff"
+      :open-compared-diff="comparedOpenAccordionDiff"
+      :base-diff="baseClosedAccordionDiff"
+      :compared-diff="compareClosedAccordionDiff"
+      :character-mounts="comparedMounts"
+      :mounts-owned-by-other="characterMounts"
+      @unlocked-amount-o="comparedOpenAccordionDiffValue"
+      @unlocked-amount="comparedAccordionDiffValue"
+      v-if="
+        comparedMounts &&
+        showRight &&
+        route.query.cregion &&
+        route.query.crealm &&
+        route.query.ccharacter
+      "
+    />
   </div>
 </template>
-
-<style scoped lang="scss">
-.user-mounts {
-  width: 100% !important;
-  height: 80vh !important;
-}
-
-.comparison {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-end;
-  &__left,
-  &__right {
-    width: 100%;
-  }
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: calc(100% - 2rem);
-    margin-bottom: 1rem;
-    padding: 0 1rem;
-  }
-  &__character {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  &__profile {
-    border: solid 2px $border-container;
-    border-radius: 0.5rem;
-    height: 3rem;
-    width: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: $corner-shape-s;
-    }
-  }
-  &__name {
-    font-family: $main-size;
-  }
-  &__search {
-    padding: 2rem;
-    border-radius: 1rem;
-    border: 2px solid $border-container;
-    background-image: url("/images/wooden-background-2.webp");
-    box-shadow: 0 0 40px 0 #000 inset;
-    background-repeat: repeat;
-    background-attachment: local;
-    height: calc(80vh - 4rem);
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: $corner-shape-s;
-    }
-  }
-  &__clear {
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:hover {
-      filter: brightness(75%);
-    }
-  }
-}
-.search-h2 {
-  font-size: $h2-size;
-  background: linear-gradient(180deg, #ffd100 0%, #dfaa03 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin: 0;
-  margin-bottom: 2rem;
-}
-</style>
