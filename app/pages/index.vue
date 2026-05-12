@@ -7,12 +7,6 @@ declare global {
     $WowheadPower: any;
   }
 }
-
-onMounted(() => {
-  if (window.$WowheadPower) {
-    window.$WowheadPower.refreshLinks();
-  }
-});
 </script>
 
 <template>

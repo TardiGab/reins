@@ -90,6 +90,14 @@ emit("unlocked-amount", unlockedAmountByCat);
 
 const baseDiff = ref(props.baseDiff);
 const comparedDiff = ref(props.comparedDiff);
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+  baseDiff.value = props.baseDiff;
+  comparedDiff.value = props.comparedDiff;
+});
 </script>
 
 <template>

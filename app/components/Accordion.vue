@@ -31,12 +31,23 @@ watch(
   () => props.comparedDiff || props.baseDiff,
   () => {
     if (props.comparedDiff) {
-      if (props.comparedDiff! >= props.baseDiff!) {
+      if (props.comparedDiff! > props.baseDiff!) {
         positive.value = true;
       }
     }
   },
 );
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+  if (props.comparedDiff) {
+    if (props.comparedDiff! > props.baseDiff!) {
+      positive.value = true;
+    }
+  }
+});
 </script>
 
 <template>
@@ -45,10 +56,13 @@ watch(
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
         <span
-          v-if="comparedDiff && baseDiff"
+          v-if="
+            (comparedDiff && baseDiff && comparedDiff! > baseDiff!) ||
+            comparedDiff! < baseDiff!
+          "
           :class="[{ 'positive-diff': positive }, negativeDiff]"
         >
-          {{ comparedDiff - baseDiff }}
+          {{ comparedDiff! - baseDiff! }}
         </span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">

@@ -18,6 +18,12 @@ useHead({
     },
   ],
 });
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>

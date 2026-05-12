@@ -2,6 +2,7 @@
 import mountsGlobal from "@/assets/data/mounts.json";
 import { useRoute } from "#app";
 import { authClient } from "~~/server/lib/auth-client";
+import ChangeCharacterButton from "./ChangeCharacterButton.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -33,131 +34,6 @@ interface CategoryOwnedMounts {
   subCategories: SubCategoryOwnedMounts[];
   amount: number;
   unlockedAmount: number;
-}
-
-const userMountsIds = props.mountsOwnedByP1?.map((item: any) => {
-  return item.mount.id;
-});
-
-const ownedMountArrayP1: number[] = [];
-let categoryOwnedMountsArrayP1: CategoryOwnedMounts[] = [];
-let numberOfMountsUnlockedP1 = 0;
-let totalMountNumberP1: number = 0;
-let comparedDiffValueP1: any[] = [];
-
-mountsGlobal.forEach((item, i) => {
-  categoryOwnedMountsArrayP1.push({
-    categoryName: item.name,
-    subCategories: [],
-    amount: 0,
-    unlockedAmount: 0,
-  });
-
-  item?.subcats?.forEach((subcats, index) => {
-    if (categoryOwnedMountsArrayP1[i])
-      categoryOwnedMountsArrayP1[i].subCategories[index] = {
-        subcatName: subcats.name,
-        amount: 0,
-        unlockedAmount: 0,
-      };
-
-    subcats?.items?.forEach((mount) => {
-      // console.log(mount);
-      if (categoryOwnedMountsArrayP1[i]?.subCategories[index]) {
-        categoryOwnedMountsArrayP1[i].subCategories[index].amount += 1;
-        categoryOwnedMountsArrayP1[i].amount += 1;
-      }
-      totalMountNumberP1 += 1;
-      if (userMountsIds?.includes(mount.ID)) {
-        ownedMountArrayP1.push(mount.ID);
-        numberOfMountsUnlockedP1 = numberOfMountsUnlockedP1 + 1;
-        if (
-          categoryOwnedMountsArrayP1[i] &&
-          categoryOwnedMountsArrayP1[i].subCategories[index]
-        ) {
-          categoryOwnedMountsArrayP1[i].subCategories[index].unlockedAmount +=
-            1;
-          categoryOwnedMountsArrayP1[i].unlockedAmount += 1;
-
-          comparedDiffValueP1.push(
-            categoryOwnedMountsArrayP1[i].categoryName,
-            categoryOwnedMountsArrayP1[i].unlockedAmount,
-          );
-        }
-      }
-    });
-  });
-});
-
-const {
-  data: comparedMountsLink,
-  execute: comparedGo,
-  clear: comparedClear,
-} = await useLazyFetch("/api/character-mounts", {
-  query: {
-    region: route.query.cregion,
-    realm: route.query.crealm,
-    character: route.query.ccharacter,
-  },
-  immediate: false,
-});
-
-const { data: comparedCharRender, execute: comparedRenderGo } =
-  await useLazyFetch("/api/character-render", {
-    query: {
-      region: route.query.cregion,
-      realm: route.query.crealm,
-      character: route.query.ccharacter,
-    },
-    immediate: false,
-  });
-
-const {
-  data: characterMounts,
-  execute: baseGo,
-  status: loading,
-  clear: baseClear,
-} = await useLazyFetch("/api/character-mounts/", {
-  query: {
-    region: route.query.region,
-    realm: route.query.realm,
-    character: route.query.character,
-  },
-});
-
-const { data: characterRender, execute: renderGo } = await useLazyFetch(
-  "/api/character-render",
-  {
-    query: {
-      region: route.query.region,
-      realm: route.query.realm,
-      character: route.query.character,
-    },
-    immediate: false,
-  },
-);
-
-const comparedMounts = ref();
-
-let baseMountsChoosed = (character: any[]) => {
-  characterMounts.value = character;
-};
-
-let comparedMountsChoosed;
-
-if (!comparedMounts.value && route.query.ccharacter) {
-  await comparedGo();
-  await comparedRenderGo();
-  comparedMounts.value = comparedMountsLink.value;
-} else if (
-  !comparedMounts.value &&
-  !route.query.cregion &&
-  !route.query.crealm &&
-  !route.query.ccharacter
-) {
-  comparedMountsChoosed = (character: any[]) => {
-    comparedMounts.value = character;
-  };
 }
 
 const baseRealm = ref<string>();
@@ -219,6 +95,91 @@ const compareClosedAccordionDiff = ref<number[]>();
 const comparedAccordionDiffValue = (value: number[]) => {
   compareClosedAccordionDiff.value = value;
 };
+
+const {
+  data: comparedMountsLink,
+  execute: comparedGo,
+  clear: comparedClear,
+} = await useLazyFetch("/api/character-mounts", {
+  query: {
+    region: route.query.cregion,
+    realm: route.query.crealm,
+    character: route.query.ccharacter,
+  },
+  immediate: false,
+});
+
+const { data: comparedCharRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  });
+
+const {
+  data: characterMounts,
+  execute: baseGo,
+  status: loading,
+  clear: baseClear,
+} = await useLazyFetch("/api/character-mounts/", {
+  query: {
+    region: route.query.region,
+    realm: route.query.realm,
+    character: route.query.character,
+  },
+});
+
+const { data: characterRender, execute: renderGo } = await useLazyFetch(
+  "/api/character-render",
+  {
+    query: {
+      region: route.query.region,
+      realm: route.query.realm,
+      character: route.query.character,
+    },
+    immediate: false,
+  },
+);
+
+const comparedMounts = ref();
+
+let baseMountsChoosed = (character: any[]) => {
+  characterMounts.value = character;
+};
+
+let comparedMountsChoosed;
+
+if (!comparedMounts.value && route.query.ccharacter) {
+  await comparedGo();
+  await comparedRenderGo();
+  comparedMounts.value = comparedMountsLink.value;
+  console.log("Valeur depuis lien:", comparedMounts.value);
+} else if (
+  !comparedMounts.value &&
+  !route.query.cregion &&
+  !route.query.crealm &&
+  !route.query.ccharacter
+) {
+  comparedMountsChoosed = (character: any[]) => {
+    comparedMounts.value = character;
+  };
+  console.log("Valeur depuis fetch:", comparedMounts.value);
+}
+
+if (
+  !comparedMounts.value &&
+  !route.query.cregion &&
+  !route.query.crealm &&
+  !route.query.ccharacter
+) {
+  comparedMountsChoosed = (character: any[]) => {
+    comparedMounts.value = character;
+  };
+  console.log("Valeur depuis fetch:", comparedMounts.value);
+}
 
 const firstAvatar = ref<string>();
 const showLeft = ref(true);
@@ -342,7 +303,7 @@ const baseDiff = ref<number>();
 const comparedDiff = ref<number>();
 
 watch(
-  () => baseClosedAccordionDiff.value,
+  () => baseClosedAccordionDiff.value && compareClosedAccordionDiff.value,
   () => {
     for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
       comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
@@ -368,7 +329,7 @@ watch(
             {{ route.query.character }}'s mount collection
           </span>
         </div>
-        <button class="comparison__clear" @click="showLeft = !showLeft">
+        <!-- <button class="comparison__clear" @click="showLeft = !showLeft">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -380,7 +341,12 @@ watch(
               d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
             />
           </svg>
-        </button>
+        </button> -->
+        <ChangeCharacterButton
+          class="comparison__clear"
+          @click="showLeft = !showLeft"
+          :label="'Change character'"
+        />
       </div>
       <div class="comparison__search" v-else-if="!showLeft">
         <h2 class="search-h2">Add a character</h2>
@@ -393,8 +359,6 @@ watch(
       </div>
       <CompareMountList
         :character-mounts="characterMounts"
-        :amount="categoryOwnedMountsArrayP1[0]?.amount"
-        :unlocked-amount="categoryOwnedMountsArrayP1[0]?.unlockedAmount"
         v-if="characterMounts && showLeft"
         @unlocked-amount-o="baseOpenAccordionDiffValue"
         @unlocked-amount="baseClosedAccordionDiffValue"
@@ -413,19 +377,11 @@ watch(
             collection
           </span>
         </div>
-        <button class="comparison__clear" @click="showRight = !showRight">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="#FFD100"
-              d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
-            />
-          </svg>
-        </button>
+        <ChangeCharacterButton
+          class="comparison__clear"
+          :label="'Change character'"
+          @click="showRight = !showRight"
+        />
       </div>
 
       <div
