@@ -1,40 +1,8 @@
 <script lang="ts" setup>
-import mountsGlobal from "@/assets/data/mounts.json";
 import { useRoute } from "#app";
-import { authClient } from "~~/server/lib/auth-client";
-import ChangeCharacterButton from "./ChangeCharacterButton.vue";
 
 const route = useRoute();
 const router = useRouter();
-const session = authClient.useSession();
-
-const props = defineProps<{
-  mountsOwnedByP1?: any;
-  mountsOwnedByP2?: any;
-  openBaseDiff: any;
-  openComparedDiff: any;
-}>();
-
-interface Mount {
-  mount: {
-    key: { href: string };
-    name: string;
-    id: number;
-  };
-}
-
-interface SubCategoryOwnedMounts {
-  subcatName: string;
-  amount: number;
-  unlockedAmount: number;
-}
-
-interface CategoryOwnedMounts {
-  categoryName: string;
-  subCategories: SubCategoryOwnedMounts[];
-  amount: number;
-  unlockedAmount: number;
-}
 
 const baseRealm = ref<string>();
 const baseRealmChoosed = (realm: string) => {
@@ -156,7 +124,7 @@ if (!comparedMounts.value && route.query.ccharacter) {
   await comparedGo();
   await comparedRenderGo();
   comparedMounts.value = comparedMountsLink.value;
-  console.log("Valeur depuis lien:", comparedMounts.value);
+  // console.log("Valeur depuis lien:", comparedMounts.value);
 } else if (
   !comparedMounts.value &&
   !route.query.cregion &&
@@ -166,7 +134,7 @@ if (!comparedMounts.value && route.query.ccharacter) {
   comparedMountsChoosed = (character: any[]) => {
     comparedMounts.value = character;
   };
-  console.log("Valeur depuis fetch:", comparedMounts.value);
+  // console.log("Valeur depuis fetch:", comparedMounts.value);
 }
 
 if (
@@ -178,7 +146,7 @@ if (
   comparedMountsChoosed = (character: any[]) => {
     comparedMounts.value = character;
   };
-  console.log("Valeur depuis fetch:", comparedMounts.value);
+  // console.log("Valeur depuis fetch:", comparedMounts.value);
 }
 
 const firstAvatar = ref<string>();
@@ -329,19 +297,6 @@ watch(
             {{ route.query.character }}'s mount collection
           </span>
         </div>
-        <!-- <button class="comparison__clear" @click="showLeft = !showLeft">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="#FFD100"
-              d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z"
-            />
-          </svg>
-        </button> -->
         <ChangeCharacterButton
           class="comparison__clear"
           @click="showLeft = !showLeft"
@@ -408,7 +363,6 @@ watch(
         :base-diff="baseDiffArray"
         :compared-diff="comparedDiffArray"
         :character-mounts="comparedMounts"
-        :mounts-owned-by-other="characterMounts"
         @unlocked-amount-o="comparedOpenAccordionDiffValue"
         @unlocked-amount="comparedAccordionDiffValue"
         v-if="

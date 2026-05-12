@@ -90,10 +90,11 @@ async function pinMount(
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div class="expansion">
-        <OpenAccordion
+        <Accordion
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
+          :open="true"
         >
           <div class="expansion__container">
             <div
@@ -152,7 +153,7 @@ async function pinMount(
               </ul>
             </div>
           </div>
-        </OpenAccordion>
+        </Accordion>
       </div>
       <div
         v-for="(expansion, index) in mountsGlobal.slice(1)"
@@ -163,6 +164,7 @@ async function pinMount(
           :title="expansion.name"
           :unlocked-amount="categoryOwnedMountsArray[index + 1]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[index + 1]?.amount"
+          :open="false"
         >
           <div class="expansion__container">
             <div
