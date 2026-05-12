@@ -10,18 +10,20 @@ interface Mount {
 }
 
 const props = defineProps<{
-  characterMounts?: Mount[];
   openBaseDiff?: number;
   openComparedDiff?: number;
-  baseDiff?: number;
-  comparedDiff?: number;
+  baseDiff?: number[];
+  comparedDiff?: number[];
+  amount?: number;
+  unlockedAmount?: number;
+  characterMounts: any;
 }>();
-
-const emit = defineEmits(["unlocked-amount-O", "unlocked-amount"]);
 
 const userMountsIds = props.characterMounts?.map((item: any) => {
   return item.mount.id;
 });
+
+const emit = defineEmits(["unlocked-amount-o", "unlocked-amount"]);
 
 interface SubCategoryOwnedMounts {
   subcatName: string;
@@ -40,7 +42,7 @@ let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
 let numberOfMountsUnlocked = 0;
 let totalMountNumber: number = 0;
 
-let comparedDiffValue: any[] = [];
+let unlockedAmountByCat: number[] = [];
 
 mountsGlobal.forEach((item, i) => {
   categoryOwnedMountsArray.push({
@@ -49,6 +51,7 @@ mountsGlobal.forEach((item, i) => {
     amount: 0,
     unlockedAmount: 0,
   });
+
   item?.subcats?.forEach((subcats, index) => {
     if (categoryOwnedMountsArray[i])
       categoryOwnedMountsArray[i].subCategories[index] = {
@@ -73,21 +76,27 @@ mountsGlobal.forEach((item, i) => {
         ) {
           categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
           categoryOwnedMountsArray[i].unlockedAmount += 1;
-
-          comparedDiffValue.push(
-            categoryOwnedMountsArray[i].categoryName,
-            categoryOwnedMountsArray[i].unlockedAmount,
-          );
-
-          emit(
-            "unlocked-amount-O",
-            categoryOwnedMountsArray[0]?.unlockedAmount,
-          );
-          emit("unlocked-amount", categoryOwnedMountsArray[i]?.unlockedAmount);
         }
       }
     });
   });
+});
+
+categoryOwnedMountsArray.forEach((item) => {
+  unlockedAmountByCat.push(item.unlockedAmount);
+});
+
+emit("unlocked-amount", unlockedAmountByCat);
+
+const baseDiff = ref(props.baseDiff);
+const comparedDiff = ref(props.comparedDiff);
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+  baseDiff.value = props.baseDiff;
+  comparedDiff.value = props.comparedDiff;
 });
 </script>
 
@@ -95,12 +104,13 @@ mountsGlobal.forEach((item, i) => {
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div class="expansion">
-        <OpenAccordion
+        <Accordion
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
-          :compared-diff="props.openComparedDiff"
-          :base-diff="props.openBaseDiff"
+          :base-diff="baseDiff?.[0]"
+          :compared-diff="comparedDiff?.[0]"
+          :open="true"
         >
           <div class="expansion__container">
             <div
@@ -133,7 +143,7 @@ mountsGlobal.forEach((item, i) => {
               </ul>
             </div>
           </div>
-        </OpenAccordion>
+        </Accordion>
         <div
           v-for="(expansion, index) in mountsGlobal.slice(1)"
           :key="expansion.name"
@@ -145,8 +155,9 @@ mountsGlobal.forEach((item, i) => {
               categoryOwnedMountsArray[index + 1]?.unlockedAmount
             "
             :amount="categoryOwnedMountsArray[index + 1]?.amount"
-            :base-diff="props.baseDiff"
-            :compared-diff="props.comparedDiff"
+            :base-diff="props.baseDiff?.[index + 1]"
+            :compared-diff="props.comparedDiff?.[index + 1]"
+            :open="false"
           >
             <div class="expansion__container">
               <div

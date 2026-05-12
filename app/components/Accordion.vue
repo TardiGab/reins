@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const props = defineProps({
-  title: String,
-  unlockedAmount: Number,
-  amount: Number,
-  baseDiff: Number,
-  comparedDiff: Number,
-});
+const props = defineProps<{
+  title?: string;
+  unlockedAmount?: number;
+  amount?: number;
+  baseDiff?: number;
+  comparedDiff?: number;
+  open: boolean;
+}>();
 
 let isOpen = ref(false);
+
+if (props.open) {
+  isOpen.value = true;
+}
 
 function openAccordion() {
   isOpen.value = !isOpen.value;
@@ -23,11 +28,8 @@ const negativeDiff = ref("negative-diff");
 const positive = ref(false);
 
 watch(
-  () => props.comparedDiff && props.baseDiff,
+  () => props.comparedDiff || props.baseDiff,
   () => {
-    // console.log(props.comparedDiff);
-    console.log(props.baseDiff);
-
     if (props.comparedDiff) {
       if (props.comparedDiff! > props.baseDiff!) {
         positive.value = true;
@@ -35,6 +37,17 @@ watch(
     }
   },
 );
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+  if (props.comparedDiff) {
+    if (props.comparedDiff! > props.baseDiff!) {
+      positive.value = true;
+    }
+  }
+});
 </script>
 
 <template>
@@ -42,23 +55,14 @@ watch(
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
-        <!-- <span
-          v-if="comparedDiff && baseDiff"
-          :class="[{ 'positive-diff': positive }, negativeDiff]"
-        >
-          {{ comparedDiff - baseDiff }}
-        </span> -->
         <span
-          v-if="comparedDiff && baseDiff"
+          v-if="
+            (comparedDiff && baseDiff && comparedDiff! > baseDiff!) ||
+            comparedDiff! < baseDiff!
+          "
           :class="[{ 'positive-diff': positive }, negativeDiff]"
         >
-          {{ baseDiff }}
-        </span>
-        <span
-          v-if="comparedDiff && baseDiff"
-          :class="[{ 'positive-diff': positive }, negativeDiff]"
-        >
-          {{ comparedDiff }}
+          {{ comparedDiff! - baseDiff! }}
         </span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">

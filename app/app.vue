@@ -18,10 +18,17 @@ useHead({
     },
   ],
 });
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
   <div>
+    <Header />
     <NuxtPage />
   </div>
 </template>
