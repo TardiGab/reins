@@ -289,7 +289,10 @@ watch(
       <div class="comparison__header" v-if="showLeft">
         <div class="comparison__character">
           <img
-            :src="firstAvatar"
+            :src="
+              firstAvatar ||
+              'https://render.worldofwarcraft.com/shadow/avatar/3-0.jpg'
+            "
             alt="Character's profile"
             class="comparison__profile"
           />
@@ -323,7 +326,10 @@ watch(
       <div class="comparison__header" v-if="showRight">
         <div class="comparison__character">
           <img
-            :src="comparedAvatar"
+            :src="
+              comparedAvatar ||
+              'https://render.worldofwarcraft.com/shadow/avatar/3-0.jpg'
+            "
             alt="Character profile"
             class="comparison__profile"
           />

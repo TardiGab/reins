@@ -242,15 +242,15 @@ onUnmounted(() => {
     border-radius: $corner-shape-s;
   }
   &__value {
-    padding: 0.25rem;
+    padding: 0.25rem 2rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    width: 100%;
+    width: calc(100% - 4rem);
     text-align: center;
     text-shadow: 1px 1px black;
     position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     &--span {
