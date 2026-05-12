@@ -63,7 +63,7 @@ const search = async () => {
   avatar.value = await comparedCharacterRender.value[0].value;
   randomLoadingValue = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
-  emit("character", characterSearch.value);
+  emit("character", characterSearch.value?.trim());
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);

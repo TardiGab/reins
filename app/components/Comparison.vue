@@ -90,7 +90,6 @@ const { data: comparedCharRender, execute: comparedRenderGo } =
 const {
   data: characterMounts,
   execute: baseGo,
-  status: loading,
   clear: baseClear,
 } = await useLazyFetch("/api/character-mounts/", {
   query: {
@@ -120,22 +119,27 @@ let baseMountsChoosed = (character: any[]) => {
 
 let comparedMountsChoosed;
 
+comparedMountsChoosed = (character: any[]) => {
+  comparedMounts.value = character;
+};
+
 if (!comparedMounts.value && route.query.ccharacter) {
   await comparedGo();
   await comparedRenderGo();
   comparedMounts.value = comparedMountsLink.value;
   // console.log("Valeur depuis lien:", comparedMounts.value);
-} else if (
-  !comparedMounts.value &&
-  !route.query.cregion &&
-  !route.query.crealm &&
-  !route.query.ccharacter
-) {
-  comparedMountsChoosed = (character: any[]) => {
-    comparedMounts.value = character;
-  };
-  // console.log("Valeur depuis fetch:", comparedMounts.value);
 }
+// else if (
+//   !comparedMounts.value &&
+//   !route.query.cregion &&
+//   !route.query.crealm &&
+//   !route.query.ccharacter
+// ) {
+//   comparedMountsChoosed = (character: any[]) => {
+//     comparedMounts.value = character;
+//   };
+//   // console.log("Valeur depuis fetch:", comparedMounts.value);
+// }
 
 if (
   !comparedMounts.value &&
@@ -250,7 +254,7 @@ watch(
 
 watch(
   () => route.fullPath,
-  async () => {
+  () => {
     if (route.query.region && route.query.realm && route.query.character) {
       baseGo();
       renderGo();
@@ -259,8 +263,8 @@ watch(
       route.query.crealm &&
       route.query.ccharacter
     ) {
-      await comparedGo();
-      await comparedRenderGo();
+      comparedGo();
+      comparedRenderGo();
     }
   },
 );
