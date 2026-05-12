@@ -440,18 +440,6 @@ watch(
       border-radius: $corner-shape-s;
     }
   }
-  &__clear {
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    &:hover {
-      filter: brightness(75%);
-    }
-  }
 }
 .search-h2 {
   font-size: $h2-size;
