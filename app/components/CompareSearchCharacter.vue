@@ -50,6 +50,7 @@ let loadingText = ref([
   "These webs will summon Nerubians, don't stand in 'em!",
   "Cleaning stable...",
   "Gathering horseshoes...",
+  "Mrglglglglgl!",
 ]);
 
 let randomLoadingValue: number;
