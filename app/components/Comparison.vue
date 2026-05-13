@@ -291,6 +291,13 @@ const comparedDiff = ref<number>();
 watch(
   () => baseClosedAccordionDiff.value && compareClosedAccordionDiff.value,
   () => {
+    console.log(
+      "baseClosedAccordionDiff.value:",
+      baseClosedAccordionDiff.value,
+      "compareClosedAccordionDiff.value:",
+      compareClosedAccordionDiff.value,
+    );
+
     console.log("Valeur changée!");
     if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
       comparedDiffArray.value.length = 0;
@@ -312,8 +319,31 @@ watch(
       }
     }
 
-    console.log("Base Diff:", baseDiffArray.value);
-    console.log("Compared Diff:", comparedDiffArray.value);
+    // console.log("Base Diff:", baseDiffArray.value);
+    // console.log("Compared Diff:", comparedDiffArray.value);
+  },
+);
+
+watch(
+  () => route.fullPath,
+  () => {
+    if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    } else if (baseDiffArray.value.length || comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    }
   },
 );
 </script>

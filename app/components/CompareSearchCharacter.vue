@@ -62,7 +62,6 @@ const search = async () => {
   await comparedRenderGo();
 
   if (comparedCharacterRender.value) {
-    console.log(comparedCharacterRender.value);
     avatar.value = await comparedCharacterRender.value[0].value;
   }
 
