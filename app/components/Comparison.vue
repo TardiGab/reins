@@ -34,10 +34,10 @@ const comparedCharacterChoosed = (character: string) => {
   comparedCharacterName.value = character;
 };
 
-// const baseAvatar = ref<string>();
-// const baseAvatarChoosed = (avatar: string) => {
-//   baseAvatar.value = avatar;
-// };
+const baseAvatar = ref<string>();
+const baseAvatarChoosed = (avatar: string) => {
+  baseAvatar.value = avatar;
+};
 
 const comparedAvatar = ref<string>();
 const comparedAvatarChoosed = (avatar: string) => {
@@ -99,7 +99,7 @@ const {
   },
 });
 
-const { data: characterRender, execute: renderGo } = await useLazyFetch(
+const { data: baseCharRender, execute: baseRenderGo } = await useLazyFetch(
   "/api/character-render",
   {
     query: {
@@ -158,16 +158,16 @@ const showLeft = ref(true);
 const showRight = ref(true);
 onMounted(async () => {
   await baseGo();
-  await renderGo();
-  firstAvatar.value = await characterRender.value[0].value;
+  await baseRenderGo();
+  baseAvatar.value = await baseCharRender.value[0].value;
   if (comparedCharRender.value) {
     comparedAvatar.value = await comparedCharRender.value[0].value;
+  } else if (baseCharRender.value) {
+    baseAvatar.value = await baseCharRender.value[0].value;
   }
   if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
     showRight.value = false;
   }
-
-  console.log();
 });
 
 watch(
@@ -196,7 +196,7 @@ watch(
 );
 watch(
   () => baseCharacterName.value,
-  () => {
+  async () => {
     if (baseRegion.value && baseRealm.value && baseCharacterName.value) {
       router.push({
         path: `${route.fullPath}`,
@@ -215,6 +215,9 @@ watch(
       // url.searchParams.set("character", baseCharacterName.value!);
       // history.pushState({}, "", url.href);
       baseGo();
+      // renderGo();
+      // firstAvatar.value = await characterRender.value[0].value;
+
       showLeft.value = true;
     }
   },
@@ -257,7 +260,7 @@ watch(
   () => {
     if (route.query.region && route.query.realm && route.query.character) {
       baseGo();
-      renderGo();
+      baseRenderGo();
     } else if (
       route.query.cregion &&
       route.query.crealm &&
@@ -294,7 +297,7 @@ watch(
         <div class="comparison__character">
           <img
             :src="
-              firstAvatar ||
+              baseAvatar ||
               'https://render.worldofwarcraft.com/shadow/avatar/3-0.jpg'
             "
             alt="Character's profile"
@@ -317,6 +320,7 @@ watch(
           @realm="baseRealmChoosed"
           @region="baseRegionChoosed"
           @compared-mounts="baseMountsChoosed"
+          @avatar="baseAvatarChoosed"
         />
       </div>
       <CompareMountList

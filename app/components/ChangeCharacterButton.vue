@@ -27,6 +27,7 @@ const props = defineProps<{
   position: relative;
   display: block;
   overflow: hidden;
+  cursor: pointer;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
     border-radius: 0.25rem;
