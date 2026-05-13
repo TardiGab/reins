@@ -178,8 +178,8 @@ watch(
       comparedRealm.value &&
       comparedCharacterName.value
     ) {
-      router.push({
-        path: `${route.fullPath}`,
+      navigateTo({
+        path: `/compare-result`,
         query: {
           region: route.query.region,
           realm: route.query.realm,
@@ -189,6 +189,17 @@ watch(
           ccharacter: comparedCharacterName.value,
         },
       });
+      // router.push({
+      //   path: `${route.fullPath}`,
+      //   query: {
+      //     region: route.query.region,
+      //     realm: route.query.realm,
+      //     character: route.query.character,
+      //     cregion: comparedRegion.value,
+      //     crealm: comparedRealm.value,
+      //     ccharacter: comparedCharacterName.value,
+      //   },
+      // });
       comparedGo();
       showRight.value = true;
     }
@@ -197,9 +208,16 @@ watch(
 watch(
   () => baseCharacterName.value,
   async () => {
-    if (baseRegion.value && baseRealm.value && baseCharacterName.value) {
-      router.push({
-        path: `${route.fullPath}`,
+    if (
+      baseRegion.value &&
+      baseRealm.value &&
+      baseCharacterName.value &&
+      route.query.cregion &&
+      route.query.crealm &&
+      route.query.ccharacter
+    ) {
+      navigateTo({
+        path: `/compare-result`,
         query: {
           region: baseRegion.value,
           realm: baseRealm.value,
@@ -215,9 +233,6 @@ watch(
       // url.searchParams.set("character", baseCharacterName.value!);
       // history.pushState({}, "", url.href);
       baseGo();
-      // renderGo();
-      // firstAvatar.value = await characterRender.value[0].value;
-
       showLeft.value = true;
     }
   },
@@ -226,8 +241,6 @@ watch(
 watch(
   () => showRight.value,
   () => {
-    console.log("Right:", showRight.value);
-
     if (showRight.value === false) {
       let url = new URL(window?.location.href);
       url.searchParams.delete("cregion");
@@ -242,8 +255,6 @@ watch(
 watch(
   () => showLeft.value,
   () => {
-    console.log("Left:", showLeft.value);
-
     if (showLeft.value === false) {
       let url = new URL(window?.location.href);
       url.searchParams.delete("region");
@@ -280,12 +291,29 @@ const comparedDiff = ref<number>();
 watch(
   () => baseClosedAccordionDiff.value && compareClosedAccordionDiff.value,
   () => {
-    for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
-      comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
-      comparedDiffArray.value.push(comparedDiff.value);
-      baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
-      baseDiffArray.value.push(baseDiff.value);
+    console.log("Valeur changée!");
+    if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    } else if (baseDiffArray.value.length || comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
     }
+
+    console.log("Base Diff:", baseDiffArray.value);
+    console.log("Compared Diff:", comparedDiffArray.value);
   },
 );
 </script>
@@ -304,7 +332,7 @@ watch(
             class="comparison__profile"
           />
           <span class="comparison__name">
-            {{ route.query.character }}'s mount collection
+            {{ route.query.character || baseCharacterName }}'s mount collection
           </span>
         </div>
         <ChangeCharacterButton
