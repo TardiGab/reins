@@ -19,7 +19,7 @@ const props = defineProps<{
   background-image: url("/images/body-background-1.webp");
   background-color: #5f5f5f;
   background-blend-mode: difference;
-  border: solid 2px #5f5f5f;
+  border: solid 2px #121212;
   border-radius: 0.5rem;
   font-size: $small;
   transition: all 0.3s ease;
