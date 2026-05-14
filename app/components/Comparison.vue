@@ -111,6 +111,29 @@ const { data: baseCharRender, execute: baseRenderGo } = await useLazyFetch(
   },
 );
 
+const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
+  {
+    query: {
+      region: route.query.region,
+      realm: route.query.realm,
+      character: route.query.character,
+    },
+    immediate: false,
+  },
+);
+const { data: compaedProfile, execute: comparedProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
+  {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  },
+);
+
 const comparedMounts = ref();
 
 let baseMountsChoosed = (character: any[]) => {
@@ -127,19 +150,7 @@ if (!comparedMounts.value && route.query.ccharacter) {
   await comparedGo();
   await comparedRenderGo();
   comparedMounts.value = comparedMountsLink.value;
-  // console.log("Valeur depuis lien:", comparedMounts.value);
 }
-// else if (
-//   !comparedMounts.value &&
-//   !route.query.cregion &&
-//   !route.query.crealm &&
-//   !route.query.ccharacter
-// ) {
-//   comparedMountsChoosed = (character: any[]) => {
-//     comparedMounts.value = character;
-//   };
-//   // console.log("Valeur depuis fetch:", comparedMounts.value);
-// }
 
 if (
   !comparedMounts.value &&
@@ -150,15 +161,45 @@ if (
   comparedMountsChoosed = (character: any[]) => {
     comparedMounts.value = character;
   };
-  // console.log("Valeur depuis fetch:", comparedMounts.value);
 }
 
-const firstAvatar = ref<string>();
+let baseUseableMounts: string[] = [];
+let comparedUseableMounts: string[] = [];
+if (characterMounts.value) {
+  characterMounts.value.forEach((item: any) => {
+    if (item.is_useable) {
+      baseUseableMounts.push(item.mount.name);
+    }
+  });
+  // console.log(
+  //   "Base useable mounts:",
+  //   baseUseableMounts.length,
+  //   "Base total mounts:",
+  //   characterMounts.value.length,
+  // );
+} else if (comparedMountsLink.value || comparedMounts.value) {
+  comparedMountsLink.value.forEach((item: any) => {
+    if (item.is_useable) {
+      comparedUseableMounts.push(item.mount.name);
+    }
+  });
+  // console.log(
+  //   "Compared useable mounts:",
+  //   comparedUseableMounts.length,
+  //   "Compared total mounts:",
+  //   comparedMountsLink.value.length || comparedMounts.value.length,
+  // );
+}
+
 const showLeft = ref(true);
 const showRight = ref(true);
 onMounted(async () => {
   await baseGo();
   await baseRenderGo();
+  await baseProfileGo();
+
+  console.log(baseProfile.value);
+
   baseAvatar.value = await baseCharRender.value[0].value;
   if (comparedCharRender.value) {
     comparedAvatar.value = await comparedCharRender.value[0].value;
@@ -189,18 +230,8 @@ watch(
           ccharacter: comparedCharacterName.value,
         },
       });
-      // router.push({
-      //   path: `${route.fullPath}`,
-      //   query: {
-      //     region: route.query.region,
-      //     realm: route.query.realm,
-      //     character: route.query.character,
-      //     cregion: comparedRegion.value,
-      //     crealm: comparedRealm.value,
-      //     ccharacter: comparedCharacterName.value,
-      //   },
-      // });
       comparedGo();
+      comparedProfileGo();
       showRight.value = true;
     }
   },
@@ -227,12 +258,8 @@ watch(
           ccharacter: route.query.ccharacter,
         },
       });
-      // let url = new URL(window?.location.href);
-      // url.searchParams.set("region", baseRegion.value!);
-      // url.searchParams.set("realm", baseRealm.value!);
-      // url.searchParams.set("character", baseCharacterName.value!);
-      // history.pushState({}, "", url.href);
       baseGo();
+      baseProfileGo();
       showLeft.value = true;
     }
   },
@@ -272,6 +299,7 @@ watch(
     if (route.query.region && route.query.realm && route.query.character) {
       baseGo();
       baseRenderGo();
+      baseProfileGo();
     } else if (
       route.query.cregion &&
       route.query.crealm &&
@@ -279,6 +307,7 @@ watch(
     ) {
       comparedGo();
       comparedRenderGo();
+      comparedProfileGo();
     }
   },
 );
@@ -291,14 +320,6 @@ const comparedDiff = ref<number>();
 watch(
   () => baseClosedAccordionDiff.value && compareClosedAccordionDiff.value,
   () => {
-    console.log(
-      "baseClosedAccordionDiff.value:",
-      baseClosedAccordionDiff.value,
-      "compareClosedAccordionDiff.value:",
-      compareClosedAccordionDiff.value,
-    );
-
-    console.log("Valeur changée!");
     if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
       comparedDiffArray.value.length = 0;
       baseDiffArray.value.length = 0;
@@ -318,9 +339,6 @@ watch(
         baseDiffArray.value.push(baseDiff.value);
       }
     }
-
-    // console.log("Base Diff:", baseDiffArray.value);
-    // console.log("Compared Diff:", comparedDiffArray.value);
   },
 );
 
@@ -364,6 +382,15 @@ watch(
           <span class="comparison__name">
             {{ route.query.character || baseCharacterName }}'s mount collection
           </span>
+          <Tooltip
+            class="comparison__tooltip"
+            :character="route.query.character || baseCharacterName"
+            :useable-number="baseUseableMounts.length"
+            :total-owned-number="characterMounts.length"
+            :realm="route.query.realm || baseRealm"
+            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
+            :profile="baseProfile"
+          />
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -403,6 +430,12 @@ watch(
             {{ route.query.ccharacter || comparedCharacterName }}'s mount
             collection
           </span>
+          <!-- <Tooltip
+            class="comparison__tooltip"
+            :character="route.query.ccharacter || comparedCharacterName"
+            :total-owned-number="comparedMountsLink.length"
+            :useable-number="comparedUseableMounts.length"
+          /> -->
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -470,11 +503,24 @@ watch(
     width: calc(100% - 2rem);
     margin-bottom: 1rem;
     padding: 0 1rem;
+    cursor: context-menu;
+    &:hover {
+      .comparison__tooltip {
+        display: inherit;
+      }
+    }
   }
   &__character {
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
+  }
+  &__tooltip {
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    display: none;
   }
   &__profile {
     border: solid 2px $border-container;

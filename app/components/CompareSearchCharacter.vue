@@ -11,14 +11,22 @@ const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
+const completeRealm = ref<string>();
+const completeRealmSelected = (realm: string) => {
+  completeRealm.value = realm;
+};
+
 const characterSearch = ref<string>();
 
 const emit = defineEmits([
   "region",
   "realm",
+  "complete-realm",
   "character",
   "compared-mounts",
   "avatar",
+  "total-owned",
+  "useable-number",
 ]);
 
 const {
@@ -44,6 +52,18 @@ const { data: comparedCharacterRender, execute: comparedRenderGo } =
     immediate: false,
   });
 
+const { data: profile, execute: profileGo } = await useLazyFetch(
+  "/api/account-profile",
+  {
+    query: {
+      region: regionChoosed,
+      realm: realmChoosed,
+      character: characterSearch,
+    },
+    immediate: false,
+  },
+);
+
 let loadingText = ref([
   "Searching saddles...",
   "Looking for Invincible...",
@@ -57,9 +77,28 @@ let randomLoadingValue: number;
 
 let avatar = ref();
 
+let totalOwnedNumber = ref<number>();
+let useableNumber = ref<number>();
+let useableNumberArray = ref<string[]>([]);
+
 const search = async () => {
   await go();
   await comparedRenderGo();
+  await profileGo();
+
+  comparedMounts.value.forEach((item: any) => {
+    if (item.is_useable) {
+      useableNumberArray.value.push(item.mount.name);
+    }
+  });
+  totalOwnedNumber.value = comparedMounts.value.length;
+  useableNumber.value = useableNumberArray.value.length;
+  console.log(
+    "Total:",
+    totalOwnedNumber.value,
+    "Useable:",
+    useableNumber.value,
+  );
 
   if (comparedCharacterRender.value) {
     avatar.value = await comparedCharacterRender.value[0].value;

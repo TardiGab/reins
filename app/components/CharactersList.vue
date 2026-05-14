@@ -26,7 +26,7 @@ const showList = ref(false);
 const boxContainer = ref<HTMLDivElement>();
 const searchInput = ref<HTMLInputElement>();
 
-const emit = defineEmits(["region", "realm", "character"]);
+const emit = defineEmits(["region", "realm", "character", "complete-realm"]);
 
 async function selectCharacter(character: any) {
   selectedCharacter.value = character;
@@ -34,6 +34,7 @@ async function selectCharacter(character: any) {
   showList.value = false;
   emit("region", await region.value);
   emit("realm", await selectedCharacter.value.realm.slug);
+  emit("complete-realm", await selectedCharacter.value.realm.name);
   emit("character", await selectedCharacter.value.name);
 }
 

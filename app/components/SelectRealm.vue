@@ -31,6 +31,7 @@ const searchInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
   (e: "realm", realm: string): void;
+  (e: "complete-realm", completeRealm: string): void;
 }>();
 
 function selectRealm(realm: SelectedRealm) {
@@ -38,6 +39,7 @@ function selectRealm(realm: SelectedRealm) {
   searchTerm.value = "";
   showList.value = false;
   emit("realm", realm.slug);
+  emit("complete-realm", realm.name);
 }
 
 // Fonction de recherche

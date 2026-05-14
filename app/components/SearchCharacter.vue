@@ -12,7 +12,6 @@ interface CharactersMounts {
       id: number;
     };
   };
-  // length: number;
 }
 
 const regionChoosed = ref<string>("");
@@ -32,6 +31,10 @@ const loggedRegionSelected = (region: string) => {
 const loggedRealm = ref<string>("");
 const loggedRealmSelected = (realm: string) => {
   loggedRealm.value = realm;
+};
+const loggedCompleteRealm = ref<string>();
+const loggedCompleteRealmSelected = (realm: string) => {
+  loggedCompleteRealm.value = realm;
 };
 const loggedCharacter = ref<string>("");
 const loggedCharacterSelected = (character: string) => {
@@ -93,7 +96,7 @@ let loadingText = ref([
   "Looking for Invincible...",
   "Cleaning stable...",
   "Gathering horseshoes...",
-  "Fighting Nullaeus...",
+  "Mrglglglglgl!",
 ]);
 
 let randomLoadingValue = random(0, loadingText.value.length - 1);
@@ -110,6 +113,7 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         class="characters-list-component"
         @realm="loggedRealmSelected"
         @region="loggedRegionSelected"
+        @complete-realm="loggedCompleteRealmSelected"
         @character="loggedCharacterSelected"
       />
     </div>
