@@ -364,13 +364,19 @@ watch(
     }
   },
 );
+
+let showTooltip = ref(false);
 </script>
 
 <template>
   <div class="comparison">
     <div class="comparison__left">
       <div class="comparison__header" v-if="showLeft">
-        <div class="comparison__character">
+        <div
+          class="comparison__character"
+          @mouseover="showTooltip = true"
+          @mouseleave="showTooltip = false"
+        >
           <img
             :src="
               baseAvatar ||
@@ -382,15 +388,18 @@ watch(
           <span class="comparison__name">
             {{ route.query.character || baseCharacterName }}'s mount collection
           </span>
-          <Tooltip
-            class="comparison__tooltip"
-            :character="route.query.character || baseCharacterName"
-            :useable-number="baseUseableMounts.length"
-            :total-owned-number="characterMounts.length"
-            :realm="route.query.realm || baseRealm"
-            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
-            :profile="baseProfile"
-          />
+          <Transition>
+            <Tooltip
+              v-if="showTooltip"
+              class="comparison__tooltip"
+              :character="route.query.character || baseCharacterName"
+              :useable-number="baseUseableMounts.length"
+              :total-owned-number="characterMounts.length"
+              :realm="route.query.realm || baseRealm"
+              :region="route.query.region || baseRegion?.toLocaleUpperCase()"
+              :profile="baseProfile"
+            />
+          </Transition>
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -488,6 +497,15 @@ watch(
   height: 80vh !important;
 }
 
+// @keyframes fadeIn {
+//   from {
+//     opacity: 0;
+//   }
+//   to {
+//     opacity: 1;
+//   }
+// }
+
 .comparison {
   display: flex;
   gap: 1rem;
@@ -503,10 +521,10 @@ watch(
     width: calc(100% - 2rem);
     margin-bottom: 1rem;
     padding: 0 1rem;
-    cursor: context-menu;
     &:hover {
       .comparison__tooltip {
-        display: inherit;
+        // display: inherit;
+        // animation: fadeIn 0.5s ease;
       }
     }
   }
@@ -515,12 +533,14 @@ watch(
     align-items: center;
     gap: 1rem;
     position: relative;
+    cursor: help;
   }
   &__tooltip {
     position: absolute;
     top: 100%;
     left: 20%;
-    display: none;
+    // display: none;
+    // animation: fadeIn 0.5s reverse ease;
   }
   &__profile {
     border: solid 2px $border-container;
@@ -562,5 +582,16 @@ watch(
   text-align: center;
   margin: 0;
   margin-bottom: 2rem;
+}
+
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.1s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

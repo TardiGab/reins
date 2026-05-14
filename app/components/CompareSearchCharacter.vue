@@ -86,11 +86,14 @@ const search = async () => {
   await comparedRenderGo();
   await profileGo();
 
-  comparedMounts.value.forEach((item: any) => {
-    if (item.is_useable) {
-      useableNumberArray.value.push(item.mount.name);
-    }
-  });
+  if (comparedMounts.value) {
+    comparedMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        useableNumberArray.value.push(item.mount.name);
+      }
+    });
+  }
+
   totalOwnedNumber.value = comparedMounts.value.length;
   useableNumber.value = useableNumberArray.value.length;
   console.log(

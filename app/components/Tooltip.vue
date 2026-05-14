@@ -33,62 +33,20 @@ const props = defineProps<{
   useableNumber?: number;
 }>();
 
-// const { data: profile, execute: profileGo } = await useLazyFetch(
-//   "/api/character-profile/",
-//   {
-//     query: {
-//       region: props.region,
-//       realm: props.realm,
-//       character: props.character,
-//     },
-//     // immediate: false,
-//   },
-// );
-
-// let left = ref(false);
-// let comma = ref(false);
-// let right = ref(false);
-
-// // if (
-// //   profile.value.active_title.display_string ===
-// //   `{name} ${profile.value.active_title.name}`
-// // ) {
-// //   left.value = true;
-// //   if (
-// //     profile.value.active_title.display_string ===
-// //     `{name}, ${profile.value.active_title.name}`
-// //   ) {
-// //     comma.value = true;
-// //   }
-// // } else if (
-// //   profile.value.active_title.display_string ===
-// //   `${profile.value.active_title.name} {name}`
-// // ) {
-// //   right.value = true;
-// //   if (
-// //     profile.value.active_title.display_string ===
-// //     `${profile.value.active_title.name}, {name}`
-// //   ) {
-// //     comma.value = true;
-// //   }
-// // }
-
-// onMounted(() => profileGo());
-
 if (props.profile) {
   console.log(props.profile);
 }
 </script>
 
 <template>
-  <!-- <div class="tooltip container" v-if="profile.name">
+  <div class="tooltip container" v-if="profile">
     <div class="tooltip__header">
       <h2 class="tooltip__h2">{{ profile.name }}</h2>
       <div class="tooltip__char-specs">
         <span class="spec">
           Lvl {{ profile.level }} – {{ profile.race.name }} –
           {{ profile.active_spec.name }} {{ profile.character_class.name }} –
-          {{ region?.toLocaleUpperCase() }} {{ profile.realm.name }}
+          {{ region?.toLocaleUpperCase() }} &nbsp; {{ profile.realm.name }}
         </span>
       </div>
     </div>
@@ -99,7 +57,7 @@ if (props.profile) {
     <div class="tooltip__achievement">
       <h3 class="tooltip__h3">Next mounts achievement:</h3>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <style scoped lang="scss">
