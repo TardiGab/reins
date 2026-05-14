@@ -1,0 +1,566 @@
+<script lang="ts" setup>
+import { useRoute } from "#app";
+
+const route = useRoute();
+const router = useRouter();
+
+const baseRealm = ref<string>();
+const baseRealmChoosed = (realm: string) => {
+  baseRealm.value = realm;
+};
+
+const comparedRealm = ref<string>();
+const comparedRealmChoosed = (realm: string) => {
+  comparedRealm.value = realm;
+};
+
+const baseRegion = ref<string>();
+const baseRegionChoosed = (region: string) => {
+  baseRegion.value = region;
+};
+
+const comparedRegion = ref<string>();
+const comparedRegionChoosed = (region: string) => {
+  comparedRegion.value = region;
+};
+
+const baseCharacterName = ref<string>();
+const baseCharacterChoosed = (character: string) => {
+  baseCharacterName.value = character;
+};
+
+const comparedCharacterName = ref<string>();
+const comparedCharacterChoosed = (character: string) => {
+  comparedCharacterName.value = character;
+};
+
+const baseAvatar = ref<string>();
+const baseAvatarChoosed = (avatar: string) => {
+  baseAvatar.value = avatar;
+};
+
+const comparedAvatar = ref<string>();
+const comparedAvatarChoosed = (avatar: string) => {
+  comparedAvatar.value = avatar;
+};
+
+const baseOpenAccordionDiff = ref<number>();
+const baseOpenAccordionDiffValue = (value: number) => {
+  baseOpenAccordionDiff.value = value;
+};
+
+const baseClosedAccordionDiff = ref<number[]>();
+const baseClosedAccordionDiffValue = (value: number[]) => {
+  baseClosedAccordionDiff.value = value;
+};
+
+const comparedOpenAccordionDiff = ref<number>();
+const comparedOpenAccordionDiffValue = (value: number) => {
+  comparedOpenAccordionDiff.value = value;
+};
+
+const compareClosedAccordionDiff = ref<number[]>();
+const comparedAccordionDiffValue = (value: number[]) => {
+  compareClosedAccordionDiff.value = value;
+};
+
+const {
+  data: comparedMountsLink,
+  execute: comparedGo,
+  clear: comparedClear,
+} = await useLazyFetch("/api/character-mounts", {
+  query: {
+    region: route.query.cregion,
+    realm: route.query.crealm,
+    character: route.query.ccharacter,
+  },
+  immediate: false,
+});
+
+const { data: comparedCharRender, execute: comparedRenderGo } =
+  await useLazyFetch("/api/character-render", {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  });
+
+const {
+  data: characterMounts,
+  execute: baseGo,
+  clear: baseClear,
+} = await useLazyFetch("/api/character-mounts/", {
+  query: {
+    region: route.query.region,
+    realm: route.query.realm,
+    character: route.query.character,
+  },
+});
+
+const { data: baseCharRender, execute: baseRenderGo } = await useLazyFetch(
+  "/api/character-render",
+  {
+    query: {
+      region: route.query.region,
+      realm: route.query.realm,
+      character: route.query.character,
+    },
+    immediate: false,
+  },
+);
+
+const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
+  {
+    query: {
+      region: route.query.region,
+      realm: route.query.realm,
+      character: route.query.character,
+    },
+    immediate: false,
+  },
+);
+const { data: compaedProfile, execute: comparedProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
+  {
+    query: {
+      region: route.query.cregion,
+      realm: route.query.crealm,
+      character: route.query.ccharacter,
+    },
+    immediate: false,
+  },
+);
+
+const comparedMounts = ref();
+
+let baseMountsChoosed = (character: any[]) => {
+  characterMounts.value = character;
+};
+
+let comparedMountsChoosed;
+
+comparedMountsChoosed = (character: any[]) => {
+  comparedMounts.value = character;
+};
+
+if (!comparedMounts.value && route.query.ccharacter) {
+  await comparedGo();
+  await comparedRenderGo();
+  comparedMounts.value = comparedMountsLink.value;
+}
+
+if (
+  !comparedMounts.value &&
+  !route.query.cregion &&
+  !route.query.crealm &&
+  !route.query.ccharacter
+) {
+  comparedMountsChoosed = (character: any[]) => {
+    comparedMounts.value = character;
+  };
+}
+
+let baseUseableMounts: string[] = [];
+let comparedUseableMounts: string[] = [];
+if (characterMounts.value) {
+  characterMounts.value.forEach((item: any) => {
+    if (item.is_useable) {
+      baseUseableMounts.push(item.mount.name);
+    }
+  });
+  // console.log(
+  //   "Base useable mounts:",
+  //   baseUseableMounts.length,
+  //   "Base total mounts:",
+  //   characterMounts.value.length,
+  // );
+} else if (comparedMountsLink.value || comparedMounts.value) {
+  comparedMountsLink.value.forEach((item: any) => {
+    if (item.is_useable) {
+      comparedUseableMounts.push(item.mount.name);
+    }
+  });
+  // console.log(
+  //   "Compared useable mounts:",
+  //   comparedUseableMounts.length,
+  //   "Compared total mounts:",
+  //   comparedMountsLink.value.length || comparedMounts.value.length,
+  // );
+}
+
+const showLeft = ref(true);
+const showRight = ref(true);
+onMounted(async () => {
+  await baseGo();
+  await baseRenderGo();
+  await baseProfileGo();
+
+  console.log(baseProfile.value);
+
+  baseAvatar.value = await baseCharRender.value[0].value;
+  if (comparedCharRender.value) {
+    comparedAvatar.value = await comparedCharRender.value[0].value;
+  } else if (baseCharRender.value) {
+    baseAvatar.value = await baseCharRender.value[0].value;
+  }
+  if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
+    showRight.value = false;
+  }
+});
+
+watch(
+  () => comparedCharacterName.value,
+  () => {
+    if (
+      comparedRegion.value &&
+      comparedRealm.value &&
+      comparedCharacterName.value
+    ) {
+      navigateTo({
+        path: `/compare-result`,
+        query: {
+          region: route.query.region,
+          realm: route.query.realm,
+          character: route.query.character,
+          cregion: comparedRegion.value,
+          crealm: comparedRealm.value,
+          ccharacter: comparedCharacterName.value,
+        },
+      });
+      comparedGo();
+      comparedProfileGo();
+      showRight.value = true;
+    }
+  },
+);
+watch(
+  () => baseCharacterName.value,
+  async () => {
+    if (
+      baseRegion.value &&
+      baseRealm.value &&
+      baseCharacterName.value &&
+      route.query.cregion &&
+      route.query.crealm &&
+      route.query.ccharacter
+    ) {
+      navigateTo({
+        path: `/compare-result`,
+        query: {
+          region: baseRegion.value,
+          realm: baseRealm.value,
+          character: baseCharacterName.value,
+          cregion: route.query.cregion,
+          crealm: route.query.crealm,
+          ccharacter: route.query.ccharacter,
+        },
+      });
+      baseGo();
+      baseProfileGo();
+      showLeft.value = true;
+    }
+  },
+);
+
+watch(
+  () => showRight.value,
+  () => {
+    if (showRight.value === false) {
+      let url = new URL(window?.location.href);
+      url.searchParams.delete("cregion");
+      url.searchParams.delete("crealm");
+      url.searchParams.delete("ccharacter");
+      history.pushState({}, "", url.href);
+      comparedClear();
+    }
+  },
+);
+
+watch(
+  () => showLeft.value,
+  () => {
+    if (showLeft.value === false) {
+      let url = new URL(window?.location.href);
+      url.searchParams.delete("region");
+      url.searchParams.delete("realm");
+      url.searchParams.delete("character");
+      history.pushState({}, "", url.href);
+      baseClear();
+    }
+  },
+);
+
+watch(
+  () => route.fullPath,
+  () => {
+    if (route.query.region && route.query.realm && route.query.character) {
+      baseGo();
+      baseRenderGo();
+      baseProfileGo();
+    } else if (
+      route.query.cregion &&
+      route.query.crealm &&
+      route.query.ccharacter
+    ) {
+      comparedGo();
+      comparedRenderGo();
+      comparedProfileGo();
+    }
+  },
+);
+
+const baseDiffArray = ref<number[]>([]);
+const comparedDiffArray = ref<number[]>([]);
+const baseDiff = ref<number>();
+const comparedDiff = ref<number>();
+
+watch(
+  () => baseClosedAccordionDiff.value && compareClosedAccordionDiff.value,
+  () => {
+    if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    } else if (baseDiffArray.value.length || comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    }
+  },
+);
+
+watch(
+  () => route.fullPath,
+  () => {
+    if (!baseDiffArray.value.length || !comparedDiffArray.value.length) {
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    } else if (baseDiffArray.value.length || comparedDiffArray.value.length) {
+      comparedDiffArray.value.length = 0;
+      baseDiffArray.value.length = 0;
+      for (let i = 0; i < baseClosedAccordionDiff.value?.length!; i++) {
+        comparedDiff.value = compareClosedAccordionDiff.value?.[i]!;
+        comparedDiffArray.value.push(comparedDiff.value);
+        baseDiff.value = baseClosedAccordionDiff.value?.[i]!;
+        baseDiffArray.value.push(baseDiff.value);
+      }
+    }
+  },
+);
+</script>
+
+<template>
+  <div class="comparison">
+    <div class="comparison__left">
+      <div class="comparison__header" v-if="showLeft">
+        <div class="comparison__character">
+          <img
+            :src="
+              baseAvatar ||
+              'https://render.worldofwarcraft.com/shadow/avatar/3-0.jpg'
+            "
+            alt="Character's profile"
+            class="comparison__profile"
+          />
+          <span class="comparison__name">
+            {{ route.query.character || baseCharacterName }}'s mount collection
+          </span>
+          <Tooltip
+            class="comparison__tooltip"
+            :character="route.query.character || baseCharacterName"
+            :useable-number="baseUseableMounts.length"
+            :total-owned-number="characterMounts.length"
+            :realm="route.query.realm || baseRealm"
+            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
+            :profile="baseProfile"
+          />
+        </div>
+        <ChangeCharacterButton
+          class="comparison__clear"
+          @click="showLeft = !showLeft"
+          :label="'Change character'"
+        />
+      </div>
+      <div class="comparison__search" v-else-if="!showLeft">
+        <h2 class="search-h2">Add a character</h2>
+        <CompareSearchCharacter
+          @character="baseCharacterChoosed"
+          @realm="baseRealmChoosed"
+          @region="baseRegionChoosed"
+          @compared-mounts="baseMountsChoosed"
+          @avatar="baseAvatarChoosed"
+        />
+      </div>
+      <CompareMountList
+        :character-mounts="characterMounts"
+        v-if="characterMounts && showLeft"
+        @unlocked-amount-o="baseOpenAccordionDiffValue"
+        @unlocked-amount="baseClosedAccordionDiffValue"
+      />
+    </div>
+    <div class="comparison__right">
+      <div class="comparison__header" v-if="showRight">
+        <div class="comparison__character">
+          <img
+            :src="
+              comparedAvatar ||
+              'https://render.worldofwarcraft.com/shadow/avatar/3-0.jpg'
+            "
+            alt="Character profile"
+            class="comparison__profile"
+          />
+          <span class="comparison__name">
+            {{ route.query.ccharacter || comparedCharacterName }}'s mount
+            collection
+          </span>
+          <!-- <Tooltip
+            class="comparison__tooltip"
+            :character="route.query.ccharacter || comparedCharacterName"
+            :total-owned-number="comparedMountsLink.length"
+            :useable-number="comparedUseableMounts.length"
+          /> -->
+        </div>
+        <ChangeCharacterButton
+          class="comparison__clear"
+          :label="'Change character'"
+          @click="showRight = !showRight"
+        />
+      </div>
+
+      <div
+        class="comparison__search"
+        v-else-if="
+          !showRight ||
+          (!route.query.cregion &&
+            !route.query.crealm &&
+            !route.query.ccharacter)
+        "
+      >
+        <h2 class="search-h2">Add a character</h2>
+        <CompareSearchCharacter
+          @compared-mounts="comparedMountsChoosed"
+          @character="comparedCharacterChoosed"
+          @realm="comparedRealmChoosed"
+          @region="comparedRegionChoosed"
+          @avatar="comparedAvatarChoosed"
+        />
+      </div>
+      <CompareMountList
+        :open-base-diff="baseOpenAccordionDiff"
+        :open-compared-diff="comparedOpenAccordionDiff"
+        :base-diff="baseDiffArray"
+        :compared-diff="comparedDiffArray"
+        :character-mounts="comparedMounts"
+        @unlocked-amount-o="comparedOpenAccordionDiffValue"
+        @unlocked-amount="comparedAccordionDiffValue"
+        v-if="
+          comparedMounts &&
+          showRight &&
+          route.query.cregion &&
+          route.query.crealm &&
+          route.query.ccharacter
+        "
+      />
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.user-mounts {
+  width: 100% !important;
+  height: 80vh !important;
+}
+
+.comparison {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  &__left,
+  &__right {
+    width: 100%;
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 2rem);
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+    cursor: context-menu;
+    &:hover {
+      .comparison__tooltip {
+        display: inherit;
+      }
+    }
+  }
+  &__character {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+  }
+  &__tooltip {
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    display: none;
+  }
+  &__profile {
+    border: solid 2px $border-container;
+    border-radius: 0.5rem;
+    height: 3rem;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
+  }
+  &__name {
+    font-family: $main-size;
+  }
+  &__search {
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 2px solid $border-container;
+    background-image: url("/images/wooden-background-2.webp");
+    box-shadow: 0 0 40px 0 #000 inset;
+    background-repeat: repeat;
+    background-attachment: local;
+    height: calc(80vh - 4rem);
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
+  }
+}
+.search-h2 {
+  font-size: $h2-size;
+  background: linear-gradient(180deg, #ffd100 0%, #dfaa03 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 2rem;
+}
+</style>

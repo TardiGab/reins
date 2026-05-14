@@ -1,23 +1,10 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
 import { authClient } from "~~/server/lib/auth-client";
-const { data: userMounts } = await useFetch("/api/mounts");
+const { data: userMounts } = await useFetch("/api/mounts", {
+  key: "user-mounts",
+});
 const session = authClient.useSession();
-// const isLogged = document.cookie.get({
-//   name: "better-auth.session_token"
-// })
-
-// console.log(document.cookie);
-
-// function getCookie(name: any) {
-//   const value = `; ${document.cookie}`;
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) return (parts.pop() as any).split(";").shift();
-// }
-
-// const cookies = getCookie("better-auth.session_token");
-
-// console.log(cookies);
 
 const userMountsIds = userMounts.value?.map((item: any) => {
   return item.mount.id;
@@ -103,10 +90,11 @@ async function pinMount(
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div class="expansion">
-        <OpenAccordion
+        <Accordion
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[0]?.amount"
+          :open="true"
         >
           <div class="expansion__container">
             <div
@@ -165,7 +153,7 @@ async function pinMount(
               </ul>
             </div>
           </div>
-        </OpenAccordion>
+        </Accordion>
       </div>
       <div
         v-for="(expansion, index) in mountsGlobal.slice(1)"
@@ -176,6 +164,7 @@ async function pinMount(
           :title="expansion.name"
           :unlocked-amount="categoryOwnedMountsArray[index + 1]?.unlockedAmount"
           :amount="categoryOwnedMountsArray[index + 1]?.amount"
+          :open="false"
         >
           <div class="expansion__container">
             <div
@@ -194,7 +183,7 @@ async function pinMount(
                   }"
                 >
                   <a
-                    :href="`https://wowhead.com/ptr/mount/${mount.ID}`"
+                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
                     target="_blank"
                     class="mount-item__link"
                   >
@@ -245,126 +234,7 @@ a {
   text-decoration: none;
 }
 
-li {
-  list-style: none;
-  padding: 0;
-}
-
-ul {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 0;
-}
-
 .mounts-wrapper {
-  border-radius: 1rem;
-  border: 2px solid $border-container;
-  overflow: hidden;
   width: 80%;
-  margin: auto;
-  position: relative;
-}
-
-.mounts-container {
-  padding: 2rem;
-  max-height: calc(80vh - 2rem);
-  background-color: #1a1512;
-  background-image: url("/images/wooden-background-2.webp");
-  box-shadow: 0 0 40px 0 #000 inset;
-  background-repeat: repeat;
-  background-attachment: local;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    background-color: transparent;
-    width: 0.3rem;
-    margin: 0.3rem;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: $border-container;
-    border-radius: 32px;
-    cursor: pointer;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-    }
-    &:hover {
-      background: $container-bg;
-    }
-  }
-}
-
-.expansion {
-  &__subcat {
-    font-family: "Sentient-Variable";
-    color: $yellow;
-    text-shadow: 1px 1px 0 #000;
-    line-height: 100%;
-    font-weight: 400;
-    padding: 0 1rem;
-    &-container {
-      padding: 0 1rem;
-      margin-bottom: 2rem;
-    }
-  }
-}
-
-.mount-item {
-  filter: grayscale(100%);
-  font-family: "Sentient-Variable";
-  font-size: $small;
-  transition: all 0.3s;
-  padding: 0.5rem;
-  box-sizing: border-box;
-  position: relative;
-  span {
-    text-shadow: 1px 1px 0 #000;
-  }
-  &__pin-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 3rem;
-    border: 2px solid $yellow;
-    background-color: $dark-brown;
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0;
-    &:active {
-      filter: brightness(80%);
-    }
-  }
-  &:hover {
-    filter: grayscale(0%);
-    background-color: #28221c;
-    border-radius: 0.5rem;
-    box-shadow: inset 0px 0px 0px 2px $border-container;
-    .mount-item__pin-btn {
-      opacity: 100%;
-    }
-  }
-  &__owned {
-    filter: grayscale(0%);
-    .mount-item__link {
-      color: white;
-    }
-  }
-  &__link {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    color: #595959;
-  }
-  &__icon {
-    position: relative;
-    border-radius: 0.25rem;
-    border: $border-container solid 2px;
-  }
 }
 </style>

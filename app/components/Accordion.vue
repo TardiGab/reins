@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-defineProps({
-  title: String,
-  unlockedAmount: Number,
-  amount: Number,
-});
+const props = defineProps<{
+  title?: string;
+  unlockedAmount?: number;
+  amount?: number;
+  baseDiff?: number;
+  comparedDiff?: number;
+  open: boolean;
+}>();
 
 let isOpen = ref(false);
+
+if (props.open) {
+  isOpen.value = true;
+}
 
 function openAccordion() {
   isOpen.value = !isOpen.value;
@@ -16,6 +23,12 @@ function openAccordion() {
     window.$WowheadPower.refreshLinks();
   }, 10);
 }
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
@@ -23,6 +36,15 @@ function openAccordion() {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
+        <span
+          v-if="comparedDiff || baseDiff"
+          :class="[
+            { 'positive-diff': comparedDiff! > baseDiff! },
+            'negative-diff',
+          ]"
+        >
+          {{ comparedDiff! - baseDiff! }}
+        </span>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
@@ -57,12 +79,7 @@ function openAccordion() {
 <style lang="scss" scoped>
 .expansion {
   &__wrapper {
-    max-height: 10000px;
-    // transition: all 0.5s ease-in-out;
     overflow: hidden;
-    &--closed {
-      max-height: 0px;
-    }
   }
   &-title {
     display: flex;
@@ -77,16 +94,20 @@ function openAccordion() {
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: $dark-gray;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-s;
+    }
     &:hover {
-      transform: translate(1px, 1px);
+      color: $light-gray;
+      background-color: hsl(27, 16%, 16%);
     }
     &:active {
       transform: translate(2px, 2px);
     }
     &__name,
     span {
-      font-family: "Sentient-Variable";
-      color: $dark-gray;
       font-weight: 400;
       text-shadow: 1px 1px 0 #000;
       font-size: $main-size;
@@ -99,6 +120,27 @@ function openAccordion() {
       align-items: center;
       gap: 1rem;
     }
+  }
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.negative-diff {
+  color: $bright-red;
+}
+
+.positive-diff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  color: $bright-green;
+  &::before {
+    content: "+";
+    line-height: 1;
   }
 }
 </style>

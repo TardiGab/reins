@@ -1,6 +1,10 @@
 // Colors
 $yellow: #FFD100;
+$heirloom-blue: #00CCFF;
+$epic-purple: #A335EE;
 $red: #6C0100;
+$bright-red: #df0400;
+$bright-green: #03CC14;
 $dark-red: #290504;
 $dark-gray: #808080;
 $light-gray: #B2B1B1;
@@ -9,10 +13,15 @@ $blizzard-blue: #0074E0;
 $blizzard-blue-border: #349dff;
 $dark-brown: #4C261E;
 $container-bg: #28221c;
-
+$button-bg-dark: #191612;
+$button-bg-hover: #2f2822;
 
 // Font sizes
 $h2-size: clamp(2rem, 1.7857rem + 1.0714vw, 2.75rem);
 $h3-size: clamp(1.4375rem, 1.2946rem + 0.7143vw, 1.9375rem);
 $main-size: clamp(1rem, 0.8929rem + 0.5357vw, 1.375rem);
 $small: clamp(0.6875rem, 0.5982rem + 0.4464vw, 1rem);
+
+// Corner-shape experimental 
+$corner-shape-m: .5rem;
+$corner-shape-s: 0.35rem;
