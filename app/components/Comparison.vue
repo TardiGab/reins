@@ -2,7 +2,6 @@
 import { useRoute } from "#app";
 
 const route = useRoute();
-const router = useRouter();
 
 const baseRealm = ref<string>();
 const baseRealmChoosed = (realm: string) => {
@@ -122,17 +121,15 @@ const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
     immediate: false,
   },
 );
-const { data: compaedProfile, execute: comparedProfileGo } = await useLazyFetch(
-  "/api/character-profile/",
-  {
+const { data: comparedProfile, execute: comparedProfileGo } =
+  await useLazyFetch("/api/character-profile/", {
     query: {
       region: route.query.cregion,
       realm: route.query.crealm,
       character: route.query.ccharacter,
     },
     immediate: false,
-  },
-);
+  });
 
 const comparedMounts = ref();
 
@@ -198,8 +195,6 @@ onMounted(async () => {
   await baseRenderGo();
   await baseProfileGo();
 
-  console.log(baseProfile.value);
-
   baseAvatar.value = await baseCharRender.value[0].value;
   if (comparedCharRender.value) {
     comparedAvatar.value = await comparedCharRender.value[0].value;
@@ -209,7 +204,18 @@ onMounted(async () => {
   if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
     showRight.value = false;
   }
+  if (route.query.cregion && route.query.crealm && route.query.ccharacter) {
+    await comparedProfileGo();
+  }
 });
+
+function comparedTootltip() {
+  if (!comparedProfile.value) {
+    comparedProfileGo();
+  } else {
+    showRightTooltip.value = true;
+  }
+}
 
 watch(
   () => comparedCharacterName.value,
@@ -365,7 +371,8 @@ watch(
   },
 );
 
-let showTooltip = ref(false);
+let showLeftTooltip = ref(false);
+let showRightTooltip = ref(false);
 </script>
 
 <template>
@@ -374,8 +381,8 @@ let showTooltip = ref(false);
       <div class="comparison__header" v-if="showLeft">
         <div
           class="comparison__character"
-          @mouseover="showTooltip = true"
-          @mouseleave="showTooltip = false"
+          @mouseover="showLeftTooltip = true"
+          @mouseleave="showLeftTooltip = false"
         >
           <img
             :src="
@@ -390,12 +397,10 @@ let showTooltip = ref(false);
           </span>
           <Transition>
             <Tooltip
-              v-if="showTooltip"
+              v-if="showLeftTooltip"
               class="comparison__tooltip"
-              :character="route.query.character || baseCharacterName"
               :useable-number="baseUseableMounts.length"
               :total-owned-number="characterMounts.length"
-              :realm="route.query.realm || baseRealm"
               :region="route.query.region || baseRegion?.toLocaleUpperCase()"
               :profile="baseProfile"
             />
@@ -426,7 +431,11 @@ let showTooltip = ref(false);
     </div>
     <div class="comparison__right">
       <div class="comparison__header" v-if="showRight">
-        <div class="comparison__character">
+        <div
+          class="comparison__character"
+          @mouseover="showRightTooltip = true"
+          @mouseleave="showRightTooltip = false"
+        >
           <img
             :src="
               comparedAvatar ||
@@ -439,12 +448,16 @@ let showTooltip = ref(false);
             {{ route.query.ccharacter || comparedCharacterName }}'s mount
             collection
           </span>
-          <!-- <Tooltip
-            class="comparison__tooltip"
-            :character="route.query.ccharacter || comparedCharacterName"
-            :total-owned-number="comparedMountsLink.length"
-            :useable-number="comparedUseableMounts.length"
-          /> -->
+          <Transition>
+            <Tooltip
+              v-if="showRightTooltip"
+              class="comparison__tooltip"
+              :region="
+                route.query.cregion || comparedRegion?.toLocaleUpperCase()
+              "
+              :profile="comparedProfile"
+            />
+          </Transition>
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -587,7 +600,7 @@ let showTooltip = ref(false);
 /* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 0.1s;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .v-enter-from,
