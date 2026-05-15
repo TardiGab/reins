@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useRoute } from "#app";
+import accountProfileGet from "~~/server/api/account-profile.get";
 
 const route = useRoute();
 
@@ -54,25 +55,29 @@ if (
 ) {
   left.value = true;
 }
+
+let classColor = ref(
+  props.profile?.character_class.name.replace(/\s+/g, "").toLocaleLowerCase(),
+);
 </script>
 
 <template>
   <div class="tooltip container" v-if="profile">
     <div class="tooltip__header">
-      <h2 class="tooltip__h2" v-if="left">
+      <h2 class="tooltip__h2" :class="[classColor]" v-if="left">
         {{ profile.active_title.name }} {{ profile.name }}
       </h2>
-      <h2 class="tooltip__h2" v-if="right">
+      <h2 class="tooltip__h2" :class="[classColor]" v-if="right">
         {{ profile.name }} {{ profile.active_title.name }}
       </h2>
-      <h2 class="tooltip__h2" v-if="comma">
+      <h2 class="tooltip__h2" :class="[classColor]" v-if="comma">
         {{ profile.name }}, {{ profile.active_title.name }}
       </h2>
       <div class="tooltip__char-specs">
         <span class="spec">
           Lvl {{ profile.level }} – {{ profile.race.name }} –
           {{ profile.active_spec.name }} {{ profile.character_class.name }} –
-          {{ region?.toLocaleUpperCase() }} &nbsp; {{ profile.realm.name }}
+          {{ region?.toLocaleUpperCase() }}&nbsp;{{ profile.realm.name }}
         </span>
       </div>
     </div>
@@ -109,7 +114,6 @@ if (
     margin: 0;
   }
   &__h2 {
-    color: $epic-purple;
     font-size: $main-size;
   }
   &__h3 {
@@ -126,5 +130,47 @@ if (
     width: 0;
     margin: 0;
   }
+}
+
+// Classes color from https://wowpedia.fandom.com/wiki/Class_colors
+
+.deathknight {
+  color: #c41e3a;
+}
+.demonhunter {
+  color: #a330c9;
+}
+.druid {
+  color: #ff7c0a;
+}
+.evoker {
+  color: #33937f;
+}
+.hunter {
+  color: #aad372;
+}
+.mage {
+  color: #3fc7eb;
+}
+.monk {
+  color: #00ff98;
+}
+.paladin {
+  color: #f48cba;
+}
+.priest {
+  color: #ffffff;
+}
+.rogue {
+  color: #fff468;
+}
+.shaman {
+  color: #0070dd;
+}
+.warlock {
+  color: #8788ee;
+}
+.warrior {
+  color: #c69b6d;
 }
 </style>

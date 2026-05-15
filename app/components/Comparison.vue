@@ -209,14 +209,6 @@ onMounted(async () => {
   }
 });
 
-function comparedTootltip() {
-  if (!comparedProfile.value) {
-    comparedProfileGo();
-  } else {
-    showRightTooltip.value = true;
-  }
-}
-
 watch(
   () => comparedCharacterName.value,
   () => {
