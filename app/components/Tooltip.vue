@@ -100,6 +100,7 @@ let classColor = ref(
   border-radius: 1rem;
   border: 2px solid $border-container;
   width: 30vw;
+  overflow: hidden;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
     border-radius: $corner-shape-m;
