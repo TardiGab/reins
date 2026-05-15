@@ -25,23 +25,49 @@ interface Profile {
 }
 
 const props = defineProps<{
-  character?: string;
   region?: string;
-  realm?: string;
   profile?: Profile;
   totalOwnedNumber?: number;
   useableNumber?: number;
 }>();
 
+let left = ref(false);
+let right = ref(false);
+let comma = ref(false);
+
 if (props.profile) {
   console.log(props.profile);
+}
+if (
+  props.profile?.active_title.display_string ===
+  `{name} ${props.profile?.active_title.name}`
+) {
+  right.value = true;
+} else if (
+  props.profile?.active_title.display_string ===
+  `{name}, ${props.profile?.active_title.name}`
+) {
+  comma.value = true;
+} else if (
+  props.profile?.active_title.display_string ===
+  `${props.profile?.active_title.name} {name}`
+) {
+  left.value = true;
 }
 </script>
 
 <template>
   <div class="tooltip container" v-if="profile">
     <div class="tooltip__header">
-      <h2 class="tooltip__h2">{{ profile.name }}</h2>
+      <h2 class="tooltip__h2" v-if="left">
+        {{ profile.active_title.name }} {{ profile.name }}
+      </h2>
+      <h2 class="tooltip__h2" v-if="right">
+        {{ profile.name }} {{ profile.active_title.name }}
+      </h2>
+      <h2 class="tooltip__h2" v-if="comma">
+        {{ profile.name }}, {{ profile.active_title.name }}
+      </h2>
       <div class="tooltip__char-specs">
         <span class="spec">
           Lvl {{ profile.level }} – {{ profile.race.name }} –
