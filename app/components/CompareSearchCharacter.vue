@@ -1,4 +1,25 @@
 <script setup lang="ts">
+interface Profile {
+  name: string;
+  level: number;
+  race: {
+    name: string;
+  };
+  realm: {
+    name: string;
+  };
+  character_class: {
+    name: string;
+  };
+  active_spec: {
+    name: string;
+  };
+  active_title: {
+    name: string;
+    display_string?: string;
+  };
+}
+
 import { random } from "#imports";
 
 const regionChoosed = ref<string>("");
@@ -18,17 +39,27 @@ const completeRealmSelected = (realm: string) => {
 
 const characterSearch = ref<string>();
 
-const emit = defineEmits([
-  "region",
-  "realm",
-  "complete-realm",
-  "character",
-  "compared-mounts",
-  "avatar",
-  "total-owned",
-  "useable-number",
-  "profile",
-]);
+// const emit = defineEmits([
+//   "region",
+//   "realm",
+//   "character",
+//   "compared-mounts",
+//   "avatar",
+//   "total-owned",
+//   "useable-number",
+//   "profile",
+// ]);
+
+const emit = defineEmits<{
+  (e: "profile", profile: any): void;
+  (e: "compared-mounts", mounts: any): void;
+  (e: "character", character: string): void;
+  (e: "region", region: string): void;
+  (e: "realm", realm: string): void;
+  (e: "avatar", avatar: string): void;
+  (e: "useable-number", useable: number): void;
+  (e: "total-owned", owned: number): void;
+}>();
 
 const {
   data: comparedMounts,
@@ -108,19 +139,11 @@ const search = async () => {
     });
   }
 
-  console.log("Character:", characterProfile.value);
-
   if (comparedMounts.value) {
     totalOwnedNumber.value = comparedMounts.value.length;
   }
 
   useableNumber.value = useableNumberArray.value.length;
-  console.log(
-    "Total:",
-    totalOwnedNumber.value,
-    "Useable:",
-    useableNumber.value,
-  );
 
   if (comparedCharacterRender.value) {
     avatar.value = await comparedCharacterRender.value[0].value;
@@ -128,11 +151,15 @@ const search = async () => {
 
   randomLoadingValue = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
+  // Voir pourquoi le typage est pas bon
+  // console.log(characterSearch.value?.trim());
   emit("character", characterSearch.value?.trim());
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
   emit("profile", characterProfile.value);
+  emit("total-owned", totalOwnedNumber.value);
+  emit("useable-number", useableNumber.value);
 };
 </script>
 

@@ -72,6 +72,23 @@ const comparedProfileChoosed = (value: any) => {
   comparedProfile.value = value;
 };
 
+const baseTotalOwned = ref();
+const baseTotalOwnedChoosed = (total: number) => {
+  baseTotalOwned.value = total;
+};
+const baseUseable = ref();
+const baseUseableChoosed = (useable: number) => {
+  baseUseable.value = useable;
+};
+const comparedTotalOwned = ref();
+const comparedTotalOwnedChoosed = (total: number) => {
+  comparedTotalOwned.value = total;
+};
+const comparedUseable = ref();
+const comparedUseableChoosed = (useable: number) => {
+  comparedUseable.value = useable;
+};
+
 const {
   data: comparedMountsLink,
   execute: comparedGo,
@@ -140,12 +157,11 @@ const { data: comparedProfileLink, execute: comparedProfileGo } =
     immediate: false,
   });
 
-const comparedMounts = ref();
-
 let baseMountsChoosed = (character: any[]) => {
   characterMounts.value = character;
 };
 
+const comparedMounts = ref();
 let comparedMountsChoosed;
 
 comparedMountsChoosed = (character: any[]) => {
@@ -171,31 +187,6 @@ if (
 
 let baseUseableMounts: string[] = [];
 let comparedUseableMounts: string[] = [];
-if (characterMounts.value) {
-  characterMounts.value.forEach((item: any) => {
-    if (item.is_useable) {
-      baseUseableMounts.push(item.mount.name);
-    }
-  });
-  // console.log(
-  //   "Base useable mounts:",
-  //   baseUseableMounts.length,
-  //   "Base total mounts:",
-  //   characterMounts.value.length,
-  // );
-} else if (comparedMountsLink.value || comparedMounts.value) {
-  comparedMountsLink.value.forEach((item: any) => {
-    if (item.is_useable) {
-      comparedUseableMounts.push(item.mount.name);
-    }
-  });
-  // console.log(
-  //   "Compared useable mounts:",
-  //   comparedUseableMounts.length,
-  //   "Compared total mounts:",
-  //   comparedMountsLink.value.length || comparedMounts.value.length,
-  // );
-}
 
 const showLeft = ref(true);
 const showRight = ref(true);
@@ -215,6 +206,20 @@ onMounted(async () => {
   }
   if (route.query.cregion && route.query.crealm && route.query.ccharacter) {
     await comparedProfileGo();
+  }
+  if (characterMounts.value) {
+    characterMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        baseUseableMounts.push(item.mount.name);
+      }
+    });
+  }
+  if (comparedMountsLink.value) {
+    comparedMountsLink.value.forEach((item: any) => {
+      if (item.is_useable) {
+        comparedUseableMounts.push(item.mount.name);
+      }
+    });
   }
 });
 
@@ -406,8 +411,8 @@ let showRightTooltip = ref(false);
             <Tooltip
               v-if="showLeftTooltip"
               class="comparison__tooltip"
-              :useable-number="baseUseableMounts.length"
-              :total-owned-number="characterMounts.length"
+              :useable-number="baseUseable || baseUseableMounts.length"
+              :total-owned-number="baseTotalOwned || characterMounts.length"
               :region="route.query.region || baseRegion?.toLocaleUpperCase()"
               :profile="baseProfile || baseProfileLink"
             />
@@ -428,6 +433,8 @@ let showRightTooltip = ref(false);
           @compared-mounts="baseMountsChoosed"
           @avatar="baseAvatarChoosed"
           @profile="baseProfileChoosed"
+          @total-owned="baseTotalOwnedChoosed"
+          @useable-number="baseUseableChoosed"
         />
       </div>
       <CompareMountList
@@ -464,6 +471,12 @@ let showRightTooltip = ref(false);
                 route.query.cregion || comparedRegion?.toLocaleUpperCase()
               "
               :profile="comparedProfile || comparedProfileLink"
+              :total-owned-number="
+                comparedTotalOwned ||
+                comparedMountsLink.length ||
+                comparedMounts.length
+              "
+              :useable-number="comparedUseable || comparedUseableMounts.length"
             />
           </Transition>
         </div>
@@ -491,6 +504,8 @@ let showRightTooltip = ref(false);
           @region="comparedRegionChoosed"
           @avatar="comparedAvatarChoosed"
           @profile="comparedProfileChoosed"
+          @total-owned="comparedTotalOwnedChoosed"
+          @useable-number="comparedUseableChoosed"
         />
       </div>
       <CompareMountList
