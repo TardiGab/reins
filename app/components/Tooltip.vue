@@ -1,9 +1,4 @@
 <script lang="ts" setup>
-import { useRoute } from "#app";
-import accountProfileGet from "~~/server/api/account-profile.get";
-
-const route = useRoute();
-
 interface Profile {
   name: string;
   level: number;
@@ -36,9 +31,6 @@ let left = ref(false);
 let right = ref(false);
 let comma = ref(false);
 
-if (props.profile) {
-  console.log(props.profile);
-}
 if (
   props.profile?.active_title.display_string ===
   `{name} ${props.profile?.active_title.name}`
@@ -116,9 +108,11 @@ let classColor = ref(
   }
   &__h2 {
     font-size: $main-size;
+    font-weight: 800;
   }
   &__h3 {
     font-size: $main-size;
+    font-weight: 600;
   }
   &__stats {
     display: flex;

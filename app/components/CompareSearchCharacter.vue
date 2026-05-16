@@ -27,6 +27,7 @@ const emit = defineEmits([
   "avatar",
   "total-owned",
   "useable-number",
+  "profile",
 ]);
 
 const {
@@ -52,8 +53,20 @@ const { data: comparedCharacterRender, execute: comparedRenderGo } =
     immediate: false,
   });
 
-const { data: profile, execute: profileGo } = await useLazyFetch(
+const { data: profile, execute: profileGo } = await useFetch(
   "/api/account-profile",
+  {
+    query: {
+      region: regionChoosed,
+      realm: realmChoosed,
+      character: characterSearch,
+    },
+    immediate: false,
+  },
+);
+
+const { data: characterProfile, execute: charProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
   {
     query: {
       region: regionChoosed,
@@ -85,6 +98,7 @@ const search = async () => {
   await go();
   await comparedRenderGo();
   await profileGo();
+  await charProfileGo();
 
   if (comparedMounts.value) {
     comparedMounts.value.forEach((item: any) => {
@@ -94,7 +108,12 @@ const search = async () => {
     });
   }
 
-  totalOwnedNumber.value = comparedMounts.value.length;
+  console.log("Character:", characterProfile.value);
+
+  if (comparedMounts.value) {
+    totalOwnedNumber.value = comparedMounts.value.length;
+  }
+
   useableNumber.value = useableNumberArray.value.length;
   console.log(
     "Total:",
@@ -113,6 +132,7 @@ const search = async () => {
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
+  emit("profile", characterProfile.value);
 };
 </script>
 

@@ -63,6 +63,11 @@ const comparedAccordionDiffValue = (value: number[]) => {
   compareClosedAccordionDiff.value = value;
 };
 
+const baseProfile = ref();
+const baseProfileChoosed = (value) => {
+  baseProfile.value = value;
+};
+
 const {
   data: comparedMountsLink,
   execute: comparedGo,
@@ -110,7 +115,7 @@ const { data: baseCharRender, execute: baseRenderGo } = await useLazyFetch(
   },
 );
 
-const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
+const { data: baseProfileLink, execute: baseProfileGo } = await useLazyFetch(
   "/api/character-profile/",
   {
     query: {
@@ -394,7 +399,7 @@ let showRightTooltip = ref(false);
               :useable-number="baseUseableMounts.length"
               :total-owned-number="characterMounts.length"
               :region="route.query.region || baseRegion?.toLocaleUpperCase()"
-              :profile="baseProfile"
+              :profile="baseProfileLink || baseProfile"
             />
           </Transition>
         </div>
@@ -412,6 +417,7 @@ let showRightTooltip = ref(false);
           @region="baseRegionChoosed"
           @compared-mounts="baseMountsChoosed"
           @avatar="baseAvatarChoosed"
+          @profile="baseProfileChoosed"
         />
       </div>
       <CompareMountList
