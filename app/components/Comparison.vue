@@ -64,8 +64,12 @@ const comparedAccordionDiffValue = (value: number[]) => {
 };
 
 const baseProfile = ref();
-const baseProfileChoosed = (value) => {
+const baseProfileChoosed = (value: any) => {
   baseProfile.value = value;
+};
+const comparedProfile = ref();
+const comparedProfileChoosed = (value: any) => {
+  comparedProfile.value = value;
 };
 
 const {
@@ -126,7 +130,7 @@ const { data: baseProfileLink, execute: baseProfileGo } = await useLazyFetch(
     immediate: false,
   },
 );
-const { data: comparedProfile, execute: comparedProfileGo } =
+const { data: comparedProfileLink, execute: comparedProfileGo } =
   await useLazyFetch("/api/character-profile/", {
     query: {
       region: route.query.cregion,
@@ -214,6 +218,8 @@ onMounted(async () => {
   }
 });
 
+// Modification du lien quand on fait une recherche
+
 watch(
   () => comparedCharacterName.value,
   () => {
@@ -296,6 +302,8 @@ watch(
   },
 );
 
+// Fetch quand on arrive sur la page via le lien
+
 watch(
   () => route.fullPath,
   () => {
@@ -314,6 +322,8 @@ watch(
     }
   },
 );
+
+// Diff
 
 const baseDiffArray = ref<number[]>([]);
 const comparedDiffArray = ref<number[]>([]);
@@ -399,7 +409,7 @@ let showRightTooltip = ref(false);
               :useable-number="baseUseableMounts.length"
               :total-owned-number="characterMounts.length"
               :region="route.query.region || baseRegion?.toLocaleUpperCase()"
-              :profile="baseProfileLink || baseProfile"
+              :profile="baseProfile || baseProfileLink"
             />
           </Transition>
         </div>
@@ -453,7 +463,7 @@ let showRightTooltip = ref(false);
               :region="
                 route.query.cregion || comparedRegion?.toLocaleUpperCase()
               "
-              :profile="comparedProfile"
+              :profile="comparedProfile || comparedProfileLink"
             />
           </Transition>
         </div>
@@ -480,6 +490,7 @@ let showRightTooltip = ref(false);
           @realm="comparedRealmChoosed"
           @region="comparedRegionChoosed"
           @avatar="comparedAvatarChoosed"
+          @profile="comparedProfileChoosed"
         />
       </div>
       <CompareMountList
@@ -508,15 +519,6 @@ let showRightTooltip = ref(false);
   height: 80vh !important;
 }
 
-// @keyframes fadeIn {
-//   from {
-//     opacity: 0;
-//   }
-//   to {
-//     opacity: 1;
-//   }
-// }
-
 .comparison {
   display: flex;
   gap: 1rem;
@@ -532,12 +534,6 @@ let showRightTooltip = ref(false);
     width: calc(100% - 2rem);
     margin-bottom: 1rem;
     padding: 0 1rem;
-    &:hover {
-      .comparison__tooltip {
-        // display: inherit;
-        // animation: fadeIn 0.5s ease;
-      }
-    }
   }
   &__character {
     display: flex;
@@ -550,8 +546,6 @@ let showRightTooltip = ref(false);
     position: absolute;
     top: 100%;
     left: 20%;
-    // display: none;
-    // animation: fadeIn 0.5s reverse ease;
   }
   &__profile {
     border: solid 2px $border-container;
@@ -595,7 +589,6 @@ let showRightTooltip = ref(false);
   margin-bottom: 2rem;
 }
 
-/* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.3s ease-in-out;

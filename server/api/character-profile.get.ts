@@ -28,9 +28,6 @@ export default defineEventHandler(async (event) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
-
-      // const mounts = data.mounts;
       return data;
     })
     .catch((error) => {
