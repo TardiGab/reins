@@ -36,15 +36,19 @@ onMounted(() => {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
-        <span
-          v-if="comparedDiff || baseDiff"
+        <!-- Calcul en premier pour s'assurer qu'il n'y ait pas de div vide, au niveau du span cela créée une div vide si la condition n'est pas remplie -->
+        <div
+          v-if="comparedDiff! - baseDiff! !== 0"
           :class="[
             { 'positive-diff': comparedDiff! > baseDiff! },
             'negative-diff',
           ]"
         >
-          {{ comparedDiff! - baseDiff! }}
-        </span>
+          <!-- On vérifie la présence de ces valeurs pour éviter NaN sur la vue de gauche -->
+          <span v-if="comparedDiff || baseDiff">
+            {{ comparedDiff! - baseDiff! }}
+          </span>
+        </div>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg

@@ -18,6 +18,9 @@ interface Profile {
     name: string;
     display_string?: string;
   };
+  faction: {
+    name: string;
+  };
 }
 
 const props = defineProps<{
@@ -74,11 +77,15 @@ let classColor = ref(
       </div>
     </div>
     <div class="tooltip__stats">
-      <span class="stats">Total mounts: {{ totalOwnedNumber }}</span>
-      <span class="stats">Useable mounts: {{ useableNumber }}</span>
+      <span class="stats"><b>Total mounts:</b> {{ totalOwnedNumber }}</span>
+      <span class="stats"><b>Useable mounts:</b> {{ useableNumber }}</span>
     </div>
     <div class="tooltip__achievement">
       <h3 class="tooltip__h3">Next mounts achievement:</h3>
+      <NextAchievement
+        :faction="profile.faction.name"
+        :useable="useableNumber!"
+      />
     </div>
   </div>
 </template>
@@ -108,11 +115,12 @@ let classColor = ref(
   }
   &__h2 {
     font-size: $main-size;
-    font-weight: 800;
+    font-weight: 700;
   }
   &__h3 {
     font-size: $main-size;
     font-weight: 600;
+    margin-bottom: 1rem;
   }
   &__stats {
     display: flex;
@@ -127,7 +135,11 @@ let classColor = ref(
   }
 }
 
-// Classes color from https://wowpedia.fandom.com/wiki/Class_colors
+.stats {
+  b {
+    font-weight: 500;
+  }
+}
 
 .deathknight {
   color: #c41e3a;

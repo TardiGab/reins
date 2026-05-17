@@ -108,7 +108,7 @@ const { data: characterProfile, execute: charProfileGo } = await useLazyFetch(
   },
 );
 
-let loadingText = ref([
+let loadingText = ref<string[]>([
   "Searching saddles...",
   "Looking for Invincible...",
   "These webs will summon Nerubians, don't stand in 'em!",
@@ -158,8 +158,12 @@ const search = async () => {
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
   emit("profile", characterProfile.value);
-  emit("total-owned", totalOwnedNumber.value);
-  emit("useable-number", useableNumber.value);
+  if (totalOwnedNumber.value) {
+    emit("total-owned", totalOwnedNumber.value);
+  }
+  if (useableNumber.value) {
+    emit("useable-number", useableNumber.value);
+  }
 };
 </script>
 
