@@ -11,6 +11,11 @@ interface Achievements {
   requirement: number;
   icon: string;
   side: string;
+  reward: {
+    name: string;
+    icon: string;
+    id: number;
+  };
 }
 
 const props = defineProps<{
@@ -30,6 +35,12 @@ achievements.forEach((item) => {
 });
 
 achievement.value = nextArray.value[0];
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
@@ -48,6 +59,19 @@ achievement.value = nextArray.value[0];
       <span class="achievement__desc">{{ achievement?.desc }}</span>
     </div>
   </a>
+  <div class="reward" v-if="achievement?.reward">
+    <h3 class="reward__h3">Reward:</h3>
+    <a
+      :href="`https://wowhead.com/ptr-2/mount/${achievement?.reward.id}`"
+      class="reward__item"
+    >
+      <img
+        :src="`https://wow.zamimg.com/images/wow/icons/medium/${achievement.reward.icon.toLowerCase()}.jpg`"
+        class="mount-item__icon"
+      />
+      <span>{{ achievement?.reward.name }}</span>
+    </a>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -84,6 +108,19 @@ achievement.value = nextArray.value[0];
   }
   &:hover {
     filter: brightness(70%);
+  }
+}
+
+.reward {
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    transition: filter 0.3s ease;
+    &:hover {
+      filter: brightness(70%);
+    }
   }
 }
 </style>
