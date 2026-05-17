@@ -78,7 +78,7 @@ let classColor = ref(
     </div>
     <div class="tooltip__stats">
       <span class="stats"><b>Total mounts:</b> {{ totalOwnedNumber }}</span>
-      <span class="stats"><b>Useable mounts:</b> {{ useableNumber }}</span>
+      <span class="stats"><b>Usable mounts:</b> {{ useableNumber }}</span>
     </div>
     <div class="tooltip__achievement">
       <h3 class="tooltip__h3">Next mounts achievement:</h3>

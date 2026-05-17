@@ -417,6 +417,13 @@ let showRightTooltip = ref(false);
               :profile="baseProfile || baseProfileLink"
             />
           </Transition>
+          <Tooltip
+            class="comparison__tooltip"
+            :useable-number="baseUseable || baseUseableMounts.length"
+            :total-owned-number="baseTotalOwned || characterMounts.length"
+            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
+            :profile="baseProfile || baseProfileLink"
+          />
         </div>
         <ChangeCharacterButton
           class="comparison__clear"

@@ -60,7 +60,7 @@ onMounted(() => {
     </div>
   </a>
   <div class="reward" v-if="achievement?.reward">
-    <h3 class="reward__h3">Reward:</h3>
+    <h4 class="reward__h4">Reward:</h4>
     <a
       :href="`https://wowhead.com/ptr-2/mount/${achievement?.reward.id}`"
       class="reward__item"
@@ -82,6 +82,7 @@ onMounted(() => {
   gap: 0.5rem;
   color: white;
   transition: filter 0.3s ease;
+  margin-bottom: 1.5rem;
   &__content {
     display: flex;
     flex-direction: column;
@@ -107,11 +108,18 @@ onMounted(() => {
     }
   }
   &:hover {
-    filter: brightness(70%);
+    filter: brightness(80%);
   }
 }
 
 .reward {
+  &__h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+  }
   &__item {
     display: flex;
     flex-direction: row;
@@ -119,7 +127,7 @@ onMounted(() => {
     gap: 0.5rem;
     transition: filter 0.3s ease;
     &:hover {
-      filter: brightness(70%);
+      filter: brightness(80%);
     }
   }
 }
