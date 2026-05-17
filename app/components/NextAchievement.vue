@@ -54,9 +54,10 @@ achievement.value = nextArray.value[0];
 .achievement {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
   color: white;
+  transition: filter 0.3s ease;
   &__content {
     display: flex;
     flex-direction: column;
@@ -64,22 +65,25 @@ achievement.value = nextArray.value[0];
   }
   &__name {
     color: $yellow;
-    font-size: $main-size;
+    font-size: 1.2rem;
     font-weight: 500;
   }
   &__desc {
-    font-size: $small;
+    font-size: 0.8rem;
   }
   &__icon {
     border-radius: 0.25rem;
     border: $border-container solid 2px;
-    height: 3rem;
-    width: 3rem;
+    height: 2.5rem;
+    width: 2.5rem;
 
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
     }
+  }
+  &:hover {
+    filter: brightness(70%);
   }
 }
 </style>

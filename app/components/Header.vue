@@ -30,7 +30,7 @@ header {
   width: 100%;
   justify-content: space-between;
   border: 2px solid $border-container;
-  background-color: $container-bg;
+  background-color: hsl(23, 18%, 12%);
   box-shadow: inset 0 0 0 1px black;
   padding: 0.5rem;
   padding-left: 2rem;

@@ -89,7 +89,7 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #28221c;
+    background-color: hsl(23, 18%, 12%);
     border: 2px solid $border-container;
     box-shadow: inset 0 0 0 1px black;
     border-radius: 0.5rem;
@@ -105,7 +105,7 @@ onMounted(() => {
     }
     &:hover {
       color: $light-gray;
-      background-color: hsl(27, 16%, 16%);
+      background-color: hsl(23, 18%, 16%);
     }
     &:active {
       transform: translate(2px, 2px);

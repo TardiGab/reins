@@ -57,7 +57,7 @@ let classColor = ref(
 </script>
 
 <template>
-  <div class="tooltip container" v-if="profile">
+  <div class="tooltip" v-if="profile">
     <div class="tooltip__header">
       <h2 class="tooltip__h2" :class="[classColor]" v-if="left">
         {{ profile.active_title.name }} {{ profile.name }}
@@ -94,12 +94,19 @@ let classColor = ref(
 .tooltip {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  padding: 1.5rem;
   z-index: 1000;
   border-radius: 1rem;
   border: 2px solid $border-container;
   width: 30vw;
   overflow: hidden;
+  background-color: #241d19cc;
+  backdrop-filter: blur(10px);
+  background-blend-mode: color;
+  box-shadow: 0 0 0px 1px #000 inset;
+  text-shadow: 1px 1px black;
+
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
     border-radius: $corner-shape-m;
