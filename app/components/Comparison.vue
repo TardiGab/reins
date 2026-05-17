@@ -2,7 +2,6 @@
 import { useRoute } from "#app";
 
 const route = useRoute();
-const router = useRouter();
 
 const baseRealm = ref<string>();
 const baseRealmChoosed = (realm: string) => {
@@ -64,6 +63,32 @@ const comparedAccordionDiffValue = (value: number[]) => {
   compareClosedAccordionDiff.value = value;
 };
 
+const baseProfile = ref();
+const baseProfileChoosed = (value: any) => {
+  baseProfile.value = value;
+};
+const comparedProfile = ref();
+const comparedProfileChoosed = (value: any) => {
+  comparedProfile.value = value;
+};
+
+const baseTotalOwned = ref();
+const baseTotalOwnedChoosed = (total: number) => {
+  baseTotalOwned.value = total;
+};
+const baseUseable = ref();
+const baseUseableChoosed = (useable: number) => {
+  baseUseable.value = useable;
+};
+const comparedTotalOwned = ref();
+const comparedTotalOwnedChoosed = (total: number) => {
+  comparedTotalOwned.value = total;
+};
+const comparedUseable = ref();
+const comparedUseableChoosed = (useable: number) => {
+  comparedUseable.value = useable;
+};
+
 const {
   data: comparedMountsLink,
   execute: comparedGo,
@@ -111,7 +136,7 @@ const { data: baseCharRender, execute: baseRenderGo } = await useLazyFetch(
   },
 );
 
-const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
+const { data: baseProfileLink, execute: baseProfileGo } = await useLazyFetch(
   "/api/character-profile/",
   {
     query: {
@@ -122,24 +147,21 @@ const { data: baseProfile, execute: baseProfileGo } = await useLazyFetch(
     immediate: false,
   },
 );
-const { data: compaedProfile, execute: comparedProfileGo } = await useLazyFetch(
-  "/api/character-profile/",
-  {
+const { data: comparedProfileLink, execute: comparedProfileGo } =
+  await useLazyFetch("/api/character-profile/", {
     query: {
       region: route.query.cregion,
       realm: route.query.crealm,
       character: route.query.ccharacter,
     },
     immediate: false,
-  },
-);
-
-const comparedMounts = ref();
+  });
 
 let baseMountsChoosed = (character: any[]) => {
   characterMounts.value = character;
 };
 
+const comparedMounts = ref();
 let comparedMountsChoosed;
 
 comparedMountsChoosed = (character: any[]) => {
@@ -165,31 +187,6 @@ if (
 
 let baseUseableMounts: string[] = [];
 let comparedUseableMounts: string[] = [];
-if (characterMounts.value) {
-  characterMounts.value.forEach((item: any) => {
-    if (item.is_useable) {
-      baseUseableMounts.push(item.mount.name);
-    }
-  });
-  // console.log(
-  //   "Base useable mounts:",
-  //   baseUseableMounts.length,
-  //   "Base total mounts:",
-  //   characterMounts.value.length,
-  // );
-} else if (comparedMountsLink.value || comparedMounts.value) {
-  comparedMountsLink.value.forEach((item: any) => {
-    if (item.is_useable) {
-      comparedUseableMounts.push(item.mount.name);
-    }
-  });
-  // console.log(
-  //   "Compared useable mounts:",
-  //   comparedUseableMounts.length,
-  //   "Compared total mounts:",
-  //   comparedMountsLink.value.length || comparedMounts.value.length,
-  // );
-}
 
 const showLeft = ref(true);
 const showRight = ref(true);
@@ -197,8 +194,6 @@ onMounted(async () => {
   await baseGo();
   await baseRenderGo();
   await baseProfileGo();
-
-  console.log(baseProfile.value);
 
   baseAvatar.value = await baseCharRender.value[0].value;
   if (comparedCharRender.value) {
@@ -209,7 +204,26 @@ onMounted(async () => {
   if (!route.query.cregion && !route.query.crealm && !route.query.ccharacter) {
     showRight.value = false;
   }
+  if (route.query.cregion && route.query.crealm && route.query.ccharacter) {
+    await comparedProfileGo();
+  }
+  if (characterMounts.value) {
+    characterMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        baseUseableMounts.push(item.mount.name);
+      }
+    });
+  }
+  if (comparedMountsLink.value) {
+    comparedMountsLink.value.forEach((item: any) => {
+      if (item.is_useable) {
+        comparedUseableMounts.push(item.mount.name);
+      }
+    });
+  }
 });
+
+// Modification du lien quand on fait une recherche
 
 watch(
   () => comparedCharacterName.value,
@@ -293,6 +307,8 @@ watch(
   },
 );
 
+// Fetch quand on arrive sur la page via le lien
+
 watch(
   () => route.fullPath,
   () => {
@@ -311,6 +327,8 @@ watch(
     }
   },
 );
+
+// Diff
 
 const baseDiffArray = ref<number[]>([]);
 const comparedDiffArray = ref<number[]>([]);
@@ -364,13 +382,20 @@ watch(
     }
   },
 );
+
+const showLeftTooltip = ref(false);
+const showRightTooltip = ref(false);
 </script>
 
 <template>
   <div class="comparison">
     <div class="comparison__left">
       <div class="comparison__header" v-if="showLeft">
-        <div class="comparison__character">
+        <div
+          class="comparison__character"
+          @mouseover="showLeftTooltip = true"
+          @mouseleave="showLeftTooltip = false"
+        >
           <img
             :src="
               baseAvatar ||
@@ -382,15 +407,16 @@ watch(
           <span class="comparison__name">
             {{ route.query.character || baseCharacterName }}'s mount collection
           </span>
-          <Tooltip
-            class="comparison__tooltip"
-            :character="route.query.character || baseCharacterName"
-            :useable-number="baseUseableMounts.length"
-            :total-owned-number="characterMounts.length"
-            :realm="route.query.realm || baseRealm"
-            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
-            :profile="baseProfile"
-          />
+          <Transition>
+            <Tooltip
+              v-if="showLeftTooltip && typeof route.query.region === 'string'"
+              class="comparison__tooltip"
+              :useable-number="baseUseable || baseUseableMounts.length"
+              :total-owned-number="baseTotalOwned || characterMounts.length"
+              :region="route.query.region || baseRegion?.toLocaleUpperCase()"
+              :profile="baseProfile || baseProfileLink"
+            />
+          </Transition>
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -406,6 +432,9 @@ watch(
           @region="baseRegionChoosed"
           @compared-mounts="baseMountsChoosed"
           @avatar="baseAvatarChoosed"
+          @profile="baseProfileChoosed"
+          @total-owned="baseTotalOwnedChoosed"
+          @useable-number="baseUseableChoosed"
         />
       </div>
       <CompareMountList
@@ -417,7 +446,11 @@ watch(
     </div>
     <div class="comparison__right">
       <div class="comparison__header" v-if="showRight">
-        <div class="comparison__character">
+        <div
+          class="comparison__character"
+          @mouseover="showRightTooltip = true"
+          @mouseleave="showRightTooltip = false"
+        >
           <img
             :src="
               comparedAvatar ||
@@ -430,12 +463,22 @@ watch(
             {{ route.query.ccharacter || comparedCharacterName }}'s mount
             collection
           </span>
-          <!-- <Tooltip
-            class="comparison__tooltip"
-            :character="route.query.ccharacter || comparedCharacterName"
-            :total-owned-number="comparedMountsLink.length"
-            :useable-number="comparedUseableMounts.length"
-          /> -->
+          <Transition>
+            <Tooltip
+              v-if="showRightTooltip && typeof route.query.cregion === 'string'"
+              class="comparison__tooltip"
+              :region="
+                route.query.cregion || comparedRegion?.toLocaleUpperCase()
+              "
+              :profile="comparedProfile || comparedProfileLink"
+              :total-owned-number="
+                comparedTotalOwned ||
+                comparedMountsLink.length ||
+                comparedMounts.length
+              "
+              :useable-number="comparedUseable || comparedUseableMounts.length"
+            />
+          </Transition>
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -460,6 +503,9 @@ watch(
           @realm="comparedRealmChoosed"
           @region="comparedRegionChoosed"
           @avatar="comparedAvatarChoosed"
+          @profile="comparedProfileChoosed"
+          @total-owned="comparedTotalOwnedChoosed"
+          @useable-number="comparedUseableChoosed"
         />
       </div>
       <CompareMountList
@@ -503,24 +549,18 @@ watch(
     width: calc(100% - 2rem);
     margin-bottom: 1rem;
     padding: 0 1rem;
-    cursor: context-menu;
-    &:hover {
-      .comparison__tooltip {
-        display: inherit;
-      }
-    }
   }
   &__character {
     display: flex;
     align-items: center;
     gap: 1rem;
     position: relative;
+    cursor: help;
   }
   &__tooltip {
     position: absolute;
     top: 100%;
     left: 20%;
-    display: none;
   }
   &__profile {
     border: solid 2px $border-container;
@@ -562,5 +602,15 @@ watch(
   text-align: center;
   margin: 0;
   margin-bottom: 2rem;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

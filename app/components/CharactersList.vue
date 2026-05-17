@@ -1,7 +1,29 @@
 <script setup lang="ts">
-const { data: profile } = await useFetch("/api/account-profile");
+const { data: profile } = await useFetch<Character[]>("/api/account-profile");
 
-const region = ref();
+interface Character {
+  character: {
+    href: string;
+  };
+  faction: {
+    name: string;
+  };
+  gender: {
+    name: string;
+  };
+  level: number;
+  name: string;
+  realm: {
+    id: string;
+    key: {
+      href: string;
+    };
+    name: string;
+    slug: string;
+  };
+}
+
+const region = ref<string>("");
 
 if (profile.value) {
   profile.value.forEach((array: any) => {
@@ -20,13 +42,16 @@ if (profile.value) {
 }
 
 const selectedCharacter = ref();
-const selectedCharacterRealm = ref();
 const searchTerm = ref("");
-const showList = ref(false);
+const showList = ref<boolean>(false);
 const boxContainer = ref<HTMLDivElement>();
 const searchInput = ref<HTMLInputElement>();
 
-const emit = defineEmits(["region", "realm", "character", "complete-realm"]);
+const emit = defineEmits<{
+  (e: "region", region: string): void;
+  (e: "realm", realm: string): void;
+  (e: "character", character: string): void;
+}>();
 
 async function selectCharacter(character: any) {
   selectedCharacter.value = character;
@@ -34,8 +59,8 @@ async function selectCharacter(character: any) {
   showList.value = false;
   emit("region", await region.value);
   emit("realm", await selectedCharacter.value.realm.slug);
-  emit("complete-realm", await selectedCharacter.value.realm.name);
   emit("character", await selectedCharacter.value.name);
+  console.log(selectedCharacter.value);
 }
 
 const filteredCharacters = computed(() => {

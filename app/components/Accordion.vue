@@ -10,7 +10,7 @@ const props = defineProps<{
   open: boolean;
 }>();
 
-let isOpen = ref(false);
+const isOpen = ref(false);
 
 if (props.open) {
   isOpen.value = true;
@@ -36,15 +36,19 @@ onMounted(() => {
     <slot name="header">
       <h2 class="expansion-title__name">{{ title }}</h2>
       <div class="expansion-title__completion">
-        <span
-          v-if="comparedDiff || baseDiff"
+        <!-- Calcul en premier pour s'assurer qu'il n'y ait pas de div vide, au niveau du span cela créée une div vide si la condition n'est pas remplie -->
+        <div
+          v-if="comparedDiff! - baseDiff! !== 0"
           :class="[
             { 'positive-diff': comparedDiff! > baseDiff! },
             'negative-diff',
           ]"
         >
-          {{ comparedDiff! - baseDiff! }}
-        </span>
+          <!-- On vérifie la présence de ces valeurs pour éviter NaN sur la vue de gauche -->
+          <span v-if="comparedDiff || baseDiff">
+            {{ comparedDiff! - baseDiff! }}
+          </span>
+        </div>
         <span>{{ unlockedAmount }} / {{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
@@ -85,7 +89,7 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #28221c;
+    background-color: hsl(23, 18%, 12%);
     border: 2px solid $border-container;
     box-shadow: inset 0 0 0 1px black;
     border-radius: 0.5rem;
@@ -101,7 +105,7 @@ onMounted(() => {
     }
     &:hover {
       color: $light-gray;
-      background-color: hsl(27, 16%, 16%);
+      background-color: hsl(23, 18%, 16%);
     }
     &:active {
       transform: translate(2px, 2px);

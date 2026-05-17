@@ -16,7 +16,7 @@ const props = defineProps<{
   comparedDiff?: number[];
   amount?: number;
   unlockedAmount?: number;
-  characterMounts: any;
+  characterMounts: Mount[];
 }>();
 
 const userMountsIds = props.characterMounts?.map((item: any) => {

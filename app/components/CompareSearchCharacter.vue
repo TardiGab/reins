@@ -1,4 +1,25 @@
 <script setup lang="ts">
+interface Profile {
+  name: string;
+  level: number;
+  race: {
+    name: string;
+  };
+  realm: {
+    name: string;
+  };
+  character_class: {
+    name: string;
+  };
+  active_spec: {
+    name: string;
+  };
+  active_title: {
+    name: string;
+    display_string?: string;
+  };
+}
+
 import { random } from "#imports";
 
 const regionChoosed = ref<string>("");
@@ -11,23 +32,18 @@ const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
-const completeRealm = ref<string>();
-const completeRealmSelected = (realm: string) => {
-  completeRealm.value = realm;
-};
-
 const characterSearch = ref<string>();
 
-const emit = defineEmits([
-  "region",
-  "realm",
-  "complete-realm",
-  "character",
-  "compared-mounts",
-  "avatar",
-  "total-owned",
-  "useable-number",
-]);
+const emit = defineEmits<{
+  (e: "profile", profile: Profile): void;
+  (e: "compared-mounts", mounts: any): void;
+  (e: "character", character: string): void;
+  (e: "region", region: string): void;
+  (e: "realm", realm: string): void;
+  (e: "avatar", avatar: string): void;
+  (e: "useable-number", useable: number): void;
+  (e: "total-owned", owned: number): void;
+}>();
 
 const {
   data: comparedMounts,
@@ -52,7 +68,7 @@ const { data: comparedCharacterRender, execute: comparedRenderGo } =
     immediate: false,
   });
 
-const { data: profile, execute: profileGo } = await useLazyFetch(
+const { data: profile, execute: profileGo } = await useFetch(
   "/api/account-profile",
   {
     query: {
@@ -64,7 +80,19 @@ const { data: profile, execute: profileGo } = await useLazyFetch(
   },
 );
 
-let loadingText = ref([
+const { data: characterProfile, execute: charProfileGo } = await useLazyFetch(
+  "/api/character-profile/",
+  {
+    query: {
+      region: regionChoosed,
+      realm: realmChoosed,
+      character: characterSearch,
+    },
+    immediate: false,
+  },
+);
+
+let loadingText = ref<string[]>([
   "Searching saddles...",
   "Looking for Invincible...",
   "These webs will summon Nerubians, don't stand in 'em!",
@@ -75,30 +103,31 @@ let loadingText = ref([
 
 let randomLoadingValue: number;
 
-let avatar = ref();
+const avatar = ref();
 
-let totalOwnedNumber = ref<number>();
-let useableNumber = ref<number>();
-let useableNumberArray = ref<string[]>([]);
+const totalOwnedNumber = ref<number>();
+const useableNumber = ref<number>();
+const useableNumberArray = ref<string[]>([]);
 
 const search = async () => {
   await go();
   await comparedRenderGo();
   await profileGo();
+  await charProfileGo();
 
-  comparedMounts.value.forEach((item: any) => {
-    if (item.is_useable) {
-      useableNumberArray.value.push(item.mount.name);
-    }
-  });
-  totalOwnedNumber.value = comparedMounts.value.length;
+  if (comparedMounts.value) {
+    comparedMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        useableNumberArray.value.push(item.mount.name);
+      }
+    });
+  }
+
+  if (comparedMounts.value) {
+    totalOwnedNumber.value = comparedMounts.value.length;
+  }
+
   useableNumber.value = useableNumberArray.value.length;
-  console.log(
-    "Total:",
-    totalOwnedNumber.value,
-    "Useable:",
-    useableNumber.value,
-  );
 
   if (comparedCharacterRender.value) {
     avatar.value = await comparedCharacterRender.value[0].value;
@@ -106,10 +135,19 @@ const search = async () => {
 
   randomLoadingValue = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
-  emit("character", characterSearch.value?.trim());
+  // Voir pourquoi le typage est pas bon
+  // console.log(characterSearch.value?.trim());
+  emit("character", characterSearch.value?.trim() as string);
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
+  emit("profile", characterProfile.value);
+  if (totalOwnedNumber.value) {
+    emit("total-owned", totalOwnedNumber.value);
+  }
+  if (useableNumber.value) {
+    emit("useable-number", useableNumber.value);
+  }
 };
 </script>
 

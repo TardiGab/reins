@@ -27,7 +27,7 @@ function getRandomInInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
-let randomResponse = ref(0);
+const randomResponse = ref(0);
 
 onMounted(() => {
   randomResponse.value = getRandomInInclusive(0, randomMountArrayLength);

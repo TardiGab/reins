@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
-const { data: pinnedMounts } = await useFetch("/api/pinned-mounts", {
-  key: "pinned-mounts",
-});
+
+interface PinnedMounts {
+  id: number;
+  mountName: string;
+  mountId: number;
+  mountIcon: string;
+  userId: string;
+}
+
+const { data: pinnedMounts } = await useFetch<PinnedMounts[]>(
+  "/api/pinned-mounts",
+  {
+    key: "pinned-mounts",
+  },
+);
 const session = authClient.useSession();
 
 async function unpinMount(id: number) {
@@ -14,6 +26,12 @@ async function unpinMount(id: number) {
   });
   await refreshNuxtData("pinned-mounts");
 }
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
