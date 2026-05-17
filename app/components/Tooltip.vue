@@ -80,13 +80,10 @@ let classColor = ref(
       <span class="stats"><b>Total mounts:</b> {{ totalOwnedNumber }}</span>
       <span class="stats"><b>Usable mounts:</b> {{ useableNumber }}</span>
     </div>
-    <div class="tooltip__achievement">
-      <h3 class="tooltip__h3">Next mounts achievement:</h3>
-      <NextAchievement
-        :faction="profile.faction.name"
-        :useable="useableNumber!"
-      />
-    </div>
+    <NextAchievement
+      :faction="profile.faction.name"
+      :useable="useableNumber!"
+    />
   </div>
 </template>
 

@@ -10,7 +10,7 @@ const props = defineProps<{
   open: boolean;
 }>();
 
-let isOpen = ref(false);
+const isOpen = ref(false);
 
 if (props.open) {
   isOpen.value = true;

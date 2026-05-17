@@ -2,12 +2,11 @@
 // Combobox créé à l'aide de ce tutoriel : https://www.youtube.com/watch?v=KlMIf0_48b8, à mettre en page
 const regions = ref(["EU", "US", "KR", "TW"]);
 
-const selectedRegion = ref("");
-const searchTerm = ref("");
-const showList = ref(false);
+const selectedRegion = ref<string>("");
+const searchTerm = ref<string>("");
+const showList = ref<boolean>(false);
 const boxContainer = ref<HTMLDivElement>();
 const searchInput = ref<HTMLInputElement>();
-const dropdownHeight = ref();
 
 const emit = defineEmits<{
   (e: "region", region: string): void;

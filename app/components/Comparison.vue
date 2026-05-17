@@ -383,8 +383,8 @@ watch(
   },
 );
 
-let showLeftTooltip = ref(false);
-let showRightTooltip = ref(false);
+const showLeftTooltip = ref(false);
+const showRightTooltip = ref(false);
 </script>
 
 <template>
@@ -409,7 +409,7 @@ let showRightTooltip = ref(false);
           </span>
           <Transition>
             <Tooltip
-              v-if="showLeftTooltip"
+              v-if="showLeftTooltip && typeof route.query.region === 'string'"
               class="comparison__tooltip"
               :useable-number="baseUseable || baseUseableMounts.length"
               :total-owned-number="baseTotalOwned || characterMounts.length"
@@ -417,13 +417,6 @@ let showRightTooltip = ref(false);
               :profile="baseProfile || baseProfileLink"
             />
           </Transition>
-          <Tooltip
-            class="comparison__tooltip"
-            :useable-number="baseUseable || baseUseableMounts.length"
-            :total-owned-number="baseTotalOwned || characterMounts.length"
-            :region="route.query.region || baseRegion?.toLocaleUpperCase()"
-            :profile="baseProfile || baseProfileLink"
-          />
         </div>
         <ChangeCharacterButton
           class="comparison__clear"
@@ -472,7 +465,7 @@ let showRightTooltip = ref(false);
           </span>
           <Transition>
             <Tooltip
-              v-if="showRightTooltip"
+              v-if="showRightTooltip && typeof route.query.cregion === 'string'"
               class="comparison__tooltip"
               :region="
                 route.query.cregion || comparedRegion?.toLocaleUpperCase()

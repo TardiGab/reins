@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import PinnedMounts from "./PinnedMounts.vue";
-import RandomMount from "./RandomMount.vue";
-</script>
-
 <template>
   <div class="side-wrapper">
     <div class="side-container">

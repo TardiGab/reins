@@ -8,7 +8,9 @@ const session = authClient.useSession();
 
 <template>
   <header>
-    <h1>Reins</h1>
+    <NuxtLink to="/" class="header-logo">
+      <h1>Reins</h1>
+    </NuxtLink>
     <div class="header-content">
       <!-- <form action="" method="post" class="search">
         <input type="text" placeholder="Search mount" class="search__input" />
@@ -41,6 +43,10 @@ header {
     corner-shape: bevel;
     border-radius: $corner-shape-m;
   }
+}
+
+.header-logo {
+  color: white;
 }
 
 h1 {

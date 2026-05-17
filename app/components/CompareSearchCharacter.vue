@@ -32,26 +32,10 @@ const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
-const completeRealm = ref<string>();
-const completeRealmSelected = (realm: string) => {
-  completeRealm.value = realm;
-};
-
 const characterSearch = ref<string>();
 
-// const emit = defineEmits([
-//   "region",
-//   "realm",
-//   "character",
-//   "compared-mounts",
-//   "avatar",
-//   "total-owned",
-//   "useable-number",
-//   "profile",
-// ]);
-
 const emit = defineEmits<{
-  (e: "profile", profile: any): void;
+  (e: "profile", profile: Profile): void;
   (e: "compared-mounts", mounts: any): void;
   (e: "character", character: string): void;
   (e: "region", region: string): void;
@@ -119,11 +103,11 @@ let loadingText = ref<string[]>([
 
 let randomLoadingValue: number;
 
-let avatar = ref();
+const avatar = ref();
 
-let totalOwnedNumber = ref<number>();
-let useableNumber = ref<number>();
-let useableNumberArray = ref<string[]>([]);
+const totalOwnedNumber = ref<number>();
+const useableNumber = ref<number>();
+const useableNumberArray = ref<string[]>([]);
 
 const search = async () => {
   await go();
@@ -153,7 +137,7 @@ const search = async () => {
   emit("compared-mounts", comparedMounts.value);
   // Voir pourquoi le typage est pas bon
   // console.log(characterSearch.value?.trim());
-  emit("character", characterSearch.value?.trim());
+  emit("character", characterSearch.value?.trim() as string);
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
