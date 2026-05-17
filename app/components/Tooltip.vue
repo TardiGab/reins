@@ -101,8 +101,7 @@ let classColor = ref(
   border: 2px solid $border-container;
   width: 30vw;
   overflow: hidden;
-  background-color: #241d19cc;
-  backdrop-filter: blur(10px);
+  background-color: #241d19;
   background-blend-mode: color;
   box-shadow: 0 0 0px 1px #000 inset;
   text-shadow: 1px 1px black;
