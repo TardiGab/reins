@@ -199,6 +199,12 @@ body {
 //   }
 // }
 
+a {
+  text-decoration: none;
+}
+
+
+
 .mounts-wrapper,
 .wrapper {
   border-radius: 1rem;
@@ -261,6 +267,10 @@ body {
       gap: 1rem;
       padding: 0 1rem;
       margin-bottom: 2rem;
+
+      @media screen and (max-width: 780px) {
+        display: block;
+      }
     }
   }
 }
@@ -269,11 +279,15 @@ body {
   list-style: none;
 
   filter: grayscale(100%);
-  font-size: $small;
+  font-size: 1rem;
   transition: all 0.3s;
   padding: 0.5rem;
   box-sizing: border-box;
   position: relative;
+
+  @media screen and (max-width: 780px) {
+    margin-bottom: 1rem;
+  }
 
   span {
     text-shadow: 1px 1px 0 #000;

@@ -124,6 +124,9 @@ onMounted(() => {
       align-items: center;
       gap: 1rem;
     }
+    @media screen and (max-width: 780px) {
+      margin-bottom: 1.5rem;
+    }
   }
 }
 .icon {

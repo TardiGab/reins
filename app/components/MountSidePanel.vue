@@ -12,21 +12,9 @@
   </div>
 </template>
 
-<style lang="scss">
-a {
-  text-decoration: none;
-}
-
+<style lang="scss" scoped>
 li {
   list-style: none;
-  padding: 0;
-}
-
-ul {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
   padding: 0;
 }
 
