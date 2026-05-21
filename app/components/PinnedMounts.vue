@@ -90,7 +90,10 @@ onMounted(() => {
     margin-bottom: 2rem;
   }
   &__list {
+    padding: 0;
+    margin: 0;
     margin-bottom: 2rem;
+    list-style-type: none;
     li:empty {
       display: none;
     }
