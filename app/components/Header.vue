@@ -36,10 +36,14 @@ const mobileNav = ref(false);
       </button>
     </nav>
     <nav class="nav-mobile" :class="{ 'nav-mobile--active': mobileNav }">
-      <NuxtLink to="/compare" class="nav__link">
+      <NuxtLink
+        to="/mobile/pinned"
+        class="nav__link"
+        @click="mobileNav = !mobileNav"
+      >
         <span class="nav__link--label">Pinned mounts</span>
       </NuxtLink>
-      <NuxtLink to="/compare" class="nav__link">
+      <NuxtLink to="/compare" class="nav__link" @click="mobileNav = !mobileNav">
         <span class="nav__link--label">Compare with a friend</span>
       </NuxtLink>
     </nav>
@@ -58,7 +62,7 @@ const mobileNav = ref(false);
   padding: 0.5rem;
   padding-left: 2rem;
   border-radius: 1rem;
-  width: calc(100% - 3rem);
+  width: calc(100% - 2.5rem);
   margin-bottom: 1rem;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
@@ -160,7 +164,7 @@ const mobileNav = ref(false);
   box-shadow: inset 0 0 0 1px black;
   padding: 0.5rem;
   border-radius: 1rem;
-  width: calc(100% - (3rem + 4px));
+  width: calc(100% - 3rem);
   height: 85vh;
   margin-bottom: 1rem;
   transform: translateX(120%);
