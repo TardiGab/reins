@@ -545,9 +545,6 @@ const showRightTooltip = ref(false);
   &__left,
   &__right {
     width: 100%;
-    @media screen and (max-width: 900px) {
-      height: 45vh;
-    }
   }
   &__header {
     display: flex;

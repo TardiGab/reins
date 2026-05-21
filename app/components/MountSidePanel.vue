@@ -41,6 +41,7 @@ li {
     background-repeat: repeat;
     background-attachment: local;
     overflow-y: scroll;
+    border-radius: 1rem;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-m;

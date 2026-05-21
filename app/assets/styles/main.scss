@@ -182,10 +182,14 @@ template {
   display: none;
 }
 
+html {
+  background-color: #000;
+}
+
 body {
   font-family: "Sentient-Variable";
   font-family: "tiller", sans-serif;
-  background-image: url("/images/body-background.webp");
+  background-image: url("/images/body.webp");
   color: white;
   padding: 1rem;
   min-height: calc(100vh - 2rem);
