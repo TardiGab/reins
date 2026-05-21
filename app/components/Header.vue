@@ -22,7 +22,7 @@ const mobileNav = ref(false);
       </div>
       <div class="nav--right">
         <NuxtLink to="/compare" class="nav__link">
-          <span class="nav__link--label">Compare with a friend</span>
+          <span class="nav__link--label nav__label">Compare with a friend</span>
         </NuxtLink>
       </div>
       <button
@@ -38,13 +38,13 @@ const mobileNav = ref(false);
     <nav class="nav-mobile" :class="{ 'nav-mobile--active': mobileNav }">
       <NuxtLink
         to="/mobile/pinned"
-        class="nav__link"
+        class="nav__link nav__link--gray"
         @click="mobileNav = !mobileNav"
       >
-        <span class="nav__link--label">Pinned mounts</span>
+        <span class="nav__label">Pinned mounts & Random mount</span>
       </NuxtLink>
       <NuxtLink to="/compare" class="nav__link" @click="mobileNav = !mobileNav">
-        <span class="nav__link--label">Compare with a friend</span>
+        <span class="nav__label">Compare with a friend</span>
       </NuxtLink>
     </nav>
   </header>
@@ -56,9 +56,10 @@ const mobileNav = ref(false);
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid $border-container;
   background-color: hsl(23, 18%, 12%);
-  box-shadow: inset 0 0 0 1px black;
+  box-shadow:
+    inset 0 0 0 2px $border-container,
+    inset 0 0 0 3px black;
   padding: 0.5rem;
   padding-left: 2rem;
   border-radius: 1rem;
@@ -127,14 +128,7 @@ const mobileNav = ref(false);
       corner-shape: bevel;
       border-radius: 0.25rem;
     }
-    &--label {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-      text-align: center;
-      z-index: 1;
-      font-size: 1rem;
-    }
+
     &::after {
       content: "";
       position: absolute;
@@ -153,15 +147,44 @@ const mobileNav = ref(false);
         opacity: 1;
       }
     }
+    &--gray {
+      background-color: $dark-gray;
+      background-blend-mode: color;
+      border: solid 2px #373737;
+      margin-bottom: 1rem;
+      color: $button-bg-dark;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        background: radial-gradient(rgba(202, 202, 202, 0.7), rgba(0, 0, 0, 0));
+        opacity: 0;
+        z-index: 0;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+  &__label {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    font-size: 1rem;
   }
 }
 
 .nav-mobile {
   position: absolute;
   z-index: 10000;
-  border: 2px solid $border-container;
+  box-shadow:
+    inset 0 0 0 2px $border-container,
+    inset 0 0 0 3px black;
   background-color: hsl(23, 18%, 12%);
-  box-shadow: inset 0 0 0 1px black;
   padding: 0.5rem;
   border-radius: 1rem;
   width: calc(100% - 3rem);
@@ -185,9 +208,11 @@ const mobileNav = ref(false);
   padding: 1rem;
   height: 0.5rem;
   position: relative;
+  @media screen and (min-width: 781px) {
+    display: none;
+  }
   div {
     transition: all 0.3s ease;
-    // margin-bottom: 4px;
     width: 1.5rem;
     height: 2px;
     background-color: white;
