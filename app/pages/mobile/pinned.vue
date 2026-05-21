@@ -6,6 +6,6 @@
 .mobile-pinned {
   width: calc(100% - 0.5rem);
   width: 100%;
-  height: 85vh;
+  height: calc(90vh - 1rem);
 }
 </style>

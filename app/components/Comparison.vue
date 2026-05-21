@@ -538,9 +538,16 @@ const showRightTooltip = ref(false);
   display: flex;
   gap: 1rem;
   align-items: flex-end;
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+  }
   &__left,
   &__right {
     width: 100%;
+    @media screen and (max-width: 900px) {
+      height: 45vh;
+    }
   }
   &__header {
     display: flex;
