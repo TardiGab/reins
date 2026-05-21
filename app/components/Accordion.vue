@@ -117,6 +117,7 @@ onMounted(() => {
       font-size: $main-size;
       padding: 0;
       margin: 0;
+      text-align: left;
     }
     &__completion {
       display: flex;
@@ -137,6 +138,9 @@ onMounted(() => {
 
 .negative-diff {
   color: $bright-red;
+  &:empty {
+    display: none;
+  }
 }
 
 .positive-diff {

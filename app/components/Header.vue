@@ -185,9 +185,9 @@ const mobileNav = ref(false);
     inset 0 0 0 2px $border-container,
     inset 0 0 0 3px black;
   background-color: hsl(23, 18%, 12%);
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: 1rem;
-  width: calc(100% - 3rem);
+  width: calc(100% - 4rem);
   height: 85vh;
   margin-bottom: 1rem;
   transform: translateX(120%);

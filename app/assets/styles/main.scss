@@ -232,6 +232,10 @@ a {
   background-attachment: local;
   overflow-y: scroll;
 
+  @media screen and (max-width: 780px) {
+    padding: 1rem;
+  }
+
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 0.3rem;
