@@ -26,4 +26,8 @@ export default defineNuxtConfig({
     families: [{ name: "Sentient Variable", provider: "fontshare" }],
   },
   pages: true,
+  devServer: {
+    port: 3000,
+    host: "0.0.0.0",
+  },
 });
