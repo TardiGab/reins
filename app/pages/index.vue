@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+definePageMeta({
+  middleware: "auth",
+});
+</script>
+
 <template>
   <main class="main">
     <MountSidePanel class="main__side-panel" />

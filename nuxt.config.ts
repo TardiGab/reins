@@ -16,8 +16,11 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData:
-            '@use "~/assets/styles/partials/_variables.scss" as *;',
+          additionalData: `
+            @use "~/assets/styles/partials/_variables.scss" as *;
+            @use "~/assets/styles/partials/_base.scss" as *; 
+            @use "~/assets/styles/partials/_mixins.scss" as *; 
+            `,
         },
       },
     },

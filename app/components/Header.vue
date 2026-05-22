@@ -29,6 +29,7 @@ const mobileNav = ref(false);
         @click="mobileNav = !mobileNav"
         class="burger-btn"
         :class="[{ ['burger']: !mobileNav }, { ['cross']: mobileNav }]"
+        aria-label="Burger menu"
       >
         <div></div>
         <div></div>
@@ -117,17 +118,13 @@ const mobileNav = ref(false);
     background-color: $red;
     background-blend-mode: luminosity;
     border: solid 2px #2d0000;
-    border-radius: 0.5rem;
     font-size: $small;
     transition: all 0.3s ease;
     text-decoration: none;
     position: relative;
     display: block;
     overflow: hidden;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: 0.25rem;
-    }
+    @include border-radius(0.5rem, true);
 
     &::after {
       content: "";
