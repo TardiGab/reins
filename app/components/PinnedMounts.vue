@@ -28,6 +28,7 @@ async function unpinMount(id: number) {
 }
 
 onMounted(() => {
+  setTimeout(() => {});
   if (window.$WowheadPower) {
     window.$WowheadPower.refreshLinks();
   }
@@ -43,7 +44,10 @@ onMounted(() => {
       </div>
       <ul class="pinned-mounts__list" v-else>
         <li v-for="mount in pinnedMounts">
-          <div v-if="session.data?.user.id === mount.userId" class="mount-item">
+          <div
+            v-if="session.data?.user.id === mount.userId"
+            class="mount-item q4"
+          >
             <a
               :href="`https://wowhead.com/ptr/mount/${mount.mountId}`"
               class="mount-item__link"
