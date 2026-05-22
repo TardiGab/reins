@@ -98,6 +98,9 @@ onMounted(() => {
     margin: 0;
     margin-bottom: 2rem;
     list-style-type: none;
+    li {
+      margin-bottom: 1rem;
+    }
     li:empty {
       display: none;
     }
