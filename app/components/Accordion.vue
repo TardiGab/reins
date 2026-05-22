@@ -117,12 +117,16 @@ onMounted(() => {
       font-size: $main-size;
       padding: 0;
       margin: 0;
+      text-align: left;
     }
     &__completion {
       display: flex;
       flex-direction: row;
       align-items: center;
       gap: 1rem;
+    }
+    @media screen and (max-width: 780px) {
+      margin-bottom: 1.5rem;
     }
   }
 }
@@ -134,6 +138,9 @@ onMounted(() => {
 
 .negative-diff {
   color: $bright-red;
+  &:empty {
+    display: none;
+  }
 }
 
 .positive-diff {

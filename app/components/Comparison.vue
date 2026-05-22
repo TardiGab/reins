@@ -538,6 +538,10 @@ const showRightTooltip = ref(false);
   display: flex;
   gap: 1rem;
   align-items: flex-end;
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+    align-items: center;
+  }
   &__left,
   &__right {
     width: 100%;
@@ -559,8 +563,8 @@ const showRightTooltip = ref(false);
   }
   &__tooltip {
     position: absolute;
-    top: 100%;
-    left: 20%;
+    top: 110%;
+    left: 0;
   }
   &__profile {
     border: solid 2px $border-container;

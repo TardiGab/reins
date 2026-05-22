@@ -12,37 +12,19 @@
   </div>
 </template>
 
-<style lang="scss">
-a {
-  text-decoration: none;
-}
-
+<style lang="scss" scoped>
 li {
   list-style: none;
-  padding: 0;
-}
-
-ul {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
   padding: 0;
 }
 
 .side {
   height: 100%;
   &-wrapper {
-    border-radius: 1rem;
-    border: 2px solid $border-container;
     overflow: hidden;
     width: 20%;
     min-width: 320px;
     position: relative;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: $corner-shape-m;
-    }
   }
   &-container {
     display: flex;
@@ -53,10 +35,17 @@ ul {
     padding: 2rem;
     background-color: #1a1512;
     background-image: url("/images/wooden-background-2.webp");
-    box-shadow: 0 0 40px 0 #000 inset;
+    box-shadow:
+      inset 0 0 0 2px $border-container,
+      inset 0 0 40px 0 #000;
     background-repeat: repeat;
     background-attachment: local;
-    overflow-y: scroll;
+    overflow: hidden;
+    border-radius: 1rem;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: $corner-shape-m;
+    }
     &::-webkit-scrollbar {
       background-color: transparent;
       width: 0.5rem;

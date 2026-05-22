@@ -182,15 +182,20 @@ template {
   display: none;
 }
 
+html {
+  background-color: #000;
+}
+
 body {
   font-family: "Sentient-Variable";
   font-family: "tiller", sans-serif;
-  background-image: url("/images/body-background.webp");
+  background-image: url("/images/body.webp");
   color: white;
   padding: 1rem;
   min-height: calc(100vh - 2rem);
   background-repeat: repeat;
   background-position: top;
+  overflow-x: hidden;
 }
 
 // .wowhead-tooltip {
@@ -198,6 +203,12 @@ body {
 //     font-family: "tiller";
 //   }
 // }
+
+a {
+  text-decoration: none;
+}
+
+
 
 .mounts-wrapper,
 .wrapper {
@@ -224,6 +235,10 @@ body {
   background-repeat: repeat;
   background-attachment: local;
   overflow-y: scroll;
+
+  @media screen and (max-width: 780px) {
+    padding: 1rem;
+  }
 
   &::-webkit-scrollbar {
     background-color: transparent;
@@ -261,6 +276,10 @@ body {
       gap: 1rem;
       padding: 0 1rem;
       margin-bottom: 2rem;
+
+      @media screen and (max-width: 780px) {
+        display: block;
+      }
     }
   }
 }
@@ -269,11 +288,15 @@ body {
   list-style: none;
 
   filter: grayscale(100%);
-  font-size: $small;
+  font-size: 1rem;
   transition: all 0.3s;
   padding: 0.5rem;
   box-sizing: border-box;
   position: relative;
+
+  @media screen and (max-width: 780px) {
+    margin-bottom: 1rem;
+  }
 
   span {
     text-shadow: 1px 1px 0 #000;

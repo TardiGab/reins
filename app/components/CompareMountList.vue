@@ -201,5 +201,8 @@ onMounted(() => {
 .mounts-wrapper {
   width: calc(50vw - 2rem);
   height: 80vh;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 }
 </style>

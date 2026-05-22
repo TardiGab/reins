@@ -230,10 +230,6 @@ async function pinMount(
 </template>
 
 <style lang="scss" scoped>
-a {
-  text-decoration: none;
-}
-
 .mounts-wrapper {
   width: 80%;
 }
