@@ -40,7 +40,7 @@ li {
       inset 0 0 40px 0 #000;
     background-repeat: repeat;
     background-attachment: local;
-    overflow-y: scroll;
+    overflow: hidden;
     border-radius: 1rem;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
