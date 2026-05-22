@@ -26,9 +26,11 @@ const baseCharacterSearch = ref<string>();
 const baseSearch = async () => {
   characterSearch.value = baseCharacterSearch.value;
   baseCharacterName.value = baseCharacterSearch.value;
-  await navigateTo({
-    path: `/search/${regionChoosed.value.toLocaleLowerCase()}/${realmChoosed.value}/${baseCharacterSearch.value}`,
-  });
+  if (regionChoosed.value && realmChoosed.value && baseCharacterSearch.value) {
+    await navigateTo({
+      path: `/search/${regionChoosed.value.toLocaleLowerCase()}/${realmChoosed.value}/${baseCharacterSearch.value}`,
+    });
+  }
 };
 </script>
 
@@ -41,6 +43,7 @@ const baseSearch = async () => {
           :region-choosed="regionChoosed"
           @realm="realmSelected"
           class="login__realm"
+          :disabled="!regionChoosed"
         />
         <div class="search__input-container">
           <svg
@@ -60,6 +63,7 @@ const baseSearch = async () => {
             placeholder="Character's name"
             @change="baseSearch"
             class="search__input"
+            :disabled="!realmChoosed"
           />
         </div>
 
@@ -165,6 +169,20 @@ const baseSearch = async () => {
         inset 0 0 0 3px black;
       outline: none;
     }
+    &:disabled {
+      cursor: not-allowed;
+      color: $dark-gray;
+      &:hover {
+        background-color: $button-bg-dark;
+      }
+      &:active,
+      &:focus {
+        box-shadow:
+          inset 0px 0px 0px 2px $border-container,
+          inset 0 0 0 3px black;
+        outline: none;
+      }
+    }
   }
   &__button {
     color: $yellow;
@@ -203,6 +221,23 @@ const baseSearch = async () => {
     &:hover {
       &::after {
         opacity: 1;
+      }
+    }
+    &:disabled {
+      cursor: not-allowed;
+      filter: grayscale(50%);
+      &:hover {
+        background-color: $red;
+        &::after {
+          opacity: 0;
+        }
+      }
+      &:active,
+      &:focus {
+        box-shadow:
+          inset 0px 0px 0px 2px $border-container,
+          inset 0 0 0 3px black;
+        outline: none;
       }
     }
   }
