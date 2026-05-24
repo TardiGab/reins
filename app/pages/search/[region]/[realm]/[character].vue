@@ -22,7 +22,6 @@ onMounted(async () => {
   <div class="character">
     <MountSidePanel />
     <div class="character__right">
-      <p>{{ $route.params.character }}'s mounts collection</p>
       <CompareMountList
         :character-mounts="characterMounts"
         class="character__collection"
@@ -38,6 +37,9 @@ onMounted(async () => {
   gap: 1rem;
   &__collection {
     width: 100%;
+  }
+  &__right {
+    flex: 1;
   }
 }
 </style>

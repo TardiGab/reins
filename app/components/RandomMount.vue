@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
+import { authClient } from "~~/server/lib/auth-client";
 const { data: userMounts } = await useFetch("/api/mounts");
+
+const session = authClient.useSession();
 
 const userMountsIds = userMounts.value?.map((item: any) => {
   return item.mount.id;
@@ -8,16 +11,18 @@ const userMountsIds = userMounts.value?.map((item: any) => {
 
 const randomMountArray: any = [];
 
-mountsGlobal.forEach((category) => {
-  category.subcats.forEach((subcats) => {
-    subcats.items.forEach((mount) => {
-      // IMPORTANT ! Mettre le "?" afin de le rendre optionnel et éviter le crash de l'app
-      if (!userMountsIds?.includes(mount.ID)) {
-        randomMountArray.push(mount);
-      }
+if (session.value.data?.session) {
+  mountsGlobal.forEach((category) => {
+    category.subcats.forEach((subcats) => {
+      subcats.items.forEach((mount) => {
+        // IMPORTANT ! Mettre le "?" afin de le rendre optionnel et éviter le crash de l'app
+        if (!userMountsIds?.includes(mount.ID)) {
+          randomMountArray.push(mount);
+        }
+      });
     });
   });
-});
+}
 
 let randomMountArrayLength = randomMountArray.length;
 
@@ -46,7 +51,11 @@ function getRandomMount() {
   <div class="random-mount">
     <div class="random-mount__heading">
       <h2 class="random-mount__h2">Random mount</h2>
-      <button class="random-mount__btn" @click="getRandomMount">
+      <button
+        class="random-mount__btn"
+        @click="getRandomMount"
+        :disabled="!session.data?.session"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="1.5em"
@@ -62,7 +71,7 @@ function getRandomMount() {
         </svg>
       </button>
     </div>
-    <div class="mount-item">
+    <div class="mount-item" v-if="session.data?.session">
       <a
         :href="`https://wowhead.com/ptr/mount/${randomMountArray[randomResponse].ID}`"
         class="mount-item__link"
@@ -74,6 +83,9 @@ function getRandomMount() {
         />
         <span>{{ randomMountArray[randomResponse].name }}</span>
       </a>
+    </div>
+    <div v-else class="random-mount--message">
+      <span>Please log in to get a random mount suggestion</span>
     </div>
   </div>
 </template>
@@ -99,12 +111,23 @@ function getRandomMount() {
     &:hover {
       filter: brightness(80%);
     }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      &:hover {
+        filter: none;
+      }
+    }
   }
   &__h2 {
     color: $yellow;
     font-size: $main-size;
     margin: 0;
     font-weight: 400;
+  }
+  &--message {
+    margin-bottom: 2rem;
+    font-size: $small;
   }
 }
 </style>
