@@ -187,7 +187,7 @@ const baseSearch = async () => {
   &__button {
     color: $yellow;
     padding: 0.5rem 2rem;
-    background-image: url("/images/body-background-1.webp");
+    background-image: url("/images/body.webp");
     background-color: $red;
     background-blend-mode: luminosity;
     border: solid 2px $dark-red;

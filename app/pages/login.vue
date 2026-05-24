@@ -38,8 +38,11 @@ watch(
 
 <style lang="scss" scoped>
 .login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  max-width: 1440px;
+  height: 80vh;
   margin: auto;
   border: 2px solid $border-container;
   @include border-radius(1rem, true);
@@ -54,6 +57,7 @@ watch(
     background-image: url("/images/stable.webp");
     background-repeat: no-repeat;
     background-size: cover;
+    filter: blur(8px);
     opacity: 0.2;
     width: 100%;
     height: 100%;
@@ -61,7 +65,6 @@ watch(
   &__container {
     max-width: 500px;
     position: relative;
-    margin: auto;
     z-index: 1;
   }
   &__h2 {

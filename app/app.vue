@@ -4,11 +4,9 @@ useHead({
   script: [
     {
       innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: false, iconSize: false, renameLinks: false};`,
-      // defer: true,
     },
     {
       src: "https://wow.zamimg.com/js/tooltips.js",
-      // defer: true,
     },
   ],
   link: [
@@ -36,8 +34,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <Header />
-    <NuxtPage />
-  </div>
+  <Header />
+  <NuxtPage />
 </template>

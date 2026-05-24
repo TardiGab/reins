@@ -17,6 +17,7 @@ const mobileNav = ref(false);
     <nav class="nav">
       <div class="nav--left">
         <NuxtLink to="/" class="nav__logo">
+          <img src="/images/logo.svg" alt="Reins Logo" />
           <h1>Reins</h1>
         </NuxtLink>
       </div>
@@ -62,9 +63,9 @@ const mobileNav = ref(false);
     inset 0 0 0 2px $border-container,
     inset 0 0 0 3px black;
   padding: 0.5rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
   border-radius: 1rem;
-  width: calc(100% - 2.5rem);
+  width: calc(100% - 1.5rem);
   margin-bottom: 1rem;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
@@ -72,9 +73,22 @@ const mobileNav = ref(false);
   }
   &__logo {
     color: white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    transition: opacity 0.3s ease;
     h1 {
       padding: 0;
       margin: 0;
+    }
+    img {
+      height: 2em;
+      width: 2em;
+    }
+    &:hover {
+      opacity: 0.8;
     }
   }
   &--right {
@@ -114,7 +128,7 @@ const mobileNav = ref(false);
   &__link {
     color: $yellow;
     padding: 0.5rem 2rem;
-    background-image: url("/images/body-background.webp");
+    background-image: url("/images/body.webp");
     background-color: $red;
     background-blend-mode: luminosity;
     border: solid 2px #2d0000;
