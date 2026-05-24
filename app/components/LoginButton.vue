@@ -11,10 +11,11 @@ function logout() {
 </script>
 
 <template>
-  <div v-if="!session.data">
+  <div>
     <button
       @click="() => authClient.signIn.social({ provider: 'battlenet' })"
-      class="login-button"
+      class="login-bnet"
+      v-if="!session.data"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -29,22 +30,22 @@ function logout() {
       </svg>
       Login with Battle.net
     </button>
-  </div>
-  <div v-if="session.data">
-    <p>Hello, {{ session.data?.user.name }}</p>
-    <button @click="logout" class="login-button">Logout</button>
+    <div v-else>
+      <p>Hello, {{ session.data?.user.name }}</p>
+      <button @click="logout" class="login-bnet">Logout</button>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.login-button {
+.login-bnet {
   background-color: $blizzard-blue;
   border: none;
   width: 100%;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
-  padding: 0.5rem 1rem;
+  padding: 0.5em 1em;
   border-radius: 0.25rem;
   transition: all 0.3s ease;
   cursor: pointer;

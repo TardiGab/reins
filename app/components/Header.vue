@@ -17,7 +17,6 @@ const mobileNav = ref(false);
     <nav class="nav">
       <div class="nav--left">
         <NuxtLink to="/" class="nav__logo">
-          <img src="/images/logo.svg" alt="Reins Logo" />
           <h1>Reins</h1>
         </NuxtLink>
       </div>
@@ -82,6 +81,18 @@ const mobileNav = ref(false);
     h1 {
       padding: 0;
       margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      &::before {
+        content: "";
+        height: 1em;
+        width: 1em;
+        background-image: url("/images/logo.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+      }
     }
     img {
       height: 2em;
