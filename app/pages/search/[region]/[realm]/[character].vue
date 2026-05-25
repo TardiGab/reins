@@ -19,6 +19,12 @@ onMounted(async () => {
 
 useHead({
   title: `Reins | Visiting ${route.params.character}'s stable`,
+  meta: [
+    {
+      name: "description",
+      content: `Check out ${route.params.character}'s mount collection!`,
+    },
+  ],
 });
 </script>
 
