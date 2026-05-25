@@ -34,5 +34,7 @@ useHead({
     :src="`https://wow.zamimg.com/images/wow/icons/medium/${mountInfos.icon}.jpg`"
     class="mount-item__icon"
   />
-  <p>{{ mountInfos.name }}</p>
+  <a :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`" target="_blank">
+    {{ mountInfos.name }}
+  </a>
 </template>
