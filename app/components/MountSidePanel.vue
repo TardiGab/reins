@@ -6,7 +6,10 @@
         <RandomMount />
       </div>
       <div class="side-container--bottom">
-        <LoginButton />
+        <p class="side-container__user" v-if="$route.params.character">
+          Visiting {{ $route.params.character }}'s stable.
+        </p>
+        <LoginButton class="side-container__login" />
       </div>
     </div>
   </div>
@@ -59,6 +62,13 @@ li {
     }
     &--bottom {
       width: 100%;
+    }
+    &__user {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    &__login {
+      margin-top: 1rem;
       position: relative;
       &::before {
         content: "";

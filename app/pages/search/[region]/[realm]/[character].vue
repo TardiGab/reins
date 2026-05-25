@@ -20,8 +20,11 @@ onMounted(async () => {
 
 <template>
   <div class="character">
-    <MountSidePanel />
+    <MountSidePanel class="character__side-panel" />
     <div class="character__right">
+      <p class="character__name">
+        Visiting {{ route.params.character }}'s stable.
+      </p>
       <CompareMountList
         :character-mounts="characterMounts"
         class="character__collection"
@@ -35,11 +38,27 @@ onMounted(async () => {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  &__collection {
-    width: 100%;
+  &__side-panel {
+    @media screen and (max-width: 780px) {
+      display: none;
+    }
   }
   &__right {
     flex: 1;
+    @media screen and (max-width: 780px) {
+      width: 100%;
+    }
+  }
+  &__collection {
+    width: 100%;
+  }
+  &__name {
+    font-size: $main-size;
+    margin-left: 1rem;
+    display: none;
+    @media screen and (max-width: 780px) {
+      display: block;
+    }
   }
 }
 </style>

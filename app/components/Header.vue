@@ -36,18 +36,24 @@ const mobileNav = ref(false);
         <div></div>
       </button>
     </nav>
-    <nav class="nav-mobile" :class="{ 'nav-mobile--active': mobileNav }">
-      <NuxtLink
-        to="/mobile/pinned"
-        class="nav__link nav__link--gray"
-        @click="mobileNav = !mobileNav"
-      >
-        <span class="nav__label">Pinned mounts & Random mount</span>
-      </NuxtLink>
-      <NuxtLink to="/compare" class="nav__link" @click="mobileNav = !mobileNav">
-        <span class="nav__label">Compare with a friend</span>
-      </NuxtLink>
-    </nav>
+    <Transition name="slide">
+      <nav class="nav-mobile" v-if="mobileNav">
+        <NuxtLink
+          to="/mobile/pinned"
+          class="nav__link nav__link--gray"
+          @click="mobileNav = !mobileNav"
+        >
+          <span class="nav__label">Pinned mounts & Random mount</span>
+        </NuxtLink>
+        <NuxtLink
+          to="/compare"
+          class="nav__link"
+          @click="mobileNav = !mobileNav"
+        >
+          <span class="nav__label">Compare with a friend</span>
+        </NuxtLink>
+      </nav>
+    </Transition>
   </header>
 </template>
 
@@ -208,19 +214,10 @@ const mobileNav = ref(false);
     inset 0 0 0 3px black;
   background-color: hsl(23, 18%, 12%);
   padding: 1rem;
-  border-radius: 1rem;
   width: calc(100% - 4rem);
   height: 85vh;
   margin-bottom: 1rem;
-  transform: translateX(120%);
-  transition: transform 0.5s ease;
-  @supports (corner-shape: bevel) {
-    corner-shape: bevel;
-    border-radius: $corner-shape-m;
-  }
-  &--active {
-    transform: translateX(0);
-  }
+  @include border-radius(1rem, true);
 }
 
 .burger-btn {
@@ -303,5 +300,15 @@ const mobileNav = ref(false);
   &:focus-visible {
     border-color: $yellow;
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(120%);
 }
 </style>

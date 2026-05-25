@@ -127,7 +127,7 @@ function getRandomMount() {
   }
   &--message {
     margin-bottom: 2rem;
-    font-size: $small;
+    font-size: 1rem;
   }
 }
 </style>
