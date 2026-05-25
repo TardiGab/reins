@@ -2,6 +2,10 @@
 definePageMeta({
   middleware: "auth",
 });
+
+useHead({
+  title: "Reins | Your collection",
+});
 </script>
 
 <template>

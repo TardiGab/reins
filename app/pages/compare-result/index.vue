@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHead({
+  title: "Reins | Compare your collection with a friend",
+});
+</script>
 
 <template>
   <Comparison />
 </template>
-
-<style scoped lang="scss"></style>

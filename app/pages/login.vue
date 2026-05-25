@@ -7,6 +7,17 @@ watch(
   () => session.value.data?.session,
   () => navigateTo("/"),
 );
+
+useHead({
+  title: "Reins | Login",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Link your Battle.net account to Reins and see what mounts you're missing in World of Warcraft!",
+    },
+  ],
+});
 </script>
 
 <template>

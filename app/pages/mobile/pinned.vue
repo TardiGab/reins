@@ -1,3 +1,9 @@
+<script setup lang="ts">
+useHead({
+  title: "Reins | Pinned mounts",
+});
+</script>
+
 <template>
   <MountSidePanel class="mobile-pinned" />
 </template>

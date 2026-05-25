@@ -16,6 +16,10 @@ const { data: characterMounts, execute: go } = await useFetch(
 onMounted(async () => {
   await go();
 });
+
+useHead({
+  title: `Reins | Visiting ${route.params.character}'s stable`,
+});
 </script>
 
 <template>
