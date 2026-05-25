@@ -1,0 +1,22 @@
+@mixin gradient-heading($font-size, $font-weight: 600) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  background: linear-gradient(180deg, #ffd100 0%, #dfaa03 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: $font-size;
+}
+
+@mixin border-radius($radius, $bevel: false) {
+  border-radius: $radius;
+
+  @if $bevel {
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: calc($radius / 2);
+    }
+  }
+
+}

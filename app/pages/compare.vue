@@ -17,17 +17,7 @@
 }
 
 .compare-h1 {
-  font-size: $h2-size;
-  font-weight: 600;
-  background: var(
-    --Heading-color,
-    linear-gradient(180deg, #ffd100 0%, #dfaa03 100%)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-align: center;
-  margin-bottom: 2rem;
+  @include gradient-heading($h2-size);
 }
 
 .compare-p {

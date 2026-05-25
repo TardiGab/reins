@@ -323,7 +323,7 @@ watch(
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  max-height: 25vh;
+  max-height: 20vh;
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: $button-bg-dark;

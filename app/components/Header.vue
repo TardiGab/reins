@@ -29,24 +29,31 @@ const mobileNav = ref(false);
         @click="mobileNav = !mobileNav"
         class="burger-btn"
         :class="[{ ['burger']: !mobileNav }, { ['cross']: mobileNav }]"
+        aria-label="Burger menu"
       >
         <div></div>
         <div></div>
         <div></div>
       </button>
     </nav>
-    <nav class="nav-mobile" :class="{ 'nav-mobile--active': mobileNav }">
-      <NuxtLink
-        to="/mobile/pinned"
-        class="nav__link nav__link--gray"
-        @click="mobileNav = !mobileNav"
-      >
-        <span class="nav__label">Pinned mounts & Random mount</span>
-      </NuxtLink>
-      <NuxtLink to="/compare" class="nav__link" @click="mobileNav = !mobileNav">
-        <span class="nav__label">Compare with a friend</span>
-      </NuxtLink>
-    </nav>
+    <Transition name="slide">
+      <nav class="nav-mobile" v-if="mobileNav">
+        <NuxtLink
+          to="/mobile/pinned"
+          class="nav__link nav__link--gray"
+          @click="mobileNav = !mobileNav"
+        >
+          <span class="nav__label">Pinned mounts & Random mount</span>
+        </NuxtLink>
+        <NuxtLink
+          to="/compare"
+          class="nav__link"
+          @click="mobileNav = !mobileNav"
+        >
+          <span class="nav__label">Compare with a friend</span>
+        </NuxtLink>
+      </nav>
+    </Transition>
   </header>
 </template>
 
@@ -61,9 +68,9 @@ const mobileNav = ref(false);
     inset 0 0 0 2px $border-container,
     inset 0 0 0 3px black;
   padding: 0.5rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
   border-radius: 1rem;
-  width: calc(100% - 2.5rem);
+  width: calc(100% - 1.5rem);
   margin-bottom: 1rem;
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
@@ -71,9 +78,34 @@ const mobileNav = ref(false);
   }
   &__logo {
     color: white;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    transition: opacity 0.3s ease;
     h1 {
       padding: 0;
       margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      &::before {
+        content: "";
+        height: 1em;
+        width: 1em;
+        background-image: url("/images/logo.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+      }
+    }
+    img {
+      height: 2em;
+      width: 2em;
+    }
+    &:hover {
+      opacity: 0.8;
     }
   }
   &--right {
@@ -113,21 +145,17 @@ const mobileNav = ref(false);
   &__link {
     color: $yellow;
     padding: 0.5rem 2rem;
-    background-image: url("/images/body-background.webp");
+    background-image: url("/images/body.webp");
     background-color: $red;
     background-blend-mode: luminosity;
     border: solid 2px #2d0000;
-    border-radius: 0.5rem;
     font-size: $small;
     transition: all 0.3s ease;
     text-decoration: none;
     position: relative;
     display: block;
     overflow: hidden;
-    @supports (corner-shape: bevel) {
-      corner-shape: bevel;
-      border-radius: 0.25rem;
-    }
+    @include border-radius(0.5rem, true);
 
     &::after {
       content: "";
@@ -186,19 +214,10 @@ const mobileNav = ref(false);
     inset 0 0 0 3px black;
   background-color: hsl(23, 18%, 12%);
   padding: 1rem;
-  border-radius: 1rem;
   width: calc(100% - 4rem);
   height: 85vh;
   margin-bottom: 1rem;
-  transform: translateX(120%);
-  transition: transform 0.5s ease;
-  @supports (corner-shape: bevel) {
-    corner-shape: bevel;
-    border-radius: $corner-shape-m;
-  }
-  &--active {
-    transform: translateX(0);
-  }
+  @include border-radius(1rem, true);
 }
 
 .burger-btn {
@@ -281,5 +300,15 @@ const mobileNav = ref(false);
   &:focus-visible {
     border-color: $yellow;
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(120%);
 }
 </style>
