@@ -15,6 +15,15 @@ const { data: pinnedMounts } = await useFetch<PinnedMounts[]>(
     key: "pinned-mounts",
   },
 );
+
+const { data: userMounts } = await useFetch("/api/mounts", {
+  key: "user-mounts",
+});
+
+const userMountsIds = userMounts.value?.map((item: any) => {
+  return item.mount.id;
+});
+
 const session = authClient.useSession();
 
 async function unpinMount(id: number) {
@@ -27,8 +36,13 @@ async function unpinMount(id: number) {
   await refreshNuxtData("pinned-mounts");
 }
 
+pinnedMounts.value?.forEach((mount) => {
+  if (userMountsIds?.includes(mount.mountId)) {
+    unpinMount(mount.id);
+  }
+});
+
 onMounted(() => {
-  setTimeout(() => {});
   if (window.$WowheadPower) {
     window.$WowheadPower.refreshLinks();
   }
