@@ -2,24 +2,37 @@
 import { useRoute } from "#app";
 import mounts from "@/assets/data/mounts.json";
 
-const route = useRoute();
+interface Mount {
+  ID?: number;
+  icon?: string;
+  itemId?: number;
+  name?: string;
+  spellid?: number;
+}
 
-let mountInfos;
+const route = useRoute("mount-guide");
+
+let mountInfos: Mount = {};
 
 mounts.forEach((category) => {
   category.subcats.forEach((subcat) => {
-    mountInfos = computed(() => {
-      // console.log(subcat.items.find((mount) => mount.ID == route.params.guide as number));
-      // return subcat.items.find((mount) => mount.ID === route.params.guide);
+    subcat.items.forEach((mount) => {
+      if (mount.ID === Number(route.params.guide)) {
+        mountInfos = mount;
+      }
     });
   });
 });
 
 useHead({
-  title: `Reins | ${route.params.guide}`,
+  title: `Reins | ${mountInfos.name}`,
 });
 </script>
 
 <template>
-  <p>{{ mountInfos }}</p>
+  <img
+    :src="`https://wow.zamimg.com/images/wow/icons/medium/${mountInfos.icon}.jpg`"
+    class="mount-item__icon"
+  />
+  <p>{{ mountInfos.name }}</p>
 </template>

@@ -90,22 +90,6 @@ async function pinMount(
   <div class="mounts-wrapper">
     <div class="mounts-container">
       <div class="expansion">
-        <ul class="expansion__subcat-container">
-          <li class="mount-item q4">
-            <NuxtLink
-              :to="{ name: 'mount-guide', params: { guide: 'invincible' } }"
-              target="_blank"
-              class="mount-item__link"
-              data-wowhead="item=50818"
-            >
-              <img
-                :src="`https://wow.zamimg.com/images/wow/icons/medium/ability_mount_pegasus.jpg`"
-                class="mount-item__icon"
-              />
-              <span>Invincible</span>
-            </NuxtLink>
-          </li>
-        </ul>
         <Accordion
           :title="mountsGlobal[0]?.name"
           :unlocked-amount="categoryOwnedMountsArray[0]?.unlockedAmount"
@@ -128,17 +112,23 @@ async function pinMount(
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.ID,
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                   <button
                     v-if="
                       !ownedMountArray.includes(mount.ID) && session.data?.user
