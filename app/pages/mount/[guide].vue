@@ -64,8 +64,6 @@ const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
 
-console.log(page.value);
-
 useHead({
   title: `Reins | ${mountInfos.name}`,
   meta: [
@@ -98,9 +96,19 @@ useHead({
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
-        <ContentRenderer v-if="page" :value="page" class="guide__content" />
+        <div class="guide__content" v-if="page">
+          <ContentRenderer :value="page" />
+        </div>
+        <div class="guide__content" v-else>
+          <h2 class="guide__h2">Guide Not Found</h2>
+          <p>
+            Oops! The content you're looking for doesn't exist (yet). Feel free
+            to <a href="" class="guide__link">contribute</a> and create a guide
+            for this mount!
+          </p>
+        </div>
         <div class="mount-faction">
-          <h3 class="mount-faction__h3">Faction</h3>
+          <h2 class="mount-faction__h2">Faction</h2>
           <span
             v-if="mountInfos.side === 'A'"
             class="mount-faction__span mount-faction__span--alliance"
@@ -125,19 +133,22 @@ useHead({
             :alt="`Creature display of ${mountInfos.name}`"
             class="display-wrapper__img"
           />
-          <a
-            :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-            class="display-wrapper__wh-link"
-          >
-            More on Wowhead
-          </a>
+          <span class="display-wrapper__wh-link">
+            More on
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
+              class="display-wrapper__wh-link"
+            >
+              Wowhead
+            </a>
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .guide {
   max-width: 1440px;
   margin: auto;
@@ -168,17 +179,34 @@ useHead({
     }
   }
   &__content {
+    margin-top: 3rem;
     h2 {
+      font-size: $h3-size;
+      margin: 0;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px black;
+      font-weight: 600;
+      color: white;
       a {
-        font-size: $h2-size;
+        font-size: $h3-size;
         margin: 0;
         margin-top: 2rem;
         margin-bottom: 1rem;
         text-shadow: 1px 1px black;
-        font-weight: 400;
+        font-weight: 600;
         color: white;
       }
     }
+    p {
+      font-size: $main-size;
+      line-height: 140%;
+      color: white;
+      text-shadow: 1px 1px black;
+    }
+  }
+  &__link {
+    color: $yellow;
   }
 }
 
@@ -196,13 +224,13 @@ useHead({
 }
 
 .mount-faction {
-  &__h3 {
+  &__h2 {
     font-size: $h3-size;
     margin: 0;
     margin-top: 2rem;
     margin-bottom: 1rem;
     text-shadow: 1px 1px black;
-    font-weight: 400;
+    font-weight: 600;
   }
   &__span {
     display: inline-flex;
