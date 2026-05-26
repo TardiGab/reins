@@ -118,7 +118,7 @@ useHead({
       padding-bottom: 2rem;
       margin-bottom: 4rem;
       border-bottom: 2px solid $border-container;
-
+      text-shadow: 1px 1px black;
       a {
         display: flex;
         align-items: center;
@@ -157,15 +157,29 @@ useHead({
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: center;
   gap: 1rem;
   &__wh-link {
     color: white;
+    text-shadow: 1px 1px black;
+    font-size: $main-size;
+    font-weight: 500;
+    @media screen and (max-width: 780px) {
+      align-self: center;
+    }
   }
   &__img {
     @include border-radius(1rem, true);
     @include container-border();
     width: 542px;
+    @media screen and (max-width: 960px) {
+      width: 100%;
+    }
     @media screen and (max-width: 780px) {
+      width: 50%;
+      margin: 0 auto;
+    }
+    @media screen and (max-width: 480px) {
       width: 100%;
     }
   }
