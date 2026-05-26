@@ -90,17 +90,15 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     background-color: hsl(23, 18%, 12%);
-    border: 2px solid $border-container;
-    box-shadow: inset 0 0 0 1px black;
-    border-radius: 0.5rem;
+    @include container-border();
     padding: 0.5rem 1rem;
     margin-bottom: 2rem;
     width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
     color: $dark-gray;
+    @include border-radius(0.5rem, true);
     @supports (corner-shape: bevel) {
-      corner-shape: bevel;
       border-radius: $corner-shape-s;
     }
     &:hover {

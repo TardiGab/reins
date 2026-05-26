@@ -16,7 +16,7 @@ const props = defineProps<{
 .change-character {
   color: $yellow;
   padding: 0.5rem 2rem;
-  background-image: url("/images/body-background-1.webp");
+  background-image: url("/images/body.webp");
   background-color: #5f5f5f;
   background-blend-mode: difference;
   border: solid 2px #121212;
