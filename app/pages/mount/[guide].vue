@@ -36,7 +36,9 @@ let mountInfos: Mount = {};
 mounts.forEach((category) => {
   category.subcats.forEach((subcat) => {
     subcat.items.forEach((mount) => {
-      if (mount.ID === Number(route.params.guide)) {
+      if (
+        mount.name?.replace(/\W+/g, "-").toLowerCase() === route.params.guide
+      ) {
         mountInfos = mount;
       }
     });
@@ -58,11 +60,18 @@ const { data: creatureDisplay } = await useFetch(
   },
 );
 
+const { data: page } = await useAsyncData(route.path, () => {
+  return queryCollection("blog").path(route.path).first();
+});
+
+console.log(page.value);
+
 useHead({
   title: `Reins | ${mountInfos.name}`,
-  script: [
+  meta: [
     {
-      innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: true, iconSize: false, renameLinks: false};`,
+      name: "description",
+      content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
     },
   ],
 });
@@ -89,6 +98,7 @@ useHead({
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
+        <ContentRenderer v-if="page" :value="page" class="guide__content" />
         <div class="mount-faction">
           <h3 class="mount-faction__h3">Faction</h3>
           <span
@@ -155,6 +165,19 @@ useHead({
     @media screen and (max-width: 780px) {
       flex-direction: column;
       gap: 2rem;
+    }
+  }
+  &__content {
+    h2 {
+      a {
+        font-size: $h2-size;
+        margin: 0;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 1px 1px black;
+        font-weight: 400;
+        color: white;
+      }
     }
   }
 }

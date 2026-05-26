@@ -116,7 +116,7 @@ async function pinMount(
                     :to="{
                       name: 'mount-guide',
                       params: {
-                        guide: mount.ID,
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
                       },
                     }"
                     target="_blank"
@@ -192,7 +192,7 @@ async function pinMount(
                     :to="{
                       name: 'mount-guide',
                       params: {
-                        guide: mount.ID,
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
                       },
                     }"
                     target="_blank"
