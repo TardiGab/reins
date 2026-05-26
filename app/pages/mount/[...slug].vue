@@ -4,7 +4,15 @@ const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
 
-console.log(page.value);
+useHead({
+  title: "Reins | Mount Not Found",
+  meta: [
+    {
+      name: "description",
+      content: "Oops! The content you're looking for doesn't exist (yet).",
+    },
+  ],
+});
 </script>
 
 <template>
@@ -13,9 +21,9 @@ console.log(page.value);
   </template>
   <template v-else>
     <div class="empty-page">
-      <h2>Page Not Found</h2>
-      <p>Oops! The content you're looking for doesn't exist (yet).</p>
-      <NuxtLink to="/">Go back home</NuxtLink>
+      <h2>Mount Not Found</h2>
+      <p>Oops! We've searched everywhere but couldn't find that mount.</p>
+      <NuxtLink to="/mount">Go back</NuxtLink>
     </div>
   </template>
 </template>
