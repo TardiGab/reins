@@ -36,7 +36,9 @@ let mountInfos: Mount = {};
 mounts.forEach((category) => {
   category.subcats.forEach((subcat) => {
     subcat.items.forEach((mount) => {
-      if (mount.ID === Number(route.params.guide)) {
+      if (
+        mount.name?.replace(/\W+/g, "-").toLowerCase() === route.params.guide
+      ) {
         mountInfos = mount;
       }
     });
@@ -58,11 +60,16 @@ const { data: creatureDisplay } = await useFetch(
   },
 );
 
+const { data: page } = await useAsyncData(route.path, () => {
+  return queryCollection("blog").path(route.path).first();
+});
+
 useHead({
   title: `Reins | ${mountInfos.name}`,
-  script: [
+  meta: [
     {
-      innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: true, iconSize: false, renameLinks: false};`,
+      name: "description",
+      content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
     },
   ],
 });
@@ -89,8 +96,19 @@ useHead({
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
+        <div class="guide__content" v-if="page">
+          <ContentRenderer :value="page" />
+        </div>
+        <div class="guide__content" v-else>
+          <h2 class="guide__h2">Guide Not Found</h2>
+          <p>
+            Oops! The content you're looking for doesn't exist (yet). Feel free
+            to <a href="" class="guide__link">contribute</a> and create a guide
+            for this mount!
+          </p>
+        </div>
         <div class="mount-faction">
-          <h3 class="mount-faction__h3">Faction</h3>
+          <h2 class="mount-faction__h2">Faction</h2>
           <span
             v-if="mountInfos.side === 'A'"
             class="mount-faction__span mount-faction__span--alliance"
@@ -115,19 +133,22 @@ useHead({
             :alt="`Creature display of ${mountInfos.name}`"
             class="display-wrapper__img"
           />
-          <a
-            :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-            class="display-wrapper__wh-link"
-          >
-            More on Wowhead
-          </a>
+          <span class="display-wrapper__wh-link">
+            More on
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
+              class="display-wrapper__wh-link"
+            >
+              Wowhead
+            </a>
+          </span>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .guide {
   max-width: 1440px;
   margin: auto;
@@ -157,6 +178,36 @@ useHead({
       gap: 2rem;
     }
   }
+  &__content {
+    margin-top: 3rem;
+    h2 {
+      font-size: $h3-size;
+      margin: 0;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px black;
+      font-weight: 600;
+      color: white;
+      a {
+        font-size: $h3-size;
+        margin: 0;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 1px 1px black;
+        font-weight: 600;
+        color: white;
+      }
+    }
+    p {
+      font-size: $main-size;
+      line-height: 140%;
+      color: white;
+      text-shadow: 1px 1px black;
+    }
+  }
+  &__link {
+    color: $yellow;
+  }
 }
 
 .mount-quote {
@@ -173,13 +224,13 @@ useHead({
 }
 
 .mount-faction {
-  &__h3 {
+  &__h2 {
     font-size: $h3-size;
     margin: 0;
     margin-top: 2rem;
     margin-bottom: 1rem;
     text-shadow: 1px 1px black;
-    font-weight: 400;
+    font-weight: 600;
   }
   &__span {
     display: inline-flex;

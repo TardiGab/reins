@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/fonts"],
+  modules: ["@nuxt/fonts", "@nuxt/content"],
   css: ["@/assets/styles/main.scss"],
   vite: {
     optimizeDeps: {
@@ -32,5 +32,10 @@ export default defineNuxtConfig({
   devServer: {
     port: 3000,
     host: "0.0.0.0",
+  },
+  content: {
+    build: {
+      markdown: {},
+    },
   },
 });
