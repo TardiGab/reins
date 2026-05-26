@@ -10,6 +10,7 @@ interface Mount {
   spellid?: number;
   notObtainable?: boolean;
   notReleased?: boolean;
+  side?: string;
 }
 
 interface MountInfo {
@@ -88,6 +89,24 @@ useHead({
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
+        <div class="mount-faction">
+          <h3 class="mount-faction__h3">Faction</h3>
+          <span
+            v-if="mountInfos.side === 'A'"
+            class="mount-faction__span mount-faction__span--alliance"
+          >
+            Alliance
+          </span>
+          <span
+            v-else-if="mountInfos.side === 'H'"
+            class="mount-faction__span mount-faction__span--horde"
+          >
+            Horde
+          </span>
+          <span v-else class="mount-faction__span mount-faction__span--both">
+            Both
+          </span>
+        </div>
       </div>
       <div class="guide-desc--right">
         <div class="display-wrapper">
@@ -150,6 +169,59 @@ useHead({
     line-height: 140%;
     color: $yellow;
     text-shadow: 1px 1px black;
+  }
+}
+
+.mount-faction {
+  &__h3 {
+    font-size: $h3-size;
+    margin: 0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px black;
+    font-weight: 400;
+  }
+  &__span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: $main-size;
+    border-radius: 0.5rem;
+    color: white;
+    text-shadow: 1px 1px black;
+    &--alliance {
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        background-image: url("/images/factions/alliance.webp");
+        background-size: cover;
+        background-position: center;
+      }
+    }
+    &--horde {
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        background-image: url("/images/factions/horde.webp");
+        background-size: cover;
+        background-position: center;
+      }
+    }
+    &--both {
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        background-image: url("/images/factions/both.webp");
+        background-size: cover;
+        background-position: center;
+      }
+    }
   }
 }
 
