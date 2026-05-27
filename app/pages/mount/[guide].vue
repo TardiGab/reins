@@ -45,13 +45,11 @@ useHead({
 </script>
 
 <template>
-  <GuidesContent v-if="mountInfos.name">
-    <template #content>
-      <div class="guide__content" v-if="page">
-        <ContentRenderer :value="page" />
-      </div>
+  <GuidesTemplate v-if="mountInfos.name">
+    <template #template v-if="page">
+      <ContentRenderer :value="page" />
     </template>
-  </GuidesContent>
+  </GuidesTemplate>
   <div v-else class="empty-page">
     <h2>Mount Not Found</h2>
     <p>Oops! We've searched everywhere but couldn't find that mount.</p>

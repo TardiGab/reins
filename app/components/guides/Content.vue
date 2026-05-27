@@ -86,9 +86,11 @@ const { data: page } = await useAsyncData(route.path, () => {
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
+
         <div class="guide__content" v-if="page">
-          <slot name="content"></slot>
+          <slot name="desc"></slot>
         </div>
+
         <div class="guide__content" v-else>
           <h2 class="guide__h2">Guide Not Found</h2>
           <p>
@@ -134,6 +136,9 @@ const { data: page } = await useAsyncData(route.path, () => {
           </span>
         </div>
       </div>
+    </div>
+    <div class="guide__content">
+      <slot name="guide"></slot>
     </div>
   </div>
 </template>
@@ -193,10 +198,10 @@ const { data: page } = await useAsyncData(route.path, () => {
       line-height: 140%;
       color: white;
       text-shadow: 1px 1px black;
+      a {
+        color: $yellow;
+      }
     }
-  }
-  &__link {
-    color: $yellow;
   }
 }
 
