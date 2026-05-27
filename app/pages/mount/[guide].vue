@@ -49,6 +49,9 @@ useHead({
     <template #template v-if="page">
       <ContentRenderer :value="page" />
     </template>
+    <template #template v-else>
+      <GuidesContentNotFound />
+    </template>
   </GuidesTemplate>
   <div v-else class="empty-page">
     <h2>Mount Not Found</h2>

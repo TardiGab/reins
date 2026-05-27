@@ -59,10 +59,6 @@ const { data: creatureDisplay } = await useFetch(
     },
   },
 );
-
-const { data: page } = await useAsyncData(route.path, () => {
-  return queryCollection("blog").path(route.path).first();
-});
 </script>
 
 <template>
@@ -86,12 +82,7 @@ const { data: page } = await useAsyncData(route.path, () => {
         <p class="mount-quote">
           <q>{{ mountData?.description }}</q>
         </p>
-
-        <div class="guide__content" v-if="page">
-          <slot name="desc"></slot>
-        </div>
-
-        <div class="guide__content" v-else>
+        <div class="guide__content">
           <h2 class="guide__h2">Guide Not Found</h2>
           <p>
             Oops! The content you're looking for doesn't exist (yet). Feel free
@@ -149,9 +140,6 @@ const { data: page } = await useAsyncData(route.path, () => {
           </div>
         </div>
       </div>
-    </div>
-    <div class="guide__content">
-      <slot name="guide"></slot>
     </div>
   </div>
 </template>
