@@ -168,7 +168,7 @@ const { data: page } = await useAsyncData(route.path, () => {
   }
   &-heading {
     &__h2 {
-      font-size: $h2-size;
+      font-size: $h1-size;
       padding-bottom: 2rem;
       margin-bottom: 4rem;
       border-bottom: 2px solid $border-container;
