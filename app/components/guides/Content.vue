@@ -160,7 +160,7 @@ const { data: page } = await useAsyncData(route.path, () => {
 .guide {
   max-width: 1440px;
   margin: auto;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1440px) {
     max-width: 80vw;
   }
   @media screen and (max-width: 780px) {
@@ -191,7 +191,8 @@ const { data: page } = await useAsyncData(route.path, () => {
       flex-direction: column;
       gap: 2rem;
     }
-    &--left {
+    &--left,
+    &--right {
       flex: 1;
     }
   }

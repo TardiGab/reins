@@ -84,7 +84,7 @@ const { data: creatureDisplay } = await useFetch(
         </p>
         <div class="guide__content">
           <h2 class="guide__h2">Guide Not Found</h2>
-          <p>
+          <p class="guide__p">
             Oops! The content you're looking for doesn't exist (yet). Feel free
             to <a href="" class="guide__link">contribute</a> and create a guide
             for this mount!
@@ -148,7 +148,7 @@ const { data: creatureDisplay } = await useFetch(
 .guide {
   max-width: 1440px;
   margin: auto;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1440px) {
     max-width: 80vw;
   }
   @media screen and (max-width: 780px) {
@@ -179,7 +179,8 @@ const { data: creatureDisplay } = await useFetch(
       flex-direction: column;
       gap: 2rem;
     }
-    &--left {
+    &--left,
+    &--right {
       flex: 1;
     }
   }
