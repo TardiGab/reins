@@ -34,8 +34,8 @@ export default defineNuxtConfig({
     host: "0.0.0.0",
   },
   content: {
-    build: {
-      markdown: {},
+    experimental: {
+      sqliteConnector: "better-sqlite3",
     },
   },
 });
