@@ -7,6 +7,7 @@ useHead({
     },
     {
       src: "https://wow.zamimg.com/js/tooltips.js",
+      defer: true,
     },
   ],
   link: [

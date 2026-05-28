@@ -65,6 +65,7 @@ onMounted(() => {
             <a
               :href="`https://wowhead.com/ptr/mount/${mount.mountId}`"
               class="mount-item__link"
+              target="_blank"
             >
               <img
                 :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.mountIcon.toLowerCase()}.jpg`"

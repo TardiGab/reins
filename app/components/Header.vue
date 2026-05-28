@@ -58,6 +58,13 @@ const mobileNav = ref(false);
 </template>
 
 <style lang="scss" scoped>
+.header {
+  position: sticky;
+  top: 1rem;
+  z-index: 1000;
+  background-color: transparent;
+}
+
 .nav {
   display: flex;
   width: 100%;

@@ -58,7 +58,8 @@ useHead({
   position: relative;
   height: 80vh;
   margin: auto;
-  border: 2px solid $border-container;
+
+  @include container-border();
   @include border-radius(1rem, true);
   padding: 2rem;
   overflow: hidden;
@@ -163,6 +164,7 @@ useHead({
   }
   &__button {
     font-size: $main-size;
+    padding: 1rem 0;
   }
 }
 </style>
