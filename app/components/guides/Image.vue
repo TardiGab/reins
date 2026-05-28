@@ -18,7 +18,7 @@ defineProps<{
 .guide-img {
   width: 100%;
   height: auto;
-  @include border-radius(0.5rem, true);
+  @include border-radius(1rem, true);
   @include container-border();
   &__caption {
     display: block;
@@ -33,6 +33,7 @@ defineProps<{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 1rem 0;
 }
 
 .img-100 {

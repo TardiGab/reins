@@ -156,8 +156,8 @@ const { data: page } = await useAsyncData(route.path, () => {
 <style lang="scss">
 .guide {
   max-width: 1440px;
-  margin: 0 2rem;
-  @media screen and (max-width: 1440px) {
+  margin: auto;
+  @media screen and (max-width: 1530px) {
     max-width: 80vw;
     margin: auto;
   }
@@ -247,9 +247,12 @@ const { data: page } = await useAsyncData(route.path, () => {
       margin: 0;
       padding: 0;
       li {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
         font-size: $main-size;
         line-height: 140%;
+        a {
+          color: $yellow;
+        }
       }
     }
   }
@@ -360,16 +363,6 @@ const { data: page } = await useAsyncData(route.path, () => {
     @include border-radius(1rem, true);
     @include container-border();
     width: 100%;
-    @media screen and (max-width: 960px) {
-      width: 100%;
-    }
-    @media screen and (max-width: 780px) {
-      width: 75%;
-      margin: 0 auto;
-    }
-    @media screen and (max-width: 480px) {
-      width: 100%;
-    }
   }
 }
 </style>

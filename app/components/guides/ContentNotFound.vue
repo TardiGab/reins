@@ -119,24 +119,20 @@ const { data: creatureDisplay } = await useFetch(
             class="display-wrapper__img"
           />
           <div class="display-wrapper__links">
-            <span class="display-wrapper__wh-link">
-              More on
-              <a
-                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-                class="display-wrapper__wh-link"
-              >
-                Wowhead
-              </a>
-            </span>
-            <span class="display-wrapper__wh-link">
-              View
-              <a
-                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
-                class="display-wrapper__wh-link"
-              >
-                3D model on Wowhead
-              </a>
-            </span>
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
+              class="display-wrapper__wh-link"
+              target="_blank"
+            >
+              More on Wowhead
+            </a>
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
+              class="display-wrapper__wh-link"
+              target="_blank"
+            >
+              View 3D model on Wowhead
+            </a>
           </div>
         </div>
       </div>
@@ -346,16 +342,6 @@ const { data: creatureDisplay } = await useFetch(
     @include border-radius(1rem, true);
     @include container-border();
     width: 100%;
-    @media screen and (max-width: 960px) {
-      width: 100%;
-    }
-    @media screen and (max-width: 780px) {
-      width: 75%;
-      margin: 0 auto;
-    }
-    @media screen and (max-width: 480px) {
-      width: 100%;
-    }
   }
 }
 </style>
