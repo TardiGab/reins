@@ -324,12 +324,22 @@ const { data: creatureDisplay } = await useFetch(
     gap: 1.5rem;
   }
   &__wh-link {
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-shadow: 1px 1px black;
-    font-size: $main-size;
+    font-size: $small;
     font-weight: 500;
-    @media screen and (max-width: 780px) {
-      align-self: center;
+    padding: 0.5rem 1rem;
+    background-color: $dark-gray;
+    outline: 2px solid $border-container;
+    @include border-radius(0.5rem, true);
+    width: 100%;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    color: white !important;
+    &:hover {
+      background-color: $light-gray;
     }
   }
   &__img {

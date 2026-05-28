@@ -43,20 +43,32 @@ defineProps<{
   width: 75%;
   height: auto;
   margin: 0 auto;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 }
 .img-50 {
   width: 50%;
   height: auto;
   margin: 0 auto;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 }
 .img-33 {
   width: 33%;
   height: auto;
   margin: 0 auto;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 }
 .img-25 {
   width: 25%;
   height: auto;
   margin: 0 auto;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
 }
 </style>

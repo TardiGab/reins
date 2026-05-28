@@ -128,24 +128,21 @@ const { data: page } = await useAsyncData(route.path, () => {
             class="display-wrapper__img"
           />
           <div class="display-wrapper__links">
-            <span class="display-wrapper__wh-link">
-              More on
-              <a
-                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-                class="display-wrapper__wh-link"
-              >
-                Wowhead
-              </a>
-            </span>
-            <span class="display-wrapper__wh-link">
-              View
-              <a
-                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
-                class="display-wrapper__wh-link"
-              >
-                3D model on Wowhead
-              </a>
-            </span>
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
+              class="display-wrapper__wh-link"
+              target="_blank"
+            >
+              More on Wowhead
+            </a>
+
+            <a
+              :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
+              class="display-wrapper__wh-link"
+              target="_blank"
+            >
+              View 3D model on Wowhead
+            </a>
           </div>
         </div>
       </div>
@@ -159,9 +156,10 @@ const { data: page } = await useAsyncData(route.path, () => {
 <style lang="scss">
 .guide {
   max-width: 1440px;
-  margin: auto;
+  margin: 0 2rem;
   @media screen and (max-width: 1440px) {
     max-width: 80vw;
+    margin: auto;
   }
   @media screen and (max-width: 780px) {
     max-width: 90vw;
@@ -335,14 +333,27 @@ const { data: page } = await useAsyncData(route.path, () => {
   &__links {
     display: flex;
     gap: 1.5rem;
+    width: 100%;
   }
   &__wh-link {
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-shadow: 1px 1px black;
-    font-size: $main-size;
+    font-size: $small;
     font-weight: 500;
-    @media screen and (max-width: 780px) {
-      align-self: center;
+    padding: 0.5rem 1rem;
+    background-color: $dark-gray;
+    outline: 2px solid $border-container;
+    @include border-radius(0.5rem, true);
+    width: 100%;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    &:hover {
+      background-color: $light-gray;
+    }
+    a {
+      color: white !important;
     }
   }
   &__img {
