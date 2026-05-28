@@ -9,6 +9,8 @@
   background-color: $container-bg;
   padding: 0.5rem 1rem;
   padding-left: 2.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   @include border-radius(1rem, true);
   @include container-border();
   position: relative;

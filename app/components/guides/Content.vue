@@ -244,7 +244,8 @@ const { data: page } = await useAsyncData(route.path, () => {
         color: $yellow;
       }
     }
-    ul {
+    ul,
+    ol {
       margin: 0;
       padding: 0;
       li {
