@@ -215,11 +215,13 @@ onMounted(() => {
     width: calc(50vw - 2rem);
     max-height: 80vh;
     @media screen and (max-width: 780px) {
+      max-height: none;
+      height: 100%;
       width: 100%;
     }
   }
-  &-container {
+  /* &-container {
     max-height: calc(70dvh - 2.5rem);
-  }
+  } */
 }
 </style>

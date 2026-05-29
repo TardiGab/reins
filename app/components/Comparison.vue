@@ -545,6 +545,8 @@ const showRightTooltip = ref(false);
   }
   &__left,
   &__right {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     @media screen and (max-width: 900px) {
       min-width: 320px;
@@ -609,7 +611,7 @@ const showRightTooltip = ref(false);
     }
     @media screen and (max-width: 780px) {
       padding: 1rem;
-      height: calc(100% - 3rem);
+      height: 100%;
     }
   }
   &__clear {
