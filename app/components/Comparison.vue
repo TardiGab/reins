@@ -539,12 +539,17 @@ const showRightTooltip = ref(false);
   gap: 1rem;
   align-items: flex-end;
   @media screen and (max-width: 900px) {
-    flex-direction: column;
-    align-items: center;
+    max-width: 100vw;
+    overflow-x: scroll;
+    max-height: 85dvh;
   }
   &__left,
   &__right {
     width: 100%;
+    @media screen and (max-width: 900px) {
+      min-width: 320px;
+      height: 85dvh;
+    }
   }
   &__header {
     display: flex;
@@ -553,6 +558,13 @@ const showRightTooltip = ref(false);
     width: calc(100% - 2rem);
     margin-bottom: 1rem;
     padding: 0 1rem;
+    @media screen and (max-width: 780px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0 0.25rem;
+      width: calc(100% - 0.5rem);
+    }
   }
   &__character {
     display: flex;
@@ -594,6 +606,15 @@ const showRightTooltip = ref(false);
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: $corner-shape-s;
+    }
+    @media screen and (max-width: 780px) {
+      padding: 1rem;
+      height: calc(100% - 3rem);
+    }
+  }
+  &__clear {
+    @media screen and (max-width: 780px) {
+      width: 100%;
     }
   }
 }

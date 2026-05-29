@@ -49,7 +49,7 @@ onMounted(() => {
             {{ comparedDiff! - baseDiff! }}
           </span>
         </div>
-        <span>{{ unlockedAmount }} / {{ amount }}</span>
+        <span>{{ unlockedAmount }}&nbsp;/&nbsp;{{ amount }}</span>
         <div class="icon" v-if="!isOpen">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -101,6 +101,9 @@ onMounted(() => {
     @supports (corner-shape: bevel) {
       border-radius: $corner-shape-s;
     }
+    @media screen and (max-width: 780px) {
+      padding: 0.5rem;
+    }
     &:hover {
       color: $light-gray;
       background-color: hsl(23, 18%, 16%);
@@ -122,12 +125,16 @@ onMounted(() => {
       flex-direction: row;
       align-items: center;
       gap: 1rem;
+      @media screen and (max-width: 780px) {
+        gap: 0.5rem;
+      }
     }
     @media screen and (max-width: 780px) {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
   }
 }
+
 .icon {
   display: flex;
   align-items: center;

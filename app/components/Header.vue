@@ -221,10 +221,11 @@ const mobileNav = ref(false);
     inset 0 0 0 3px black;
   background-color: $container-bg;
   padding: 1rem;
-  width: calc(100% - 4rem);
-  height: 85vh;
+  width: calc(100% - 2rem);
+  height: 80dvh;
   margin-bottom: 1rem;
   @include border-radius(1rem, true);
+  overflow: hidden;
 }
 
 .burger-btn {
