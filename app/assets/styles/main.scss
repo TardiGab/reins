@@ -37,6 +37,7 @@ a {
   // width: 80%;
   margin: auto;
   position: relative;
+  height: 85dvh;
 
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
@@ -47,7 +48,7 @@ a {
 .mounts-container,
 .container {
   padding: 2rem;
-  max-height: calc(80vh - 2rem);
+  max-height: calc(85dvh - 2rem);
   background-color: #1a1512;
   background-image: url("/images/wooden-background-2.webp");
   box-shadow: 0 0 40px 0 #000 inset;
