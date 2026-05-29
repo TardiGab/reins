@@ -27,6 +27,8 @@ interface MountInfo {
     type: string;
     name: string;
   };
+  code?: number;
+  detail?: string;
 }
 
 const route = useRoute("mount-guide");
@@ -51,6 +53,20 @@ const { data: mountData } = await useFetch<MountInfo>("/api/mount-info", {
   },
 });
 
+console.log(mountData.value);
+
+if (mountData.value?.code === 404) {
+  throw createError({
+    status: 404,
+    statusText: "Mount not found",
+    data: {
+      link: `https://www.wowhead.com/ptr-2/search?q=${mountInfos.name}&s=mounts`,
+      mountName: mountInfos.name,
+      message: `was not found on Blizzard's API. This mount might be very new or not released yet. Please check back later.`,
+    },
+  });
+}
+
 const { data: creatureDisplay } = await useFetch(
   "/api/creature-display-media",
   {
@@ -70,7 +86,7 @@ const { data: creatureDisplay } = await useFetch(
           target="_blank"
         >
           <img
-            :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon}.jpg`"
+            :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
             class="mount-item__icon"
           />
           {{ mountInfos.name }}
@@ -144,8 +160,9 @@ const { data: creatureDisplay } = await useFetch(
 .guide {
   max-width: 1440px;
   margin: auto;
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1530px) {
     max-width: 80vw;
+    margin: auto;
   }
   @media screen and (max-width: 780px) {
     max-width: 90vw;
@@ -228,13 +245,17 @@ const { data: creatureDisplay } = await useFetch(
         color: $yellow;
       }
     }
-    ul {
+    ul,
+    ol {
       margin: 0;
       padding: 0;
       li {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
         font-size: $main-size;
         line-height: 140%;
+        a {
+          color: $yellow;
+        }
       }
     }
   }
@@ -318,6 +339,7 @@ const { data: creatureDisplay } = await useFetch(
   &__links {
     display: flex;
     gap: 1.5rem;
+    width: 100%;
   }
   &__wh-link {
     display: flex;
@@ -333,7 +355,7 @@ const { data: creatureDisplay } = await useFetch(
     width: 100%;
     transition: background-color 0.3s ease;
     text-align: center;
-    color: white !important;
+    color: white;
     &:hover {
       background-color: $light-gray;
     }

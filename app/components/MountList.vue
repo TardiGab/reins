@@ -84,6 +84,8 @@ async function pinMount(
   await refreshNuxtData("pinned-mounts");
   window.$WowheadPower.refreshLinks();
 }
+
+console.log(userMounts.value);
 </script>
 
 <template>
@@ -112,17 +114,24 @@ async function pinMount(
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                   <button
                     v-if="
                       !ownedMountArray.includes(mount.ID) && session.data?.user
@@ -182,17 +191,24 @@ async function pinMount(
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                   <button
                     v-if="
                       !ownedMountArray.includes(mount.ID) && session.data?.user

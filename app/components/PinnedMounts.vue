@@ -62,17 +62,23 @@ onMounted(() => {
             v-if="session.data?.user.id === mount.userId"
             class="mount-item q4"
           >
-            <a
-              :href="`https://wowhead.com/ptr/mount/${mount.mountId}`"
-              class="mount-item__link"
+            <NuxtLink
+              :to="{
+                name: 'mount-guide',
+                params: {
+                  guide: mount.mountName?.replace(/\W+/g, '-').toLowerCase(),
+                },
+              }"
               target="_blank"
+              class="mount-item__link"
+              :data-wowhead="`item=${mount.mountId}`"
             >
               <img
                 :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.mountIcon.toLowerCase()}.jpg`"
                 class="mount-item__icon"
               />
               <span>{{ mount.mountName }}</span>
-            </a>
+            </NuxtLink>
             <button class="mount-item__pin-btn" @click="unpinMount(mount.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
