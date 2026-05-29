@@ -70,7 +70,7 @@ const mobileNav = ref(false);
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  background-color: hsl(23, 18%, 12%);
+  background-color: $container-bg;
   box-shadow:
     inset 0 0 0 2px $border-container,
     inset 0 0 0 3px black;
@@ -219,7 +219,7 @@ const mobileNav = ref(false);
   box-shadow:
     inset 0 0 0 2px $border-container,
     inset 0 0 0 3px black;
-  background-color: hsl(23, 18%, 12%);
+  background-color: $container-bg;
   padding: 1rem;
   width: calc(100% - 4rem);
   height: 85vh;
