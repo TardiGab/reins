@@ -216,7 +216,7 @@ onMounted(() => {
     max-height: 80vh;
     @media screen and (max-width: 780px) {
       max-height: none;
-      height: 100%;
+      height: 80dvh;
       width: 100%;
     }
   }
