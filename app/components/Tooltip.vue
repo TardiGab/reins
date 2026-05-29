@@ -103,6 +103,9 @@ let classColor = ref(
   box-shadow: 0 0 0px 1px #000 inset;
   text-shadow: 1px 1px black;
 
+  @media screen and (max-width: 1200px) {
+    width: 70vw;
+  }
   @supports (corner-shape: bevel) {
     corner-shape: bevel;
     border-radius: $corner-shape-m;

@@ -5,7 +5,11 @@ const session = authClient.useSession();
 //   await refreshNuxtData("user-mounts");
 // }
 
-const mobileNav = ref(false);
+const mobileNav = ref<boolean>(false);
+
+const emit = defineEmits<{
+  "nav-opened": [boolean];
+}>();
 </script>
 
 <template>
@@ -26,7 +30,10 @@ const mobileNav = ref(false);
         </NuxtLink>
       </div>
       <button
-        @click="mobileNav = !mobileNav"
+        @click="
+          mobileNav = !mobileNav;
+          emit('nav-opened', mobileNav);
+        "
         class="burger-btn"
         :class="[{ ['burger']: !mobileNav }, { ['cross']: mobileNav }]"
         aria-label="Burger menu"
@@ -41,14 +48,20 @@ const mobileNav = ref(false);
         <NuxtLink
           to="/mobile/pinned"
           class="nav__link nav__link--gray"
-          @click="mobileNav = !mobileNav"
+          @click="
+            mobileNav = !mobileNav;
+            emit('nav-opened', mobileNav);
+          "
         >
           <span class="nav__label">Pinned mounts & Random mount</span>
         </NuxtLink>
         <NuxtLink
           to="/compare"
           class="nav__link"
-          @click="mobileNav = !mobileNav"
+          @click="
+            mobileNav = !mobileNav;
+            emit('nav-opened', mobileNav);
+          "
         >
           <span class="nav__label">Compare with a friend</span>
         </NuxtLink>

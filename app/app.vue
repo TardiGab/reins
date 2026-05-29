@@ -32,9 +32,28 @@ onMounted(() => {
     window.$WowheadPower.refreshLinks();
   }
 });
+
+const navState = ref(false);
+const handleNavOpened = (state: boolean) => {
+  navState.value = state;
+};
 </script>
 
 <template>
-  <Header />
-  <NuxtPage />
+  <Header @nav-opened="handleNavOpened" />
+  <NuxtPage class="content" :class="{ 'nav-opened': navState }" />
 </template>
+
+<style lang="scss">
+.content {
+  transition: opacity 0.3s ease;
+  @media screen and (max-width: 780px) {
+    opacity: 1;
+  }
+  &.nav-opened {
+    @media screen and (max-width: 780px) {
+      opacity: 0;
+    }
+  }
+}
+</style>

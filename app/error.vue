@@ -29,11 +29,16 @@ useHead({
     },
   ],
 });
+
+const navState = ref(false);
+const handleNavOpened = (state: boolean) => {
+  navState.value = state;
+};
 </script>
 
 <template>
-  <Header />
-  <div class="error-page">
+  <Header @nav-opened="handleNavOpened" />
+  <div class="error-page content" :class="{ 'nav-opened': navState }">
     <h2 class="error-page__h1">{{ error.status }}</h2>
     <h3 class="error-page__status-text">{{ error.statusText }}</h3>
     <p class="error-page__message">
@@ -142,6 +147,18 @@ useHead({
           opacity: 1;
         }
       }
+    }
+  }
+}
+
+.content {
+  transition: opacity 0.3s ease;
+  @media screen and (max-width: 780px) {
+    opacity: 1;
+  }
+  &.nav-opened {
+    @media screen and (max-width: 780px) {
+      opacity: 0;
     }
   }
 }
