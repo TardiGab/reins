@@ -44,6 +44,10 @@ useHead({
       content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
     },
     {
+      property: "og:sitename",
+      content: "Reins",
+    },
+    {
       property: "og:title",
       content: `Reins | ${mountInfos.name || "Mount Not Found"}`,
     },
@@ -53,7 +57,9 @@ useHead({
     },
     {
       property: "og:image",
-      content: `${page.value?.meta.image || mountInfos.icon}`,
+      content:
+        `${page.value?.meta.image}` ||
+        `https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon}.jpg`,
     },
   ],
 });
