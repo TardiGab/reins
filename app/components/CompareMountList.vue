@@ -128,81 +128,100 @@ onMounted(() => {
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
           </div>
         </Accordion>
-        <div
-          v-for="(expansion, index) in mountsGlobal.slice(1)"
-          :key="expansion.name"
-          class="expansion"
+      </div>
+      <div
+        v-for="(expansion, index) in mountsGlobal.slice(1)"
+        :key="expansion.name"
+        class="expansion"
+      >
+        <Accordion
+          :title="expansion.name"
+          :unlocked-amount="categoryOwnedMountsArray[index + 1]?.unlockedAmount"
+          :amount="categoryOwnedMountsArray[index + 1]?.amount"
+          :base-diff="props.baseDiff?.[index + 1]"
+          :compared-diff="props.comparedDiff?.[index + 1]"
+          :open="false"
         >
-          <Accordion
-            :title="expansion.name"
-            :unlocked-amount="
-              categoryOwnedMountsArray[index + 1]?.unlockedAmount
-            "
-            :amount="categoryOwnedMountsArray[index + 1]?.amount"
-            :base-diff="props.baseDiff?.[index + 1]"
-            :compared-diff="props.comparedDiff?.[index + 1]"
-            :open="false"
-          >
-            <div class="expansion__container">
-              <div
-                v-for="subcat in expansion.subcats"
-                :key="subcat.name"
-                class="expansion__subcategories"
-              >
-                <h3 class="expansion__subcat">{{ subcat.name }}</h3>
-                <ul class="expansion__subcat-container">
-                  <li
-                    v-for="mount in subcat.items"
-                    :key="mount.ID"
-                    class="mount-item"
-                    :class="{
-                      'mount-item__owned': ownedMountArray.includes(mount.ID),
+          <div class="expansion__container">
+            <div
+              v-for="subcat in expansion.subcats"
+              :key="subcat.name"
+              class="expansion__subcategories"
+            >
+              <h3 class="expansion__subcat">{{ subcat.name }}</h3>
+              <ul class="expansion__subcat-container">
+                <li
+                  v-for="mount in subcat.items"
+                  :key="mount.ID"
+                  class="mount-item"
+                  :class="{
+                    'mount-item__owned': ownedMountArray.includes(mount.ID),
+                  }"
+                >
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
                     }"
+                    target="_blank"
+                    class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
-                    <a
-                      :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
-                      target="_blank"
-                      class="mount-item__link"
-                    >
-                      <img
-                        :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
-                        class="mount-item__icon"
-                      />
-                      <span>{{ mount.name }}</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+                    <img
+                      :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
+                      class="mount-item__icon"
+                    />
+                    <span>{{ mount.name }}</span>
+                  </NuxtLink>
+                </li>
+              </ul>
             </div>
-          </Accordion>
-        </div>
+          </div>
+        </Accordion>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.mounts-wrapper {
-  width: calc(50vw - 2rem);
-  height: 80vh;
-  @media screen and (max-width: 780px) {
-    width: 100%;
+.mounts {
+  &-wrapper {
+    width: calc(50vw - 2rem);
+    max-height: 80vh;
+    @media screen and (max-width: 780px) {
+      max-height: none;
+      height: 100%;
+      width: 100%;
+    }
   }
+  /* &-container {
+    max-height: calc(70dvh - 2.5rem);
+  } */
 }
 </style>

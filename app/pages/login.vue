@@ -56,7 +56,7 @@ useHead({
   align-items: flex-start;
   justify-content: center;
   position: relative;
-  height: 80vh;
+  min-height: 80dvh;
   margin: auto;
 
   @include container-border();

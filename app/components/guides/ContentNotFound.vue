@@ -95,7 +95,7 @@ const { data: creatureDisplay } = await useFetch(
     </div>
     <div class="guide-desc">
       <div class="guide-desc--left">
-        <p class="mount-quote">
+        <p class="mount-quote" v-if="mountData?.description">
           <q>{{ mountData?.description }}</q>
         </p>
         <div class="guide__content">
@@ -196,9 +196,14 @@ const { data: creatureDisplay } = await useFetch(
     &--right {
       flex: 1;
     }
+    &--right {
+      max-width: 480px;
+      @media screen and (max-width: 780px) {
+        max-width: 100%;
+      }
+    }
   }
   &__content {
-    margin-top: 3rem;
     max-width: 960px;
     h2 {
       font-size: $h2-size;
@@ -216,6 +221,19 @@ const { data: creatureDisplay } = await useFetch(
         text-shadow: 1px 1px black;
         font-weight: 600;
         color: white;
+        transition: all 0.3s ease;
+        position: relative;
+        &::before {
+          content: "#";
+          opacity: 0;
+          color: $yellow;
+          position: absolute;
+          left: -1em;
+          transition: opacity 0.3s ease;
+        }
+        &:hover::before {
+          opacity: 1;
+        }
       }
     }
     h3 {
@@ -234,6 +252,19 @@ const { data: creatureDisplay } = await useFetch(
         text-shadow: 1px 1px black;
         font-weight: 600;
         color: white;
+        transition: all 0.3s ease;
+        position: relative;
+        &::before {
+          content: "#";
+          opacity: 0;
+          color: $yellow;
+          position: absolute;
+          left: -1em;
+          transition: opacity 0.3s ease;
+        }
+        &:hover::before {
+          opacity: 1;
+        }
       }
     }
     p {
@@ -264,6 +295,7 @@ const { data: creatureDisplay } = await useFetch(
 .mount-quote {
   font-size: $main-size;
   margin: 0;
+  margin-bottom: 2rem;
   q {
     font-family: "Sentient Variable";
     font-style: italic;
@@ -284,6 +316,19 @@ const { data: creatureDisplay } = await useFetch(
       text-shadow: 1px 1px black;
       font-weight: 600;
       color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      &::before {
+        content: "#";
+        opacity: 0;
+        color: $yellow;
+        position: absolute;
+        left: -1em;
+        transition: opacity 0.3s ease;
+      }
+      &:hover::before {
+        opacity: 1;
+      }
     }
   }
   &__span {
@@ -341,7 +386,8 @@ const { data: creatureDisplay } = await useFetch(
     gap: 1.5rem;
     width: 100%;
   }
-  &__wh-link {
+  &__wh-link,
+  a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -355,10 +401,12 @@ const { data: creatureDisplay } = await useFetch(
     width: 100%;
     transition: background-color 0.3s ease;
     text-align: center;
-    color: white;
     &:hover {
       background-color: $light-gray;
     }
+  }
+  a {
+    color: white !important;
   }
   &__img {
     @include border-radius(1rem, true);
