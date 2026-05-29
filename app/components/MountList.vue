@@ -71,6 +71,7 @@ async function pinMount(
   mountId: number,
   mountIcon: string,
   userId: string | undefined,
+  itemId?: number,
 ) {
   await $fetch("/api/pin-mount", {
     method: "POST",
@@ -79,6 +80,7 @@ async function pinMount(
       mountId: mountId,
       mountIcon: mountIcon,
       userId: userId,
+      itemId: itemId,
     },
   });
   await refreshNuxtData("pinned-mounts");
@@ -142,6 +144,7 @@ console.log(userMounts.value);
                         mount.ID,
                         mount.icon,
                         session.data?.user.id,
+                        mount.itemId,
                       )
                     "
                     class="mount-item__pin-btn"
@@ -219,6 +222,7 @@ console.log(userMounts.value);
                         mount.ID,
                         mount.icon,
                         session.data?.user.id,
+                        mount.itemId,
                       )
                     "
                     class="mount-item__pin-btn"

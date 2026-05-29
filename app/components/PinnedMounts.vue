@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
+import globalMounts from "@/assets/data/mounts.json";
 
 interface PinnedMounts {
   id: number;
@@ -7,6 +8,7 @@ interface PinnedMounts {
   mountId: number;
   mountIcon: string;
   userId: string;
+  itemId?: number;
 }
 
 const { data: pinnedMounts } = await useFetch<PinnedMounts[]>(
@@ -57,7 +59,7 @@ onMounted(() => {
         <span>You don't have any mounts pinned</span>
       </div>
       <ul class="pinned-mounts__list" v-else>
-        <li v-for="mount in pinnedMounts">
+        <li v-for="mount in pinnedMounts" :key="mount.id">
           <div
             v-if="session.data?.user.id === mount.userId"
             class="mount-item q4"
@@ -71,7 +73,7 @@ onMounted(() => {
               }"
               target="_blank"
               class="mount-item__link"
-              :data-wowhead="`item=${mount.mountId}`"
+              :data-wowhead="`item=${mount.itemId}`"
             >
               <img
                 :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.mountIcon.toLowerCase()}.jpg`"

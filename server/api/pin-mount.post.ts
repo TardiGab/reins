@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
   const requestBody = await readBody(event);
 
   const pinMount = await sql`
-  INSERT INTO pinned_mounts ("mountName", "mountId", "mountIcon", "userId")
-  VALUES (${requestBody.mountName}, ${requestBody.mountId}, ${requestBody.mountIcon}, ${requestBody.userId})`;
+  INSERT INTO pinned_mounts ("mountName", "mountId", "mountIcon", "userId", "itemId")
+  VALUES (${requestBody.mountName}, ${requestBody.mountId}, ${requestBody.mountIcon}, ${requestBody.userId}, ${requestBody.itemId})`;
 
   return pinMount;
 });
