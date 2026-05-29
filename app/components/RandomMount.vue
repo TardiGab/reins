@@ -51,6 +51,7 @@ async function pinMount(
   mountId: number,
   mountIcon: string,
   userId: string | undefined,
+  itemId?: number,
 ) {
   await $fetch("/api/pin-mount", {
     method: "POST",
@@ -59,6 +60,7 @@ async function pinMount(
       mountId: mountId,
       mountIcon: mountIcon,
       userId: userId,
+      itemId: itemId,
     },
   });
   await refreshNuxtData("pinned-mounts");
@@ -91,17 +93,25 @@ async function pinMount(
       </button>
     </div>
     <div class="mount-item" v-if="session.data?.session">
-      <a
-        :href="`https://wowhead.com/ptr/mount/${randomMountArray[randomResponse].ID}`"
-        class="mount-item__link"
+      <NuxtLink
+        :to="{
+          name: 'mount-guide',
+          params: {
+            guide: randomMountArray[randomResponse].name
+              ?.replace(/\W+/g, '-')
+              .toLowerCase(),
+          },
+        }"
         target="_blank"
+        class="mount-item__link"
+        :data-wowhead="`item=${randomMountArray[randomResponse].itemId}`"
       >
         <img
           :src="`https://wow.zamimg.com/images/wow/icons/medium/${randomMountArray[randomResponse].icon?.toLowerCase()}.jpg`"
           class="mount-item__icon"
         />
         <span>{{ randomMountArray[randomResponse].name }}</span>
-      </a>
+      </NuxtLink>
       <button
         @click="
           pinMount(
@@ -109,6 +119,7 @@ async function pinMount(
             randomMountArray[randomResponse].ID,
             randomMountArray[randomResponse].icon,
             session.data?.user.id,
+            randomMountArray[randomResponse].itemId,
           )
         "
         class="mount-item__pin-btn"

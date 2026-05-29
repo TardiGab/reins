@@ -76,7 +76,7 @@ console.log(page.value?.meta.image);
           target="_blank"
         >
           <img
-            :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon}.jpg`"
+            :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
             class="mount-item__icon"
           />
           {{ mountInfos.name }}
@@ -340,7 +340,8 @@ console.log(page.value?.meta.image);
     gap: 1.5rem;
     width: 100%;
   }
-  &__wh-link {
+  &__wh-link,
+  a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -357,9 +358,9 @@ console.log(page.value?.meta.image);
     &:hover {
       background-color: $light-gray;
     }
-    a {
-      color: white !important;
-    }
+  }
+  a {
+    color: white !important;
   }
   &__img {
     @include border-radius(1rem, true);

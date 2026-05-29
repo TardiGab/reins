@@ -6,9 +6,6 @@ const { data: userMounts } = await useFetch("/api/mounts", {
 });
 const session = authClient.useSession();
 
-const userMountsIds = userMounts.value?.map((item: any) => {
-  return item.mount.id;
-});
 // Un grand merci à M. Schmouker d'avoir implémenté le compte des montures possédées et le compte total des montures par catégories.
 // Un grand merci également à M. Terranova de m'avoir aidé à vérifier la présence d'une monture possédée par le joueur dans la liste des montures globales.
 interface SubCategoryOwnedMounts {
@@ -23,6 +20,10 @@ interface CategoryOwnedMounts {
   amount: number;
   unlockedAmount: number;
 }
+
+const userMountsIds = userMounts.value?.map((item: any) => {
+  return item.mount.id;
+});
 
 const ownedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
@@ -71,6 +72,7 @@ async function pinMount(
   mountId: number,
   mountIcon: string,
   userId: string | undefined,
+  itemId?: number,
 ) {
   await $fetch("/api/pin-mount", {
     method: "POST",
@@ -79,6 +81,7 @@ async function pinMount(
       mountId: mountId,
       mountIcon: mountIcon,
       userId: userId,
+      itemId: itemId,
     },
   });
   await refreshNuxtData("pinned-mounts");
@@ -112,17 +115,24 @@ async function pinMount(
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                   <button
                     v-if="
                       !ownedMountArray.includes(mount.ID) && session.data?.user
@@ -133,6 +143,7 @@ async function pinMount(
                         mount.ID,
                         mount.icon,
                         session.data?.user.id,
+                        mount.itemId,
                       )
                     "
                     class="mount-item__pin-btn"
@@ -182,17 +193,24 @@ async function pinMount(
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
                   }"
                 >
-                  <a
-                    :href="`https://wowhead.com/ptr-2/mount/${mount.ID}`"
+                  <NuxtLink
+                    :to="{
+                      name: 'mount-guide',
+                      params: {
+                        guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
+                      },
+                    }"
                     target="_blank"
                     class="mount-item__link"
+                    :data-wowhead="`item=${mount.itemId}`"
+                    data-wowhead-domain="ptr-2"
                   >
                     <img
                       :src="`https://wow.zamimg.com/images/wow/icons/medium/${mount.icon?.toLowerCase()}.jpg`"
                       class="mount-item__icon"
                     />
                     <span>{{ mount.name }}</span>
-                  </a>
+                  </NuxtLink>
                   <button
                     v-if="
                       !ownedMountArray.includes(mount.ID) && session.data?.user
@@ -203,6 +221,7 @@ async function pinMount(
                         mount.ID,
                         mount.icon,
                         session.data?.user.id,
+                        mount.itemId,
                       )
                     "
                     class="mount-item__pin-btn"

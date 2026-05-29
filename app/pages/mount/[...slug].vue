@@ -21,9 +21,13 @@ useHead({
   </template>
   <template v-else>
     <div class="empty-page">
-      <h2>Mount Not Found</h2>
-      <p>Oops! We've searched everywhere but couldn't find that mount.</p>
-      <NuxtLink to="/mount">Go back</NuxtLink>
+      <h2 class="empty-page__h2">Mount Not Found</h2>
+      <p class="empty-page__message">
+        Oops! We've searched everywhere but couldn't find that mount.
+      </p>
+      <NuxtLink to="/" class="empty-page__link empty-page__link--red">
+        <span class="empty-page__label">Go back home</span>
+      </NuxtLink>
     </div>
   </template>
 </template>
