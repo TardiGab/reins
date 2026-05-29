@@ -58,7 +58,7 @@ useHead({
     {
       property: "og:image",
       content:
-        `${page.value?.meta.image}` ||
+        (page.value?.meta.image as string) ||
         `https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon}.jpg`,
     },
   ],
