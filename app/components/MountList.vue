@@ -6,9 +6,6 @@ const { data: userMounts } = await useFetch("/api/mounts", {
 });
 const session = authClient.useSession();
 
-const userMountsIds = userMounts.value?.map((item: any) => {
-  return item.mount.id;
-});
 // Un grand merci à M. Schmouker d'avoir implémenté le compte des montures possédées et le compte total des montures par catégories.
 // Un grand merci également à M. Terranova de m'avoir aidé à vérifier la présence d'une monture possédée par le joueur dans la liste des montures globales.
 interface SubCategoryOwnedMounts {
@@ -23,6 +20,10 @@ interface CategoryOwnedMounts {
   amount: number;
   unlockedAmount: number;
 }
+
+const userMountsIds = userMounts.value?.map((item: any) => {
+  return item.mount.id;
+});
 
 const ownedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
@@ -86,8 +87,6 @@ async function pinMount(
   await refreshNuxtData("pinned-mounts");
   window.$WowheadPower.refreshLinks();
 }
-
-console.log(userMounts.value);
 </script>
 
 <template>
