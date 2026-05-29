@@ -34,11 +34,26 @@ const { data: page } = await useAsyncData(route.path, () => {
 });
 
 useHead({
+  htmlAttrs: {
+    lang: "en",
+  },
   title: `Reins | ${mountInfos.name || "Mount Not Found"}`,
   meta: [
     {
       name: "description",
       content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
+    },
+    {
+      property: "og:title",
+      content: `Reins | ${mountInfos.name || "Mount Not Found"}`,
+    },
+    {
+      property: "og:description",
+      content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
+    },
+    {
+      property: "og:image",
+      content: `${page.value?.meta.image || mountInfos.icon}`,
     },
   ],
 });

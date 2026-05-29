@@ -1,3 +1,9 @@
+---
+title: "Smoldering Ember Wyrm"
+description: "How to get the Smoldering Ember Wyrm mount from the Return to Karazhan dungeon."
+image: /images/guides/legion/return-to-karazhan/smoldering-ember-wyrm.jpg
+---
+
 ::guides-content
 #desc
 ## Source
