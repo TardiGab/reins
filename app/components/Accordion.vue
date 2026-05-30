@@ -137,7 +137,6 @@ onMounted(() => {
       height: 2px;
       background-color: $yellow;
       z-index: 1;
-      transition: width 0.3s ease;
     }
   }
 
