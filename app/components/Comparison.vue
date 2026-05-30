@@ -600,7 +600,7 @@ const showRightTooltip = ref(false);
     padding: 2rem;
     border-radius: 1rem;
     border: 2px solid $border-container;
-    background-image: url("/images/wooden-background-2.webp");
+    background-image: url("/images/body.webp");
     box-shadow: 0 0 40px 0 #000 inset;
     background-repeat: repeat;
     background-attachment: local;
