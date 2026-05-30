@@ -32,47 +32,59 @@ onMounted(() => {
 </script>
 
 <template>
-  <button class="expansion-title" @click="openAccordion">
+  <div
+    class="expansion-accordion"
+    @click="openAccordion"
+    :aria-expanded="isOpen"
+    :aria-controls="`expansion-${title?.toLocaleLowerCase().replace(/\s/g, '-')}`"
+    role="button"
+  >
     <slot name="header">
-      <h2 class="expansion-title__name">{{ title }}</h2>
-      <div class="expansion-title__completion">
-        <!-- Calcul en premier pour s'assurer qu'il n'y ait pas de div vide, au niveau du span cela créée une div vide si la condition n'est pas remplie -->
-        <div
-          v-if="comparedDiff! - baseDiff! !== 0"
-          :class="[
-            { 'positive-diff': comparedDiff! > baseDiff! },
-            'negative-diff',
-          ]"
-        >
-          <!-- On vérifie la présence de ces valeurs pour éviter NaN sur la vue de gauche -->
-          <span v-if="comparedDiff || baseDiff">
-            {{ comparedDiff! - baseDiff! }}
-          </span>
-        </div>
-        <span>{{ unlockedAmount }}&nbsp;/&nbsp;{{ amount }}</span>
-        <div class="icon" v-if="!isOpen">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
+      <div class="expansion-title">
+        <h2 class="expansion-title__name">{{ title }}</h2>
+        <div class="expansion-title__completion">
+          <!-- Calcul en premier pour s'assurer qu'il n'y ait pas de div vide, au niveau du span cela créée une div vide si la condition n'est pas remplie -->
+          <div
+            v-if="comparedDiff! - baseDiff! !== 0"
+            :class="[
+              { 'positive-diff': comparedDiff! > baseDiff! },
+              'negative-diff',
+            ]"
           >
-            <path fill="#FFD100" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
-          </svg>
-        </div>
-        <div class="icon" v-else>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path fill="#FFD100" d="M19 12.998H5v-2h14z" />
-          </svg>
+            <!-- On vérifie la présence de ces valeurs pour éviter NaN sur la vue de gauche -->
+            <span v-if="comparedDiff || baseDiff">
+              {{ comparedDiff! - baseDiff! }}
+            </span>
+          </div>
+          <span>{{ unlockedAmount }}&nbsp;/&nbsp;{{ amount }}</span>
+          <div class="icon" v-if="!isOpen">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path fill="#FFD100" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
+            </svg>
+          </div>
+          <div class="icon" v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path fill="#FFD100" d="M19 12.998H5v-2h14z" />
+            </svg>
+          </div>
         </div>
       </div>
+      <div
+        class="expansion-accordion__bar"
+        :style="`width: calc(100% - ${((props.amount! - props.unlockedAmount!) / props.amount!) * 100}%)`"
+      ></div>
     </slot>
-  </button>
+  </div>
   <div class="expansion__wrapper" v-if="isOpen">
     <Transition>
       <slot />
@@ -85,24 +97,25 @@ onMounted(() => {
   &__wrapper {
     overflow: hidden;
   }
-  &-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  &-accordion {
+    position: relative;
     background-color: hsl(23, 18%, 12%);
     @include container-border();
     padding: 0.5rem 1rem;
     margin-bottom: 2rem;
-    width: 100%;
+    width: calc(100% - 2rem);
     cursor: pointer;
     transition: all 0.3s ease;
     color: $dark-gray;
     @include border-radius(0.5rem, true);
+    overflow: hidden;
     @supports (corner-shape: bevel) {
       border-radius: $corner-shape-s;
     }
     @media screen and (max-width: 780px) {
       padding: 0.5rem;
+      width: calc(100% - 1rem);
+      margin-bottom: 1rem;
     }
     &:hover {
       color: $light-gray;
@@ -111,6 +124,22 @@ onMounted(() => {
     &:active {
       transform: translate(2px, 2px);
     }
+    &__bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background-color: $yellow;
+      z-index: 1;
+      transition: width 0.3s ease;
+    }
+  }
+
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     &__name,
     span {
       font-weight: 400;
@@ -120,6 +149,14 @@ onMounted(() => {
       margin: 0;
       text-align: left;
     }
+    &__bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background-color: $yellow;
+      z-index: 1;
+    }
     &__completion {
       display: flex;
       flex-direction: row;
@@ -128,9 +165,6 @@ onMounted(() => {
       @media screen and (max-width: 780px) {
         gap: 0.5rem;
       }
-    }
-    @media screen and (max-width: 780px) {
-      margin-bottom: 1rem;
     }
   }
 }
