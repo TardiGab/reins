@@ -209,11 +209,11 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .mounts {
   &-wrapper {
     width: calc(50vw - 2rem);
-    max-height: 80vh;
+    /* max-height: 80vh; */
     @media screen and (max-width: 780px) {
       max-height: none;
       height: 80dvh;

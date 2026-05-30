@@ -442,6 +442,7 @@ const showRightTooltip = ref(false);
         v-if="characterMounts && showLeft"
         @unlocked-amount-o="baseOpenAccordionDiffValue"
         @unlocked-amount="baseClosedAccordionDiffValue"
+        class="comparison__user-mounts"
       />
     </div>
     <div class="comparison__right">
@@ -516,6 +517,7 @@ const showRightTooltip = ref(false);
         :character-mounts="comparedMounts"
         @unlocked-amount-o="comparedOpenAccordionDiffValue"
         @unlocked-amount="comparedAccordionDiffValue"
+        class="comparison__user-mounts"
         v-if="
           comparedMounts &&
           showRight &&
@@ -552,6 +554,9 @@ const showRightTooltip = ref(false);
       min-width: 320px;
       height: 85dvh;
     }
+  }
+  &__user-mounts {
+    max-height: 80vh;
   }
   &__header {
     display: flex;

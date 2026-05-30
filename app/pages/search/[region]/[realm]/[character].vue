@@ -29,7 +29,7 @@ useHead({
 </script>
 
 <template>
-  <div class="character">
+  <main class="character">
     <MountSidePanel class="character__side-panel" />
     <div class="character__right">
       <p class="character__name">
@@ -40,7 +40,7 @@ useHead({
         class="character__collection"
       />
     </div>
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
