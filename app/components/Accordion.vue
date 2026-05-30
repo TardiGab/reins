@@ -81,7 +81,7 @@ onMounted(() => {
       </div>
       <div
         class="expansion-accordion__bar"
-        :style="`width: calc(100% - ${((props.amount! - props.unlockedAmount!) / props.amount!) * 100}%)`"
+        :style="`width: ${100 - ((props.amount! - props.unlockedAmount!) / props.amount!) * 100}%`"
       ></div>
     </slot>
   </div>
