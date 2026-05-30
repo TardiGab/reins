@@ -38,9 +38,9 @@ const emit = defineEmits<{
         :class="[{ ['burger']: !mobileNav }, { ['cross']: mobileNav }]"
         aria-label="Burger menu"
       >
-        <div></div>
-        <div></div>
-        <div></div>
+        <i></i>
+        <i></i>
+        <i></i>
       </button>
     </nav>
     <Transition name="slide">
@@ -272,7 +272,7 @@ const emit = defineEmits<{
   @media screen and (min-width: 781px) {
     display: none;
   }
-  div {
+  i {
     transition: all 0.3s ease;
     width: 1.5rem;
     height: 2px;
@@ -296,7 +296,7 @@ const emit = defineEmits<{
   &.cross {
     transition: all 0.3s ease;
     height: 100%;
-    div {
+    i {
       &:first-child {
         margin: 0;
         transform: translate(0, 7px) rotate(-45deg);

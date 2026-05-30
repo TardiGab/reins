@@ -35,9 +35,11 @@ onMounted(() => {
   <div
     class="expansion-accordion"
     @click="openAccordion"
+    @keypress.enter="openAccordion"
     :aria-expanded="isOpen"
     :aria-controls="`expansion-${title?.toLocaleLowerCase().replace(/\s/g, '-')}`"
     role="button"
+    tabindex="0"
   >
     <slot name="header">
       <div class="expansion-title">
@@ -85,7 +87,11 @@ onMounted(() => {
       ></div>
     </slot>
   </div>
-  <div class="expansion__wrapper" v-if="isOpen">
+  <div
+    class="expansion__wrapper"
+    :id="`expansion-${title?.toLocaleLowerCase().replace(/\s/g, '-')}`"
+    v-if="isOpen"
+  >
     <Transition>
       <slot />
     </Transition>
@@ -192,5 +198,15 @@ onMounted(() => {
     content: "+";
     line-height: 1;
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
