@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { authClient } from "~~/server/lib/auth-client";
+const session = authClient.useSession();
+</script>
+
 <template>
   <div class="side-wrapper">
     <div class="side-container">
@@ -8,6 +13,9 @@
       <div class="side-container--bottom">
         <p class="side-container__user" v-if="$route.params.character">
           Visiting {{ $route.params.character }}'s stable.
+        </p>
+        <p class="side-container__user" v-else>
+          Welcome to your stable, {{ session.data?.user.name }}.
         </p>
         <LoginButton class="side-container__login" />
       </div>

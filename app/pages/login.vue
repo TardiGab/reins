@@ -3,10 +3,10 @@ import { authClient } from "~~/server/lib/auth-client";
 
 const session = authClient.useSession();
 
-watch(
-  () => session.value.data?.session,
-  () => navigateTo("/collection"),
-);
+// watch(
+//   () => session.value.data?.session,
+//   () => navigateTo("/collection"),
+// );
 
 useHead({
   title: "Reins | Login",
@@ -30,6 +30,9 @@ useHead({
           <p class="login__desc">
             See what are the mounts you’re missing by linking your
             Battle.net account!
+          </p>
+          <p class="login__user" v-if="session.data?.user.name">
+            Hello, {{ session.data?.user.name }}
           </p>
           <LoginButton class="login__button" />
           <p class="login__disclamer">

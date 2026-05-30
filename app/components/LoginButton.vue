@@ -13,7 +13,13 @@ function logout() {
 <template>
   <div>
     <button
-      @click="() => authClient.signIn.social({ provider: 'battlenet' })"
+      @click="
+        () =>
+          authClient.signIn.social({
+            provider: 'battlenet',
+            callbackURL: '/collection',
+          })
+      "
       class="login-bnet"
       v-if="!session.data"
     >
@@ -31,7 +37,6 @@ function logout() {
       Login with Battle.net
     </button>
     <div v-else>
-      <p>Hello, {{ session.data?.user.name }}</p>
       <button @click="logout" class="login-bnet">Logout</button>
     </div>
   </div>
