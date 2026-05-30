@@ -37,7 +37,7 @@ li {
     justify-content: space-between;
     padding: 2rem;
     background-color: #1a1512;
-    background-image: url("/images/wooden-background-2.webp");
+    background-image: url("/images/body.webp");
     box-shadow:
       inset 0 0 0 2px $border-container,
       inset 0 0 40px 0 #000;

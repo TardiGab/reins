@@ -133,7 +133,7 @@ const { data: page } = await useAsyncData(route.path, () => {
               class="display-wrapper__wh-link"
               target="_blank"
             >
-              More on Wowhead
+              <span>More on Wowhead</span>
             </a>
 
             <a
@@ -141,7 +141,7 @@ const { data: page } = await useAsyncData(route.path, () => {
               class="display-wrapper__wh-link"
               target="_blank"
             >
-              View 3D model on Wowhead
+              <span>View 3D model on Wowhead</span>
             </a>
           </div>
         </div>

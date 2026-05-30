@@ -196,11 +196,28 @@ const emit = defineEmits<{
       }
     }
     &--gray {
-      background-color: $dark-gray;
-      background-blend-mode: color;
-      border: solid 2px #373737;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 2rem;
+      background-image: url("/images/body.webp");
+      background-color: #5f5f5f;
+      background-blend-mode: difference;
+      border: solid 2px #121212;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: center;
+      color: white !important;
       margin-bottom: 1rem;
-      color: $button-bg-dark;
+      @supports (corner-shape: bevel) {
+        corner-shape: bevel;
+        border-radius: 0.25rem;
+      }
       &::after {
         content: "";
         position: absolute;
@@ -208,11 +225,15 @@ const emit = defineEmits<{
         left: 0;
         width: 100%;
         height: 100%;
-        background: #ffffff;
-        background: radial-gradient(rgba(202, 202, 202, 0.7), rgba(0, 0, 0, 0));
+        background: radial-gradient(rgba(131, 145, 172, 0.5), rgba(0, 0, 0, 0));
         opacity: 0;
         z-index: 0;
         transition: all 0.3s ease;
+      }
+      &:hover {
+        &::after {
+          opacity: 1;
+        }
       }
     }
   }

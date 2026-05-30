@@ -53,8 +53,6 @@ const { data: mountData } = await useFetch<MountInfo>("/api/mount-info", {
   },
 });
 
-console.log(mountData.value);
-
 if (mountData.value?.code === 404) {
   throw createError({
     status: 404,
@@ -140,14 +138,14 @@ const { data: creatureDisplay } = await useFetch(
               class="display-wrapper__wh-link"
               target="_blank"
             >
-              More on Wowhead
+              <span>More on Wowhead</span>
             </a>
             <a
               :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
               class="display-wrapper__wh-link"
               target="_blank"
             >
-              View 3D model on Wowhead
+              <span>View 3D model on Wowhead</span>
             </a>
           </div>
         </div>
@@ -280,6 +278,9 @@ const { data: creatureDisplay } = await useFetch(
     ol {
       margin: 0;
       padding: 0;
+      @media screen and (max-width: 780px) {
+        padding: 0 0.5rem;
+      }
       li {
         margin-bottom: 1rem;
         font-size: $main-size;
@@ -389,24 +390,44 @@ const { data: creatureDisplay } = await useFetch(
   &__wh-link,
   a {
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-shadow: 1px 1px black;
-    font-size: $small;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    background-color: $dark-gray;
-    outline: 2px solid $border-container;
-    @include border-radius(0.5rem, true);
-    width: 100%;
-    transition: background-color 0.3s ease;
+    justify-content: center;
+    padding: 0.5rem 2rem;
+    background-image: url("/images/body.webp");
+    background-color: #5f5f5f;
+    background-blend-mode: difference;
+    border: solid 2px #121212;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
     text-align: center;
-    &:hover {
-      background-color: $light-gray;
-    }
-  }
-  a {
+    width: 100%;
     color: white !important;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: 0.25rem;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(rgba(131, 145, 172, 0.5), rgba(0, 0, 0, 0));
+      opacity: 0;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
   }
   &__img {
     @include border-radius(1rem, true);

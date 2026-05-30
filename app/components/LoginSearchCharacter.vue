@@ -43,7 +43,6 @@ const baseSearch = async () => {
           :region-choosed="regionChoosed"
           @realm="realmSelected"
           class="login__realm"
-          :disabled="!regionChoosed"
         />
         <div class="search__input-container">
           <svg
