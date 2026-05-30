@@ -5,7 +5,7 @@ const session = authClient.useSession();
 
 watch(
   () => session.value.data?.session,
-  () => navigateTo("/"),
+  () => navigateTo("/collection"),
 );
 
 useHead({
