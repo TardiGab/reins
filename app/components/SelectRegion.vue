@@ -108,10 +108,6 @@ onUnmounted(() => {
 
 .region-choice {
   position: relative;
-  width: 50%;
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-  }
   &__container {
     min-width: 10%;
     position: relative;

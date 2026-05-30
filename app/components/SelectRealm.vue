@@ -164,11 +164,7 @@ watch(
 <style scoped lang="scss">
 .realm-choice {
   position: relative;
-  width: 70%;
   font-size: $main-size;
-  @media screen and (max-width: 1024px) {
-    width: 100%;
-  }
   &__container {
     min-width: 10%;
     width: 100%;

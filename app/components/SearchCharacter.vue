@@ -122,8 +122,12 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         <strong>Step 2:</strong> Search for your friend's character.
       </span>
       <div class="search__container">
-        <SelectRegion @region="regionSelected" />
-        <SelectRealm :region-choosed="regionChoosed" @realm="realmSelected" />
+        <SelectRegion @region="regionSelected" class="search__region" />
+        <SelectRealm
+          :region-choosed="regionChoosed"
+          @realm="realmSelected"
+          class="search__realm"
+        />
         <div class="search__input-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -205,6 +209,18 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
   display: flex;
   gap: 1rem;
   flex-direction: column;
+  &__region {
+    width: 50%;
+    @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
+  }
+  &__realm {
+    width: 70%;
+    @media screen and (max-width: 1024px) {
+      width: 100%;
+    }
+  }
   &__container {
     display: flex;
     width: 100%;
