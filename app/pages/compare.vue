@@ -5,19 +5,25 @@ useHead({
 </script>
 
 <template>
-  <div class="compare-text">
-    <h1 class="compare-h1">Check your friends' mount collection!</h1>
-    <p class="compare-p">
-      Search for your friend's character's realm and enter their name to view
-      their mount collection. If you've linked your Battle.net account to Reins,
-      you can choose one of your own characters to be compared with.
-    </p>
-  </div>
+  <main class="compare">
+    <div class="compare-text">
+      <h1 class="compare-h1">Check your friends' mount collection!</h1>
+      <p class="compare-p">
+        Search for your friend's character's realm and enter their name to view
+        their mount collection. If you've linked your Battle.net account to
+        Reins, you can choose one of your own characters to be compared with.
+      </p>
+    </div>
 
-  <SearchCharacter />
+    <SearchCharacter />
+  </main>
 </template>
 
 <style lang="scss">
+.compare {
+  min-height: 55vh;
+}
+
 .compare-text {
   margin: 4rem 0;
 }
