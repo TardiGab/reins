@@ -42,6 +42,7 @@ const handleNavOpened = (state: boolean) => {
 <template>
   <Header @nav-opened="handleNavOpened" />
   <NuxtPage class="content" :class="{ 'nav-opened': navState }" />
+  <Footer />
 </template>
 
 <style lang="scss">

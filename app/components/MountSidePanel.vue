@@ -11,12 +11,19 @@ const session = authClient.useSession();
         <RandomMount />
       </div>
       <div class="side-container--bottom">
-        <p class="side-container__user" v-if="$route.params.character">
-          Visiting {{ $route.params.character }}'s stable.
-        </p>
-        <p class="side-container__user" v-else>
-          Welcome to your stable, {{ session.data?.user.name }}.
-        </p>
+        <div class="visiting">
+          <div class="visiting__guest" v-if="$route.params.character">
+            <p class="visiting__p" v-if="$route.params.character">
+              Visiting {{ $route.params.character }}'s stable.
+            </p>
+            <NuxtLink to="/" class="visiting__link">
+              <span class="visiting__link-text">Change character</span>
+            </NuxtLink>
+          </div>
+          <p class="visiting__p" v-else>
+            Welcome to your stable, {{ session.data?.user.name }}.
+          </p>
+        </div>
         <LoginButton class="side-container__login" />
       </div>
     </div>
@@ -74,6 +81,7 @@ li {
     &__user {
       font-size: 1rem;
       margin-bottom: 2rem;
+      line-height: 1.4;
     }
     &__login {
       margin-top: 1rem;
@@ -87,6 +95,54 @@ li {
         height: 1px;
         background-color: $yellow;
       }
+    }
+  }
+}
+
+.visiting {
+  padding: 1rem 0;
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 2rem;
+    background-image: url("/images/body.webp");
+    background-color: #5f5f5f;
+    background-blend-mode: difference;
+    border: solid 2px #121212;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    color: white !important;
+    @supports (corner-shape: bevel) {
+      corner-shape: bevel;
+      border-radius: 0.25rem;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(rgba(131, 145, 172, 0.5), rgba(0, 0, 0, 0));
+      opacity: 0;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
+    &-text {
+      position: relative;
+      z-index: 1;
     }
   }
 }
