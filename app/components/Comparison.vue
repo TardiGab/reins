@@ -288,7 +288,7 @@ watch(
       url.searchParams.delete("crealm");
       url.searchParams.delete("ccharacter");
       history.pushState({}, "", url.href);
-      comparedClear();
+      comparedMounts.value = [];
     }
   },
 );
@@ -302,7 +302,7 @@ watch(
       url.searchParams.delete("realm");
       url.searchParams.delete("character");
       history.pushState({}, "", url.href);
-      baseClear();
+      characterMounts.value = [];
     }
   },
 );
