@@ -30,9 +30,30 @@ const { data: page } = await useAsyncData(route.path, () => {
       color: white;
     }
   }
-  p {
-    font-size: 1.1rem;
-    line-height: 1.6;
+  h4 {
+    font-size: $main-size;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    a {
+      color: white;
+    }
+  }
+  p,
+  li {
+    font-size: $main-size;
+    line-height: 1.4;
+    a {
+      color: white;
+      text-decoration: none;
+      transition: filter 0.3s ease;
+      &:hover {
+        filter: brightness(0.7);
+      }
+      &:visited {
+        color: white;
+        filter: brightness(0.7);
+      }
+    }
   }
 }
 </style>
