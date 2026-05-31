@@ -26,9 +26,9 @@
       <div class="footer__content-right">
         <nav class="footer__nav">
           <ul class="footer__nav-list">
-            <li class="footer__nav-item">
+            <!-- <li class="footer__nav-item">
               <NuxtLink to="/about" class="footer__nav-link"> About </NuxtLink>
-            </li>
+            </li> -->
             <li class="footer__nav-item">
               <NuxtLink to="/credits" class="footer__nav-link">
                 Credits
@@ -43,11 +43,11 @@
                 Report an issue
               </NuxtLink>
             </li>
-            <li class="footer__nav-item">
+            <!-- <li class="footer__nav-item">
               <NuxtLink to="/privacy-policy" class="footer__nav-link">
                 Privacy Policy
               </NuxtLink>
-            </li>
+            </li> -->
           </ul>
         </nav>
       </div>
