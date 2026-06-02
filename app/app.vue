@@ -40,6 +40,7 @@ const handleNavOpened = (state: boolean) => {
 </script>
 
 <template>
+  <NuxtLoadingIndicator color="#FFD100" />
   <Header @nav-opened="handleNavOpened" />
   <NuxtPage class="content" :class="{ 'nav-opened': navState }" />
   <Footer />
