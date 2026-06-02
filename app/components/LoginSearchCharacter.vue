@@ -1,14 +1,4 @@
 <script setup lang="ts">
-interface CharactersMounts {
-  mounts: {
-    mount: {
-      key: { href: string };
-      name: string;
-      id: number;
-    };
-  };
-}
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;

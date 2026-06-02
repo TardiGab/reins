@@ -1,7 +1,6 @@
 export const getBlizzAccessToken = async (status: number) => {
   let blizzToken;
   if (status >= 400 && status < 500) {
-    // console.log("Retrieving new access token...");
     const response = await fetch("https://oauth.battle.net/token", {
       method: "POST",
       headers: {

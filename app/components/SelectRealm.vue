@@ -1,20 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-
-const realmsIndexEu = ref();
-const realmsIndexUs = ref();
-const realmsIndexKr = ref();
-const realmsIndexTw = ref();
-// const realmsIndexCn = ref<Realms>();
-
-// const { data: realmsIndexEu } = await useLazyFetch<Realms>("/api/realms-eu");
-// const { data: realmsIndexUs } = await useLazyFetch<Realms>("/api/realms-us");
-// const { data: realmsIndexKr } = await useLazyFetch<Realms>("/api/realms-kr");
-// const { data: realmsIndexTw } = await useLazyFetch<Realms>("/api/realms-tw");
-// const { data: realmsIndexCn } = await useFetch("/api/realms-cn");
-
-// console.log(realmsIndexCn.value);
-
 // Combobox créé à l'aide de ce tutoriel : https://www.youtube.com/watch?v=KlMIf0_48b8, à mettre en page
 const props = defineProps<{
   regionChoosed?: string;

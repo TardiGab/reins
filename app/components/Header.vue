@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import { authClient } from "~~/server/lib/auth-client";
-const session = authClient.useSession();
-// async function refreshMounts() {
-//   await refreshNuxtData("user-mounts");
-// }
-
 const mobileNav = ref<boolean>(false);
 
 const emit = defineEmits<{
@@ -17,7 +11,6 @@ const emit = defineEmits<{
     <!-- <form action="" method="post" class="search">
       <input type="text" placeholder="Search mount" class="search__input" />
     </form> -->
-    <!-- <button @click="refreshMounts()">Refresh user mounts data</button> -->
     <nav class="nav">
       <div class="nav--left">
         <NuxtLink to="/" class="nav__logo">

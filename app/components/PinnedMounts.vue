@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { authClient } from "~~/server/lib/auth-client";
-import globalMounts from "@/assets/data/mounts.json";
 
 interface PinnedMounts {
   id: number;

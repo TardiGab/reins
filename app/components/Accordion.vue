@@ -82,7 +82,7 @@ onMounted(() => {
         </div>
       </div>
       <div
-        class="expansion-accordion__bar"
+        class="expansion__completion-bar"
         :style="`width: ${100 - ((props.amount! - props.unlockedAmount!) / props.amount!) * 100}%`"
       ></div>
     </slot>
@@ -100,6 +100,14 @@ onMounted(() => {
 .expansion {
   &__wrapper {
     overflow: hidden;
+  }
+  &__completion-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: $yellow;
+    z-index: 1;
   }
   &__accordion {
     position: relative;
@@ -128,14 +136,6 @@ onMounted(() => {
     &:active {
       transform: translate(2px, 2px);
     }
-    &__bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 2px;
-      background-color: $yellow;
-      z-index: 1;
-    }
   }
 
   &-title {
@@ -151,14 +151,6 @@ onMounted(() => {
       padding: 0;
       margin: 0;
       text-align: left;
-    }
-    &__bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 2px;
-      background-color: $yellow;
-      z-index: 1;
     }
     &__completion {
       display: flex;
