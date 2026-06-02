@@ -1,5 +1,4 @@
 import { neon } from "@neondatabase/serverless";
-import { auth } from "../lib/auth";
 
 export default defineEventHandler(async (event) => {
   const sql = neon(process.env.DATABASE_URL!);

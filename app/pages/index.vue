@@ -3,10 +3,10 @@ import { authClient } from "~~/server/lib/auth-client";
 
 const session = authClient.useSession();
 
-watch(
-  () => session.value.data?.session,
-  () => navigateTo("/collection"),
-);
+// watch(
+//   () => session.value.data?.session,
+//   () => navigateTo("/collection"),
+// );
 
 useHead({
   title: "Reins | Login",
@@ -31,6 +31,12 @@ useHead({
             See what are the mounts you’re missing by linking your
             Battle.net account!
           </p>
+          <div class="login__logged" v-if="session.data?.user.name">
+            <p class="login__user">Hello, {{ session.data?.user.name }}</p>
+            <NuxtLink to="/collection" class="login__button"
+              >Go to my collection</NuxtLink
+            >
+          </div>
           <LoginButton class="login__button" />
           <p class="login__disclamer">
             We do not have access to your email address or password. Your

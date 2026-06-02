@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   const url = `https://${query.region.toLocaleLowerCase()}.api.blizzard.com/profile/wow/character/${query.realm}/${query.character.toLocaleLowerCase()}?namespace=profile-${query.region.toLocaleLowerCase()}&locale=en_US`;
 
-  const mountsResponse = await fetch(url, {
+  const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -42,5 +42,5 @@ export default defineEventHandler(async (event) => {
     });
     return await response.json();
   }
-  return mountsResponse;
+  return response;
 });

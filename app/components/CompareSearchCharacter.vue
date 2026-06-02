@@ -135,8 +135,6 @@ const search = async () => {
 
   randomLoadingValue = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
-  // Voir pourquoi le typage est pas bon
-  // console.log(characterSearch.value?.trim());
   emit("character", characterSearch.value?.trim() as string);
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
