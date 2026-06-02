@@ -515,6 +515,7 @@ const showRightTooltip = ref(false);
         :base-diff="baseDiffArray"
         :compared-diff="comparedDiffArray"
         :character-mounts="comparedMounts"
+        :baseMounts="characterMounts"
         @unlocked-amount-o="comparedOpenAccordionDiffValue"
         @unlocked-amount="comparedAccordionDiffValue"
         class="comparison__user-mounts"

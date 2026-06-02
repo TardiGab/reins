@@ -17,9 +17,14 @@ const props = defineProps<{
   amount?: number;
   unlockedAmount?: number;
   characterMounts?: Mount[];
+  baseMounts?: Mount[];
 }>();
 
 const userMountsIds = props.characterMounts?.map((item: any) => {
+  return item.mount.id;
+});
+
+const baseMountsIds = props.baseMounts?.map((item: any) => {
   return item.mount.id;
 });
 
@@ -38,6 +43,7 @@ interface CategoryOwnedMounts {
   unlockedAmount: number;
 }
 const ownedMountArray: number[] = [];
+const leftOwnedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
 let numberOfMountsUnlocked = 0;
 let totalMountNumber: number = 0;
@@ -77,6 +83,13 @@ mountsGlobal.forEach((item, i) => {
           categoryOwnedMountsArray[i].subCategories[index].unlockedAmount += 1;
           categoryOwnedMountsArray[i].unlockedAmount += 1;
         }
+      }
+      if (
+        baseMountsIds &&
+        baseMountsIds.includes(mount.ID) &&
+        !userMountsIds?.includes(mount.ID)
+      ) {
+        leftOwnedMountArray.push(mount.ID);
       }
     });
   });
@@ -126,6 +139,9 @@ onMounted(() => {
                   class="mount-item"
                   :class="{
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
+                    'mount-item__base-owned': leftOwnedMountArray.includes(
+                      mount.ID,
+                    ),
                   }"
                 >
                   <NuxtLink
@@ -179,6 +195,9 @@ onMounted(() => {
                   class="mount-item"
                   :class="{
                     'mount-item__owned': ownedMountArray.includes(mount.ID),
+                    'mount-item__base-owned': leftOwnedMountArray.includes(
+                      mount.ID,
+                    ),
                   }"
                 >
                   <NuxtLink
@@ -217,6 +236,17 @@ onMounted(() => {
       max-height: none;
       height: 80dvh;
       width: 100%;
+    }
+  }
+}
+
+.mount {
+  &-item {
+    &__base-owned {
+      filter: grayscale(0%) opacity(0.4);
+      &:hover {
+        filter: grayscale(0%) opacity(1);
+      }
     }
   }
 }
