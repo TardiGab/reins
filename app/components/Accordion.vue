@@ -33,7 +33,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="expansion-accordion"
+    class="expansion__accordion"
     @click="openAccordion"
     @keypress.enter="openAccordion"
     :aria-expanded="isOpen"
@@ -92,9 +92,7 @@ onMounted(() => {
     :id="`expansion-${title?.toLocaleLowerCase().replace(/\s/g, '-')}`"
     v-if="isOpen"
   >
-    <Transition>
-      <slot />
-    </Transition>
+    <slot />
   </div>
 </template>
 
@@ -103,7 +101,7 @@ onMounted(() => {
   &__wrapper {
     overflow: hidden;
   }
-  &-accordion {
+  &__accordion {
     position: relative;
     background-color: hsl(23, 18%, 12%);
     @include container-border();
@@ -197,15 +195,5 @@ onMounted(() => {
     content: "+";
     line-height: 1;
   }
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 </style>

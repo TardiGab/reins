@@ -145,5 +145,10 @@ li {
       z-index: 1;
     }
   }
+  &__p {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0;
+  }
 }
 </style>
