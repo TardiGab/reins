@@ -75,7 +75,11 @@ async function pinMount(
       <button
         class="random-mount__btn"
         @click="getRandomMount"
-        :disabled="!session.data?.session"
+        :disabled="
+          !session.data?.session ||
+          randomMountArray.length === 0 ||
+          $route.name === 'search-region-realm-character'
+        "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +96,14 @@ async function pinMount(
         </svg>
       </button>
     </div>
-    <div class="mount-item" v-if="session.data?.session">
+    <div
+      class="mount-item"
+      v-if="
+        session.data?.session &&
+        randomMountArray.length > 0 &&
+        $route.name !== 'search-region-realm-character'
+      "
+    >
       <NuxtLink
         :to="{
           name: 'mount-guide',
@@ -102,7 +113,6 @@ async function pinMount(
               .toLowerCase(),
           },
         }"
-        target="_blank"
         class="mount-item__link"
         :data-wowhead="`item=${randomMountArray[randomResponse].itemId}`"
       >
@@ -136,6 +146,23 @@ async function pinMount(
           />
         </svg>
       </button>
+    </div>
+    <div
+      class="random-mount--message"
+      v-if="$route.name === 'search-region-realm-character'"
+    >
+      <span>
+        Please go to your collection page to get a random mount suggestion
+      </span>
+    </div>
+    <div
+      class="random-mount--message"
+      v-else-if="
+        randomMountArray.length === 0 &&
+        $route.name !== 'search-region-realm-character'
+      "
+    >
+      <span> No mounts available </span>
     </div>
     <div v-else class="random-mount--message">
       <span>Please log in to get a random mount suggestion</span>

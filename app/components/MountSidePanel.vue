@@ -24,7 +24,14 @@ const session = authClient.useSession();
             Welcome to your stable, {{ session.data?.user.name }}.
           </p>
         </div>
-        <LoginButton class="side-container__login" />
+        <NuxtLink
+          v-if="session.data?.user.id"
+          to="/collection"
+          class="visiting__link visiting__link--collection"
+        >
+          <span class="visiting__link-text">Go to my collection</span>
+        </NuxtLink>
+        <LoginButton class="side-container__login" v-else />
       </div>
     </div>
   </div>
@@ -101,6 +108,9 @@ li {
 
 .visiting {
   padding: 1rem 0;
+  &__guest {
+    margin-bottom: 0.5rem;
+  }
   &__link {
     display: flex;
     align-items: center;
@@ -115,10 +125,10 @@ li {
     transition: all 0.3s ease;
     text-decoration: none;
     position: relative;
-    overflow: hidden;
     cursor: pointer;
     text-align: center;
-    color: white !important;
+    color: white;
+    text-shadow: 1px 1px black;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
       border-radius: 0.25rem;
@@ -140,6 +150,50 @@ li {
         opacity: 1;
       }
     }
+    &--collection {
+      color: $yellow;
+      padding: 0.5rem 2rem;
+      background-image: url("/images/body.webp");
+      background-color: $red;
+      background-blend-mode: luminosity;
+      border: solid 2px #2d0000;
+      font-size: $small;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      display: block;
+      @include border-radius(0.5rem, true);
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: -1rem;
+        width: 100%;
+        height: 1px;
+        background-color: $yellow;
+        box-shadow: 1px 1px black;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #ff0400;
+        background: radial-gradient(rgba(182, 3, 0, 0.7), rgba(0, 0, 0, 0));
+        opacity: 0;
+        z-index: 0;
+        transition: all 0.3s ease;
+      }
+      &:hover {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
     &-text {
       position: relative;
       z-index: 1;
@@ -149,6 +203,7 @@ li {
     font-size: 1rem;
     line-height: 1.4;
     margin: 0;
+    margin-bottom: 0.5rem;
   }
 }
 </style>

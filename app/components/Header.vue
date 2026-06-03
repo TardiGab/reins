@@ -237,6 +237,7 @@ const emit = defineEmits<{
     text-align: center;
     z-index: 1;
     font-size: 1rem;
+    text-shadow: 1px 1px black;
   }
 }
 

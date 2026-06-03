@@ -56,7 +56,11 @@ const baseSearch = async () => {
           />
         </div>
 
-        <button @click="baseSearch" class="search__button">
+        <button
+          @click="baseSearch"
+          class="search__button"
+          :disabled="!realmChoosed || !baseCharacterSearch"
+        >
           <span class="search__button--label">Search</span>
         </button>
       </div>

@@ -57,6 +57,12 @@ onMounted(() => {
       <div v-if="pinnedMounts?.length === 0" class="pinned-mounts--message">
         <span>You don't have any mounts pinned</span>
       </div>
+      <div
+        v-if="$route.name === 'search-region-realm-character'"
+        class="pinned-mounts--message"
+      >
+        <span>Please go to your collection page to pin mounts</span>
+      </div>
       <ul class="pinned-mounts__list" v-else>
         <li v-for="mount in pinnedMounts" :key="mount.id">
           <div

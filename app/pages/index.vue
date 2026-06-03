@@ -14,7 +14,7 @@ useHead({
     {
       name: "description",
       content:
-        "Link your Battle.net account to Reins and see what mounts you're missing in World of Warcraft!",
+        "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
     },
   ],
 });
@@ -33,9 +33,9 @@ useHead({
           </p>
           <div class="login__logged" v-if="session.data?.user.name">
             <p class="login__user">Hello, {{ session.data?.user.name }}</p>
-            <NuxtLink to="/collection" class="login__button"
-              >Go to my collection</NuxtLink
-            >
+            <NuxtLink to="/collection" class="login__collection-link">
+              <span class="login__collection-text">Go to my collection</span>
+            </NuxtLink>
           </div>
           <LoginButton class="login__button" />
           <p class="login__disclamer">
@@ -171,6 +171,64 @@ useHead({
   &__button {
     font-size: $main-size;
     padding: 1rem 0;
+  }
+  &__user {
+    font-size: $main-size;
+    margin: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-shadow: 1px 1px black;
+  }
+  &__collection-link {
+    color: $yellow;
+    padding: 0.5rem 2rem;
+    margin-bottom: 1rem;
+    background-image: url("/images/body.webp");
+    background-color: $red;
+    background-blend-mode: luminosity;
+    border: solid 2px #2d0000;
+    font-size: $main-size;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative;
+    display: block;
+    @include border-radius(0.5rem, true);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1rem;
+      width: 100%;
+      height: 1px;
+      background-color: $dark-gray;
+      box-shadow: 1px 1px black;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ff0400;
+      background: radial-gradient(rgba(182, 3, 0, 0.7), rgba(0, 0, 0, 0));
+      opacity: 0;
+      z-index: 0;
+      transition: all 0.3s ease;
+    }
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+  &__collection-text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px black;
   }
 }
 </style>

@@ -29,7 +29,6 @@ a {
   border-radius: 1rem;
   border: 2px solid $border-container;
   overflow: hidden;
-  // width: 80%;
   margin: auto;
   position: relative;
   height: 85dvh;
@@ -125,7 +124,6 @@ a {
   filter: grayscale(100%);
   font-size: 1rem;
   transition: all 0.3s;
-  padding: 0.5rem;
   box-sizing: border-box;
   position: relative;
 
@@ -164,14 +162,6 @@ a {
     background-color: #28221c;
     box-shadow: inset 0px 0px 0px 2px $border-container, inset 0px 0px 0px 3px black;
 
-
-    // border-radius: 0.5rem;
-
-    // @supports (corner-shape: bevel) {
-    //   corner-shape: bevel;
-    //   border-radius: $corner-shape-s;
-    // }
-
     .mount-item__pin-btn {
       opacity: 100%;
     }
@@ -192,6 +182,7 @@ a {
     align-items: center;
     gap: 0.5rem;
     color: #595959;
+    padding: 0.5rem;
   }
 
   &__icon {
