@@ -25,7 +25,7 @@ const session = authClient.useSession();
           </p>
         </div>
         <NuxtLink
-          v-if="session.data?.user.id"
+          v-if="session.data?.user.id && $route.name !== 'collection'"
           to="/collection"
           class="visiting__link visiting__link--collection"
         >
