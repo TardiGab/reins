@@ -164,7 +164,7 @@ async function pinMount(
     >
       <span> No mounts available </span>
     </div>
-    <div v-else class="random-mount--message">
+    <div v-else-if="!session.data?.user.id" class="random-mount--message">
       <span>Please log in to get a random mount suggestion</span>
     </div>
   </div>
