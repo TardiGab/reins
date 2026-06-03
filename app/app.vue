@@ -13,7 +13,7 @@ useHead({
   link: [
     {
       rel: "stylesheet",
-      href: "https://use.typekit.net/wyy1zbc.css",
+      href: "https://use.typekit.net/wyy1zbc.css&display=swap",
     },
   ],
 });
