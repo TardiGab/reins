@@ -99,9 +99,10 @@ let loadingText = ref<string[]>([
   "Cleaning stable...",
   "Gathering horseshoes...",
   "Mrglglglglgl!",
+  "Looking for mounts...",
 ]);
 
-let randomLoadingValue: number;
+const randomLoadingValue = ref<number>(0);
 
 const avatar = ref();
 
@@ -133,7 +134,7 @@ const search = async () => {
     avatar.value = await comparedCharacterRender.value[0].value;
   }
 
-  randomLoadingValue = random(0, loadingText.value.length - 1);
+  randomLoadingValue.value = random(0, loadingText.value.length - 1);
   emit("compared-mounts", comparedMounts.value);
   emit("character", characterSearch.value?.trim() as string);
   emit("realm", realmChoosed.value);
@@ -183,8 +184,8 @@ const search = async () => {
       <span class="search__button--label">Search</span>
     </button>
 
-    <div class="loader" v-if="loading === 'pending'">
-      <span class="loader__text">{{ loadingText[randomLoadingValue] }}</span>
+    <div class="loader" v-if="loading === 'pending' || loading === 'success'">
+      <p class="loader__text">{{ loadingText[randomLoadingValue] }}</p>
     </div>
   </div>
 </template>
@@ -291,6 +292,15 @@ const search = async () => {
         opacity: 1;
       }
     }
+  }
+}
+
+.loader {
+  width: 100%;
+  &__text {
+    margin: 0;
+    font-size: $small;
+    text-align: center;
   }
 }
 </style>
