@@ -18,6 +18,10 @@
 - [Why are developers still using div for buttons in 2026?](https://medium.com/@alexdev82/why-are-developers-still-using-div-for-buttons-in-2026-2eb81e93e1a9)
 - [Mount List from SimpleArmory (MIT License on GitHub)](https://github.com/kevinclement/SimpleArmory?tab=MIT-1-ov-file)
 
+### Fonts used
+- [Sentient](https://fontshare.com/fonts/sentient) by [Indian Type Foundry](https://fontshare.com/?q=Indian%20Type%20Foundry)
+- [Tiller](https://fortfoundry.com/fonts/tiller) by [Brian Brubaker](http://www.behance.net/brianbrubaker)
+
 ### AI Usage
 Gemini was used for certain technical issues when a Google search wasn't enough. 
 #### Prompts 
