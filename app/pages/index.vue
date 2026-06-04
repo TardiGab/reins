@@ -33,7 +33,13 @@ useHead({
           </p>
           <div class="login__logged" v-if="session.data?.user.name">
             <p class="login__user">Hello, {{ session.data?.user.name }}</p>
-            <NuxtLink to="/collection" class="login__collection-link">
+            <p
+              v-if="$route.query.session === 'expired'"
+              class="login__disclamer"
+            >
+              Your session is expired. Please log out and log back in.
+            </p>
+            <NuxtLink to="/collection" class="login__collection-link" v-else>
               <span class="login__collection-text">Go to my collection</span>
             </NuxtLink>
           </div>
