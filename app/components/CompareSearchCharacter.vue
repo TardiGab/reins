@@ -32,7 +32,13 @@ const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
+const fullRealmString = ref<string>();
+const realmString = (realm: string) => {
+  fullRealmString.value = realm;
+};
+
 const characterSearch = ref<string>();
+const searchString = ref<string>();
 
 const emit = defineEmits<{
   (e: "profile", profile: Profile): void;
@@ -49,6 +55,7 @@ const {
   data: comparedMounts,
   execute: go,
   status: loading,
+  clear: clearComparedMounts,
 } = await useLazyFetch("/api/character-mounts", {
   query: {
     region: regionChoosed,
@@ -110,19 +117,16 @@ const totalOwnedNumber = ref<number>();
 const useableNumber = ref<number>();
 const useableNumberArray = ref<string[]>([]);
 
+const showError = ref<boolean>(false);
+
 const search = async () => {
+  clearComparedMounts();
   await go();
   await comparedRenderGo();
   await profileGo();
   await charProfileGo();
 
-  if (comparedMounts.value) {
-    comparedMounts.value.forEach((item: any) => {
-      if (item.is_useable) {
-        useableNumberArray.value.push(item.mount.name);
-      }
-    });
-  }
+  searchString.value = characterSearch.value?.trim() as string;
 
   if (comparedMounts.value) {
     totalOwnedNumber.value = comparedMounts.value.length;
@@ -135,7 +139,19 @@ const search = async () => {
   }
 
   randomLoadingValue.value = random(0, loadingText.value.length - 1);
-  emit("compared-mounts", comparedMounts.value);
+  if (await comparedMounts.value) {
+    showError.value = false;
+    emit("compared-mounts", await comparedMounts.value);
+    await comparedMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        useableNumberArray.value.push(item.mount.name);
+      }
+    });
+  } else {
+    showError.value = true;
+    return;
+  }
+  console.log("useableNumberArray", useableNumberArray.value.length);
   emit("character", characterSearch.value?.trim() as string);
   emit("realm", realmChoosed.value);
   emit("region", regionChoosed.value);
@@ -156,6 +172,7 @@ const search = async () => {
     <SelectRealm
       :region-choosed="regionChoosed"
       @realm="realmSelected"
+      @complete-realm="realmString"
       class="search__realm"
     />
     <div class="search__input-container">
@@ -180,12 +197,24 @@ const search = async () => {
       />
     </div>
 
-    <button @click="search" class="search__button">
+    <button @click="search" class="search__button" :disabled="!characterSearch">
       <span class="search__button--label">Search</span>
     </button>
 
-    <div class="loader" v-if="loading === 'pending' || loading === 'success'">
-      <p class="loader__text">{{ loadingText[randomLoadingValue] }}</p>
+    <div
+      class="loader"
+      v-if="loading === 'pending' || (loading === 'success' && !showError)"
+    >
+      <p class="loader__text">
+        {{ loadingText[randomLoadingValue] }}
+      </p>
+    </div>
+    <div class="error" v-if="showError && searchString">
+      <p class="error__text">
+        Character named <span>{{ searchString }}</span> not found on
+        <span>{{ regionChoosed }}</span> - <span>{{ fullRealmString }}</span
+        >.
+      </p>
     </div>
   </div>
 </template>
@@ -292,15 +321,28 @@ const search = async () => {
         opacity: 1;
       }
     }
+    &:disabled {
+      cursor: not-allowed;
+      filter: grayscale(50%);
+      &:hover {
+        &::after {
+          opacity: 0;
+        }
+      }
+    }
   }
 }
 
-.loader {
+.loader,
+.error {
   width: 100%;
   &__text {
     margin: 0;
     font-size: $small;
     text-align: center;
+    span {
+      color: $yellow;
+    }
   }
 }
 </style>

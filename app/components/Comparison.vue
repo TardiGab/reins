@@ -226,7 +226,8 @@ onMounted(async () => {
 // Modification du lien quand on fait une recherche
 
 watch(
-  () => comparedCharacterName.value,
+  () =>
+    comparedCharacterName.value && comparedRealm.value && comparedRegion.value,
   () => {
     if (
       comparedRegion.value &&
@@ -251,8 +252,8 @@ watch(
   },
 );
 watch(
-  () => baseCharacterName.value,
-  async () => {
+  () => baseRegion.value && baseRealm.value && baseCharacterName.value,
+  () => {
     if (
       baseRegion.value &&
       baseRealm.value &&
@@ -289,6 +290,7 @@ watch(
       url.searchParams.delete("ccharacter");
       history.pushState({}, "", url.href);
       comparedMounts.value = [];
+      comparedClear();
     }
   },
 );
@@ -303,6 +305,8 @@ watch(
       url.searchParams.delete("character");
       history.pushState({}, "", url.href);
       characterMounts.value = [];
+      baseClear();
+      console.log(characterMounts.value);
     }
   },
 );
