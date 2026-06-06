@@ -237,12 +237,6 @@ const comparedSearch = () => {
       ccharacter: comparedCharacterName.value,
     },
   });
-  console.log(
-    comparedRegion.value,
-    comparedRealm.value,
-    comparedCharacterName.value,
-  );
-  console.log("navigated to compared search");
   showRight.value = true;
 };
 

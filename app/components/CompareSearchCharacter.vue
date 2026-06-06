@@ -125,6 +125,9 @@ const useableNumberArray = ref<string[]>([]);
 const showError = ref<boolean>(false);
 
 const search = async () => {
+  if (showError.value === true) {
+    showError.value = false;
+  }
   clearComparedMounts();
   await go();
   await comparedRenderGo();
@@ -145,7 +148,7 @@ const search = async () => {
 
   randomLoadingValue.value = random(0, loadingText.value.length - 1);
   if (await comparedMounts.value) {
-    showError.value = false;
+    // showError.value = false;
     emit("character", characterSearch.value?.trim() as string);
     emit("realm", realmChoosed.value);
     emit("region", regionChoosed.value);
@@ -161,12 +164,10 @@ const search = async () => {
         useableNumberArray.value.push(item.mount.name);
       }
     });
-    console.log("Character found");
   } else {
     errorRegion.value = regionChoosed.value;
     errorRealm.value = fullRealmString.value;
     showError.value = true;
-    console.log("Character not found");
     return;
   }
 };
