@@ -306,7 +306,6 @@ watch(
       history.pushState({}, "", url.href);
       characterMounts.value = [];
       baseClear();
-      console.log(characterMounts.value);
     }
   },
 );

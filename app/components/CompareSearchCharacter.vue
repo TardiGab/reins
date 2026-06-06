@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { random } from "#imports";
+
 interface Profile {
   name: string;
   level: number;
@@ -20,22 +22,25 @@ interface Profile {
   };
 }
 
-import { random } from "#imports";
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
 };
 
+// Realm slug
 const realmChoosed = ref<string>("");
 const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
+// Realm name
 const fullRealmString = ref<string>();
 const realmString = (realm: string) => {
   fullRealmString.value = realm;
 };
+
+const errorRealm = ref<string>();
+const errorRegion = ref<string>();
 
 const characterSearch = ref<string>();
 const searchString = ref<string>();
@@ -148,6 +153,8 @@ const search = async () => {
       }
     });
   } else {
+    errorRegion.value = regionChoosed.value;
+    errorRealm.value = fullRealmString.value;
     showError.value = true;
     return;
   }
@@ -157,11 +164,9 @@ const search = async () => {
   emit("region", regionChoosed.value);
   emit("avatar", avatar.value);
   emit("profile", characterProfile.value);
+  emit("useable-number", useableNumber.value);
   if (totalOwnedNumber.value) {
     emit("total-owned", totalOwnedNumber.value);
-  }
-  if (useableNumber.value) {
-    emit("useable-number", useableNumber.value);
   }
 };
 </script>
@@ -212,7 +217,7 @@ const search = async () => {
     <div class="error" v-if="showError && searchString">
       <p class="error__text">
         Character named <span>{{ searchString }}</span> not found on
-        <span>{{ regionChoosed }}</span> - <span>{{ fullRealmString }}</span
+        <span>{{ regionChoosed }} - {{ errorRealm }}</span
         >.
       </p>
     </div>
