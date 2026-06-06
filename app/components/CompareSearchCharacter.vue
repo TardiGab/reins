@@ -146,27 +146,28 @@ const search = async () => {
   randomLoadingValue.value = random(0, loadingText.value.length - 1);
   if (await comparedMounts.value) {
     showError.value = false;
+    emit("character", characterSearch.value?.trim() as string);
+    emit("realm", realmChoosed.value);
+    emit("region", regionChoosed.value);
+    emit("avatar", avatar.value);
+    emit("profile", characterProfile.value);
+    emit("useable-number", useableNumber.value);
+    if (totalOwnedNumber.value) {
+      emit("total-owned", totalOwnedNumber.value);
+    }
     emit("compared-mounts", await comparedMounts.value);
     await comparedMounts.value.forEach((item: any) => {
       if (item.is_useable) {
         useableNumberArray.value.push(item.mount.name);
       }
     });
+    console.log("Character found");
   } else {
     errorRegion.value = regionChoosed.value;
     errorRealm.value = fullRealmString.value;
     showError.value = true;
+    console.log("Character not found");
     return;
-  }
-  console.log("useableNumberArray", useableNumberArray.value.length);
-  emit("character", characterSearch.value?.trim() as string);
-  emit("realm", realmChoosed.value);
-  emit("region", regionChoosed.value);
-  emit("avatar", avatar.value);
-  emit("profile", characterProfile.value);
-  emit("useable-number", useableNumber.value);
-  if (totalOwnedNumber.value) {
-    emit("total-owned", totalOwnedNumber.value);
   }
 };
 </script>

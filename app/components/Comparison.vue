@@ -225,60 +225,92 @@ onMounted(async () => {
 
 // Modification du lien quand on fait une recherche
 
+const comparedSearch = () => {
+  navigateTo({
+    path: `/compare-result`,
+    query: {
+      region: route.query.region,
+      realm: route.query.realm,
+      character: route.query.character,
+      cregion: comparedRegion.value,
+      crealm: comparedRealm.value,
+      ccharacter: comparedCharacterName.value,
+    },
+  });
+  console.log(
+    comparedRegion.value,
+    comparedRealm.value,
+    comparedCharacterName.value,
+  );
+  console.log("navigated to compared search");
+  showRight.value = true;
+};
+
+const baseSearch = () => {
+  if (
+    baseRegion.value &&
+    baseRealm.value &&
+    baseCharacterName.value &&
+    route.query.cregion &&
+    route.query.crealm &&
+    route.query.ccharacter
+  ) {
+    navigateTo({
+      path: `/compare-result`,
+      query: {
+        region: baseRegion.value,
+        realm: baseRealm.value,
+        character: baseCharacterName.value,
+        cregion: route.query.cregion,
+        crealm: route.query.crealm,
+        ccharacter: route.query.ccharacter,
+      },
+    });
+    showLeft.value = true;
+  } else if (
+    baseRegion.value &&
+    baseRealm.value &&
+    baseCharacterName.value &&
+    !route.query.cregion &&
+    !route.query.crealm &&
+    !route.query.ccharacter
+  ) {
+    navigateTo({
+      path: `/compare-result`,
+      query: {
+        region: baseRegion.value,
+        realm: baseRealm.value,
+        character: baseCharacterName.value,
+      },
+    });
+    showLeft.value = true;
+  }
+};
+
 watch(
-  () =>
-    comparedCharacterName.value && comparedRealm.value && comparedRegion.value,
+  [comparedMounts, comparedCharacterName, comparedRealm, comparedRegion],
   () => {
     if (
-      comparedRegion.value &&
+      comparedMounts.value?.length &&
+      comparedCharacterName.value &&
       comparedRealm.value &&
-      comparedCharacterName.value
+      comparedRegion.value
     ) {
-      navigateTo({
-        path: `/compare-result`,
-        query: {
-          region: route.query.region,
-          realm: route.query.realm,
-          character: route.query.character,
-          cregion: comparedRegion.value,
-          crealm: comparedRealm.value,
-          ccharacter: comparedCharacterName.value,
-        },
-      });
-      comparedGo();
-      comparedProfileGo();
-      showRight.value = true;
+      comparedSearch();
     }
   },
 );
-watch(
-  () => baseRegion.value && baseRealm.value && baseCharacterName.value,
-  () => {
-    if (
-      baseRegion.value &&
-      baseRealm.value &&
-      baseCharacterName.value &&
-      route.query.cregion &&
-      route.query.crealm &&
-      route.query.ccharacter
-    ) {
-      navigateTo({
-        path: `/compare-result`,
-        query: {
-          region: baseRegion.value,
-          realm: baseRealm.value,
-          character: baseCharacterName.value,
-          cregion: route.query.cregion,
-          crealm: route.query.crealm,
-          ccharacter: route.query.ccharacter,
-        },
-      });
-      baseGo();
-      baseProfileGo();
-      showLeft.value = true;
-    }
-  },
-);
+
+watch([characterMounts, baseCharacterName, baseRealm, baseRegion], () => {
+  if (
+    characterMounts.value?.length &&
+    baseCharacterName.value &&
+    baseRealm.value &&
+    baseRegion.value
+  ) {
+    baseSearch();
+  }
+});
 
 watch(
   () => showRight.value,

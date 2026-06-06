@@ -53,6 +53,7 @@ const props = defineProps<{
     z-index: 1;
     position: relative;
     color: white;
+    text-shadow: 1px 1px black;
   }
 }
 </style>
