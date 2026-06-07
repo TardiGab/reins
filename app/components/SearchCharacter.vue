@@ -24,6 +24,11 @@ const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
+const fullRealmString = ref<string>();
+const realmString = (realm: string) => {
+  fullRealmString.value = realm;
+};
+
 const loggedRegion = ref<string>("");
 const loggedRegionSelected = (region: string) => {
   loggedRegion.value = region;
@@ -60,35 +65,47 @@ const {
   watch: false,
   immediate: false,
 });
+const errorRealm = ref<string>();
+const errorRegion = ref<string>();
+const showError = ref<boolean>(false);
 
 const baseCharacterMountsData = ref<CharactersMounts>();
 const baseSearch = async () => {
+  if (showError.value === true) {
+    showError.value = false;
+  }
   characterSearch.value = baseCharacterSearch.value;
   await go();
   // Histoire d'éviter que lorsqu'on relance la recherche, la valeur du span change en temps réel
   baseCharacterName.value = baseCharacterSearch.value;
   baseCharacterMountsData.value = characterMounts.value;
-  if (session.value.data?.user) {
-    await navigateTo({
-      path: "/compare-result",
-      query: {
-        region: loggedRegion.value.toLocaleLowerCase(),
-        realm: loggedRealm.value,
-        character: loggedCharacter.value,
-        cregion: regionChoosed.value.toLocaleLowerCase(),
-        crealm: realmChoosed.value,
-        ccharacter: baseCharacterSearch.value,
-      },
-    });
+  if (characterMounts.value) {
+    if (session.value.data?.user) {
+      await navigateTo({
+        path: "/compare-result",
+        query: {
+          region: loggedRegion.value.toLocaleLowerCase(),
+          realm: loggedRealm.value,
+          character: loggedCharacter.value,
+          cregion: regionChoosed.value.toLocaleLowerCase(),
+          crealm: realmChoosed.value,
+          ccharacter: baseCharacterSearch.value,
+        },
+      });
+    } else {
+      await navigateTo({
+        path: "/compare-result",
+        query: {
+          region: regionChoosed.value.toLocaleLowerCase(),
+          realm: realmChoosed.value,
+          character: baseCharacterSearch.value,
+        },
+      });
+    }
   } else {
-    await navigateTo({
-      path: "/compare-result",
-      query: {
-        region: regionChoosed.value.toLocaleLowerCase(),
-        realm: realmChoosed.value,
-        character: baseCharacterSearch.value,
-      },
-    });
+    errorRealm.value = fullRealmString.value;
+    errorRegion.value = regionChoosed.value;
+    showError.value = true;
   }
 };
 let loadingText = ref([
@@ -126,6 +143,7 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         <SelectRealm
           :region-choosed="regionChoosed"
           @realm="realmSelected"
+          @complete-realm="realmString"
           class="search__realm"
         />
         <div class="search__input-container">
@@ -154,8 +172,17 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         </button>
       </div>
     </div>
-    <div class="loading" v-if="loading === 'pending' || loading === 'success'">
-      <span class="loading__text">{{ loadingText[randomLoadingValue] }}</span>
+    <div
+      class="loading"
+      v-if="loading === 'pending' || (loading === 'success' && !showError)"
+    >
+      <p class="loading__text">{{ loadingText[randomLoadingValue] }}</p>
+    </div>
+    <div class="error" v-if="showError && baseCharacterSearch">
+      <p class="error__text">
+        Character named <span>{{ baseCharacterName }}</span> not found on
+        <span> {{ errorRegion }} - {{ errorRealm }} </span>.
+      </p>
     </div>
   </div>
 </template>
@@ -194,7 +221,8 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
   }
 }
 
-.loading {
+.loading,
+.error {
   margin-top: 2rem;
   width: 100%;
   display: flex;
@@ -202,6 +230,9 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
   justify-content: center;
   &__text {
     font-size: $main-size;
+  }
+  span {
+    color: $yellow;
   }
 }
 

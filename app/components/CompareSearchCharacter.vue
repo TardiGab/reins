@@ -148,7 +148,6 @@ const search = async () => {
 
   randomLoadingValue.value = random(0, loadingText.value.length - 1);
   if (await comparedMounts.value) {
-    // showError.value = false;
     emit("character", characterSearch.value?.trim() as string);
     emit("realm", realmChoosed.value);
     emit("region", regionChoosed.value);
@@ -219,8 +218,7 @@ const search = async () => {
     <div class="error" v-if="showError && searchString">
       <p class="error__text">
         Character named <span>{{ searchString }}</span> not found on
-        <span>{{ regionChoosed }} - {{ errorRealm }}</span
-        >.
+        <span> {{ errorRegion }} - {{ errorRealm }} </span>.
       </p>
     </div>
   </div>
