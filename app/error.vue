@@ -42,7 +42,10 @@ const handleNavOpened = (state: boolean) => {
     <h2 class="error-page__h1">{{ error.status }}</h2>
     <h3 class="error-page__status-text">{{ error.statusText }}</h3>
     <p class="error-page__message">
-      {{ error.data?.mountName }} {{ error.data?.message }}
+      <span class="error-page__message--yellow">{{
+        error.data?.mountName
+      }}</span>
+      {{ error.data?.message }}
     </p>
     <div class="error-page__links">
       <a
@@ -58,14 +61,14 @@ const handleNavOpened = (state: boolean) => {
       </NuxtLink>
     </div>
   </div>
+  <Footer />
 </template>
 
 <style scoped lang="scss">
 .error-page {
   text-align: center;
-  max-width: 60ch;
-  margin: 0 auto;
-  margin-top: 20vh;
+  max-width: 75ch;
+  margin: 20vh auto;
   @media screen and (max-width: 500px) {
     padding: 1.5rem;
     margin-top: 10vh;
@@ -88,6 +91,10 @@ const handleNavOpened = (state: boolean) => {
     font-size: $main-size;
     margin-bottom: 2rem;
     line-height: 1.4;
+    text-wrap: balance;
+    &--yellow {
+      color: $yellow;
+    }
   }
 
   &__label {

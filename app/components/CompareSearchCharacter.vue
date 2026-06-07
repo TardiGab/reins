@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { random } from "#imports";
+
 interface Profile {
   name: string;
   level: number;
@@ -20,19 +22,28 @@ interface Profile {
   };
 }
 
-import { random } from "#imports";
-
 const regionChoosed = ref<string>("");
 const regionSelected = (region: string) => {
   regionChoosed.value = region;
 };
 
+// Realm slug
 const realmChoosed = ref<string>("");
 const realmSelected = (realm: string) => {
   realmChoosed.value = realm;
 };
 
+// Realm name
+const fullRealmString = ref<string>();
+const realmString = (realm: string) => {
+  fullRealmString.value = realm;
+};
+
+const errorRealm = ref<string>();
+const errorRegion = ref<string>();
+
 const characterSearch = ref<string>();
+const searchString = ref<string>();
 
 const emit = defineEmits<{
   (e: "profile", profile: Profile): void;
@@ -49,6 +60,7 @@ const {
   data: comparedMounts,
   execute: go,
   status: loading,
+  clear: clearComparedMounts,
 } = await useLazyFetch("/api/character-mounts", {
   query: {
     region: regionChoosed,
@@ -99,9 +111,10 @@ let loadingText = ref<string[]>([
   "Cleaning stable...",
   "Gathering horseshoes...",
   "Mrglglglglgl!",
+  "Looking for mounts...",
 ]);
 
-let randomLoadingValue: number;
+const randomLoadingValue = ref<number>(0);
 
 const avatar = ref();
 
@@ -109,19 +122,19 @@ const totalOwnedNumber = ref<number>();
 const useableNumber = ref<number>();
 const useableNumberArray = ref<string[]>([]);
 
+const showError = ref<boolean>(false);
+
 const search = async () => {
+  if (showError.value === true) {
+    showError.value = false;
+  }
+  clearComparedMounts();
   await go();
   await comparedRenderGo();
   await profileGo();
   await charProfileGo();
 
-  if (comparedMounts.value) {
-    comparedMounts.value.forEach((item: any) => {
-      if (item.is_useable) {
-        useableNumberArray.value.push(item.mount.name);
-      }
-    });
-  }
+  searchString.value = characterSearch.value?.trim() as string;
 
   if (comparedMounts.value) {
     totalOwnedNumber.value = comparedMounts.value.length;
@@ -133,18 +146,28 @@ const search = async () => {
     avatar.value = await comparedCharacterRender.value[0].value;
   }
 
-  randomLoadingValue = random(0, loadingText.value.length - 1);
-  emit("compared-mounts", comparedMounts.value);
-  emit("character", characterSearch.value?.trim() as string);
-  emit("realm", realmChoosed.value);
-  emit("region", regionChoosed.value);
-  emit("avatar", avatar.value);
-  emit("profile", characterProfile.value);
-  if (totalOwnedNumber.value) {
-    emit("total-owned", totalOwnedNumber.value);
-  }
-  if (useableNumber.value) {
+  randomLoadingValue.value = random(0, loadingText.value.length - 1);
+  if (await comparedMounts.value) {
+    emit("character", characterSearch.value?.trim() as string);
+    emit("realm", realmChoosed.value);
+    emit("region", regionChoosed.value);
+    emit("avatar", avatar.value);
+    emit("profile", characterProfile.value);
     emit("useable-number", useableNumber.value);
+    if (totalOwnedNumber.value) {
+      emit("total-owned", totalOwnedNumber.value);
+    }
+    emit("compared-mounts", await comparedMounts.value);
+    await comparedMounts.value.forEach((item: any) => {
+      if (item.is_useable) {
+        useableNumberArray.value.push(item.mount.name);
+      }
+    });
+  } else {
+    errorRegion.value = regionChoosed.value;
+    errorRealm.value = fullRealmString.value;
+    showError.value = true;
+    return;
   }
 };
 </script>
@@ -155,6 +178,7 @@ const search = async () => {
     <SelectRealm
       :region-choosed="regionChoosed"
       @realm="realmSelected"
+      @complete-realm="realmString"
       class="search__realm"
     />
     <div class="search__input-container">
@@ -179,27 +203,27 @@ const search = async () => {
       />
     </div>
 
-    <button @click="search" class="search__button">
+    <button @click="search" class="search__button" :disabled="!characterSearch">
       <span class="search__button--label">Search</span>
     </button>
 
-    <div class="loader" v-if="loading === 'pending'">
-      <span class="loader__text">{{ loadingText[randomLoadingValue] }}</span>
+    <div
+      class="loader"
+      v-if="loading === 'pending' || (loading === 'success' && !showError)"
+    >
+      <p class="loader__text">
+        {{ loadingText[randomLoadingValue] }}
+      </p>
+    </div>
+    <div class="error" v-if="showError && searchString">
+      <p class="error__text">
+        Character named <span>{{ searchString }}</span> not found on
+        <span> {{ errorRegion }} - {{ errorRealm }} </span>.
+      </p>
     </div>
   </div>
 </template>
 <style scoped lang="scss">
-.loading {
-  margin-top: 2rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &__text {
-    font-size: $main-size;
-  }
-}
-
 .search {
   display: flex;
   width: 100%;
@@ -290,6 +314,28 @@ const search = async () => {
       &::after {
         opacity: 1;
       }
+    }
+    &:disabled {
+      cursor: not-allowed;
+      filter: grayscale(50%);
+      &:hover {
+        &::after {
+          opacity: 0;
+        }
+      }
+    }
+  }
+}
+
+.loader,
+.error {
+  width: 100%;
+  &__text {
+    margin: 0;
+    font-size: $small;
+    text-align: center;
+    span {
+      color: $yellow;
     }
   }
 }

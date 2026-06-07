@@ -13,13 +13,56 @@ const characterSearch = ref<string>();
 const baseCharacterName = ref<string>();
 const baseCharacterSearch = ref<string>();
 
+const fullRealmString = ref<string>();
+
+const realmString = (realm: string) => {
+  fullRealmString.value = realm;
+};
+
+const {
+  data: characterMounts,
+  execute: go,
+  status: loading,
+} = await useLazyFetch("/api/character-mounts", {
+  query: {
+    region: regionChoosed,
+    realm: realmChoosed,
+    character: characterSearch,
+  },
+  immediate: false,
+});
+
+let loadingText = ref<string[]>([
+  "Searching saddles...",
+  "Looking for Invincible...",
+  "These webs will summon Nerubians, don't stand in 'em!",
+  "Cleaning stable...",
+  "Gathering horseshoes...",
+  "Mrglglglglgl!",
+  "Looking for mounts...",
+]);
+
+const randomLoadingValue = ref<number>(0);
+
+const showError = ref<boolean>(false);
+const errorRealm = ref<string>();
+const errorRegion = ref<string>();
+
 const baseSearch = async () => {
+  if (showError.value === true) {
+    showError.value = false;
+  }
   characterSearch.value = baseCharacterSearch.value;
   baseCharacterName.value = baseCharacterSearch.value;
-  if (regionChoosed.value && realmChoosed.value && baseCharacterSearch.value) {
+  await go();
+  if (characterMounts.value && characterMounts.value.length > 0) {
     await navigateTo({
       path: `/search/${regionChoosed.value.toLocaleLowerCase()}/${realmChoosed.value}/${baseCharacterSearch.value}`,
     });
+  } else {
+    showError.value = true;
+    errorRealm.value = fullRealmString.value;
+    errorRegion.value = regionChoosed.value;
   }
 };
 </script>
@@ -32,6 +75,7 @@ const baseSearch = async () => {
         <SelectRealm
           :region-choosed="regionChoosed"
           @realm="realmSelected"
+          @complete-realm="realmString"
           class="login__realm"
         />
         <div class="search__input-container">
@@ -63,6 +107,21 @@ const baseSearch = async () => {
         >
           <span class="search__button--label">Search</span>
         </button>
+
+        <div
+          class="loading"
+          v-if="loading === 'pending' || (loading === 'success' && !showError)"
+        >
+          <p class="loading__text">
+            {{ loadingText[randomLoadingValue] }}
+          </p>
+        </div>
+        <div class="error" v-if="showError && baseCharacterName">
+          <p class="error__text">
+            Character named <span>{{ baseCharacterName }}</span> not found on
+            <span> {{ errorRegion }} - {{ errorRealm }} </span>.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -102,14 +161,26 @@ const baseSearch = async () => {
   }
 }
 
-.loading {
-  margin-top: 2rem;
+.loading,
+.error {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: calc(100% + 1rem);
+  @media screen and (max-width: 780px) {
+    bottom: -2rem;
+  }
   &__text {
-    font-size: $main-size;
+    margin: 0;
+    font-size: 1rem;
+    text-align: center;
+    text-shadow: 1px 1px black;
+    line-height: 1.4;
+  }
+  span {
+    color: $yellow;
   }
 }
 
@@ -124,6 +195,7 @@ const baseSearch = async () => {
     width: 100%;
     gap: 1rem;
     flex-direction: column;
+    position: relative;
   }
 
   &__input-container {
