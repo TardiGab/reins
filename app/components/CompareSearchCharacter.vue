@@ -224,17 +224,6 @@ const search = async () => {
   </div>
 </template>
 <style scoped lang="scss">
-.loading {
-  margin-top: 2rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &__text {
-    font-size: $main-size;
-  }
-}
-
 .search {
   display: flex;
   width: 100%;
