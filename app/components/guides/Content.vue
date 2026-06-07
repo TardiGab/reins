@@ -69,7 +69,7 @@ const { data: page } = await useAsyncData(route.path, () => {
   <div class="guide">
     <div class="guide-heading">
       <h2 class="guide-heading__h2">
-        <a href="#" :data-wowhead="`item=${mountInfos.itemId}`" rel="np">
+        <a href="#" :data-wowhead="`item=${mountInfos.itemId}`">
           <img
             :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
             class="mount-item__icon"

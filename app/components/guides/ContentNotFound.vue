@@ -79,11 +79,7 @@ const { data: creatureDisplay } = await useFetch(
   <div class="guide">
     <div class="guide-heading">
       <h2 class="guide-heading__h2">
-        <a
-          :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-          target="_blank"
-          rel="np"
-        >
+        <a href="#" :data-wowhead="`item=${mountInfos.itemId}`">
           <img
             :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
             class="mount-item__icon"
@@ -186,6 +182,7 @@ const { data: creatureDisplay } = await useFetch(
         display: flex;
         align-items: center;
         gap: 1rem;
+        color: white;
       }
     }
   }
