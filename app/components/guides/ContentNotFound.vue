@@ -292,6 +292,7 @@ const { data: creatureDisplay } = await useFetch(
         margin-bottom: 1rem;
         font-size: $main-size;
         line-height: 140%;
+        text-shadow: 1px 1px black;
         a {
           color: $yellow;
         }
