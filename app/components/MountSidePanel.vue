@@ -24,13 +24,17 @@ const session = authClient.useSession();
             Welcome to your stable, {{ session.data?.user.name }}.
           </p>
         </div>
-        <NuxtLink
+        <div
+          class="side-container__login"
           v-if="session.data?.user.id && $route.name !== 'collection'"
-          to="/collection"
-          class="visiting__link visiting__link--collection"
         >
-          <span class="visiting__link-text">Go to my collection</span>
-        </NuxtLink>
+          <NuxtLink
+            to="/collection"
+            class="visiting__link visiting__link--collection"
+          >
+            <span class="visiting__link-text">Go to my collection</span>
+          </NuxtLink>
+        </div>
         <LoginButton class="side-container__login" v-else />
       </div>
     </div>
@@ -91,26 +95,15 @@ li {
       line-height: 1.4;
     }
     &__login {
-      margin-top: 1rem;
+      padding-top: 1rem;
       position: relative;
-      &::before {
-        content: "";
-        display: block;
-        width: 100%;
-        position: absolute;
-        top: -1rem;
-        height: 1px;
-        background-color: $yellow;
-      }
+      border-top: solid 1px $yellow;
     }
   }
 }
 
 .visiting {
   padding: 1rem 0;
-  &__guest {
-    margin-bottom: 0.5rem;
-  }
   &__link {
     display: flex;
     align-items: center;
@@ -164,17 +157,6 @@ li {
       display: block;
       @include border-radius(0.5rem, true);
 
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: -1rem;
-        width: 100%;
-        height: 1px;
-        background-color: $yellow;
-        box-shadow: 1px 1px black;
-      }
-
       &::after {
         content: "";
         position: absolute;
@@ -204,6 +186,7 @@ li {
     line-height: 1.4;
     margin: 0;
     margin-bottom: 0.5rem;
+    text-shadow: 1px 1px black;
   }
 }
 </style>
