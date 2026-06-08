@@ -60,7 +60,6 @@ async function selectCharacter(character: any) {
   emit("region", await region.value);
   emit("realm", await selectedCharacter.value.realm.slug);
   emit("character", await selectedCharacter.value.name);
-  console.log(selectedCharacter.value);
 }
 
 const filteredCharacters = computed(() => {
