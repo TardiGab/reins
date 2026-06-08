@@ -9,27 +9,6 @@ interface Mount {
   };
 }
 
-const props = defineProps<{
-  openBaseDiff?: number;
-  openComparedDiff?: number;
-  baseDiff?: number[];
-  comparedDiff?: number[];
-  amount?: number;
-  unlockedAmount?: number;
-  characterMounts?: Mount[];
-  baseMounts?: Mount[];
-}>();
-
-const userMountsIds = props.characterMounts?.map((item: any) => {
-  return item.mount.id;
-});
-
-const baseMountsIds = props.baseMounts?.map((item: any) => {
-  return item.mount.id;
-});
-
-const emit = defineEmits(["unlocked-amount-o", "unlocked-amount"]);
-
 interface SubCategoryOwnedMounts {
   subcatName: string;
   amount: number;
@@ -42,6 +21,30 @@ interface CategoryOwnedMounts {
   amount: number;
   unlockedAmount: number;
 }
+
+const props = defineProps<{
+  openBaseDiff?: number;
+  openComparedDiff?: number;
+  baseDiff?: number[];
+  comparedDiff?: number[];
+  amount?: number;
+  unlockedAmount?: number;
+  characterMounts?: Mount[];
+  baseMounts?: Mount[];
+}>();
+
+const emit = defineEmits<{
+  (e: "unlocked-amount", unlockedAmountByCat: number[]): void;
+}>();
+
+const userMountsIds = props.characterMounts?.map((item: any) => {
+  return item.mount.id;
+});
+
+const baseMountsIds = props.baseMounts?.map((item: any) => {
+  return item.mount.id;
+});
+
 const ownedMountArray: number[] = [];
 const leftOwnedMountArray: number[] = [];
 let categoryOwnedMountsArray: CategoryOwnedMounts[] = [];
@@ -67,7 +70,6 @@ mountsGlobal.forEach((item, i) => {
       };
 
     subcats?.items?.forEach((mount) => {
-      // console.log(mount);
       if (categoryOwnedMountsArray[i]?.subCategories[index]) {
         categoryOwnedMountsArray[i].subCategories[index].amount += 1;
         categoryOwnedMountsArray[i].amount += 1;
