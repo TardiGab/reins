@@ -172,6 +172,9 @@ const baseSearch = async () => {
   @media screen and (max-width: 780px) {
     bottom: -2rem;
   }
+  @media screen and (max-width: 500px) {
+    position: static;
+  }
   &__text {
     margin: 0;
     font-size: 1rem;
