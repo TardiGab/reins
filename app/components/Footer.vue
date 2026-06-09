@@ -58,7 +58,7 @@
 <style lang="scss" scoped>
 .footer {
   margin-top: 2rem;
-  padding: 4rem 1rem;
+  padding: 4rem 2rem;
   border-top: 2px solid $border-container;
   position: relative;
   z-index: 1;
@@ -88,7 +88,7 @@
   &__content {
     display: flex;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 1rem;
     @media screen and (max-width: 960px) {
       flex-direction: column;
       gap: 2rem;
@@ -96,7 +96,7 @@
     &-left,
     &-right {
       display: flex;
-      gap: 2rem;
+      gap: 1rem;
       align-items: center;
     }
     &-left {
