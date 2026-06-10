@@ -164,10 +164,15 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
             placeholder="Character's name"
             @change="baseSearch"
             class="search__input"
+            :disabled="!realmChoosed || !regionChoosed"
           />
         </div>
 
-        <button @click="baseSearch" class="search__button">
+        <button
+          @click="baseSearch"
+          class="search__button"
+          :disabled="!baseCharacterSearch"
+        >
           <span class="search__button--label">Search</span>
         </button>
       </div>
@@ -297,6 +302,20 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         inset 0 0 0 3px black;
       outline: none;
     }
+    &:disabled {
+      cursor: not-allowed;
+      color: $dark-gray;
+      &:hover {
+        background-color: $button-bg-dark;
+      }
+      &:active,
+      &:focus {
+        box-shadow:
+          inset 0px 0px 0px 2px $border-container,
+          inset 0 0 0 3px black;
+        outline: none;
+      }
+    }
   }
   &__button {
     color: $yellow;
@@ -335,6 +354,23 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
     &:hover {
       &::after {
         opacity: 1;
+      }
+    }
+    &:disabled {
+      cursor: not-allowed;
+      filter: grayscale(50%);
+      &:hover {
+        background-color: $red;
+        &::after {
+          opacity: 0;
+        }
+      }
+      &:active,
+      &:focus {
+        box-shadow:
+          inset 0px 0px 0px 2px $border-container,
+          inset 0 0 0 3px black;
+        outline: none;
       }
     }
   }

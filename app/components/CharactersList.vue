@@ -139,6 +139,15 @@ onUnmounted(() => {
             {{ character.realm.name }}</span
           >
         </div>
+        <span
+          v-if="filteredCharacters?.length === 0"
+          class="character-list__value"
+        >
+          No character found
+        </span>
+        <span v-if="!filteredCharacters" class="character-list__value">
+          Loading...
+        </span>
       </div>
     </div>
   </div>
