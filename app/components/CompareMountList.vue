@@ -86,13 +86,14 @@ mountsGlobal.forEach((item, i) => {
           categoryOwnedMountsArray[i].unlockedAmount += 1;
         }
       }
-      if (
-        baseMountsIds &&
-        baseMountsIds.includes(mount.ID) &&
-        !userMountsIds?.includes(mount.ID)
-      ) {
-        leftOwnedMountArray.push(mount.ID);
-      }
+      // De base, sert afficher les montures possédées par le personnage de base sur la vue de comparaison, mais ça ne fonctionne pas bien (l'affichage ne se mettant pas à jour lorsque le personnage de base change). À revoir plus tard
+      // if (
+      //   baseMountsIds &&
+      //   baseMountsIds.includes(mount.ID) &&
+      //   !userMountsIds?.includes(mount.ID)
+      // ) {
+      //   leftOwnedMountArray.push(mount.ID);
+      // }
     });
   });
 });
