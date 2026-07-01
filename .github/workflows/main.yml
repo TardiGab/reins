@@ -1,0 +1,23 @@
+name: Auto Update Mounts List
+
+on: 
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update_mounts_json:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout du dépôt courant
+        uses: actions/checkout@v7
+        
+      - name: Fetch SimpleArmory mounts.json
+        run: |
+          curl -sL https://raw.githubusercontent.com/kevinclement/SimpleArmory/master/static/data/mounts.json -o app/assets/data/mounts.json
+
+      - name: Commit et Push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto-update of mounts.json"
+          file_pattern: app/assets/data/mounts.json
