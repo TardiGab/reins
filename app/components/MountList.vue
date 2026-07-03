@@ -126,7 +126,6 @@ async function pinMount(
                         guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
                       },
                     }"
-                    target="_blank"
                     class="mount-item__link"
                     :data-wowhead="`item=${mount.itemId}`"
                     data-wowhead-domain="ptr-2"
@@ -204,7 +203,6 @@ async function pinMount(
                         guide: mount.name?.replace(/\W+/g, '-').toLowerCase(),
                       },
                     }"
-                    target="_blank"
                     class="mount-item__link"
                     :data-wowhead="`item=${mount.itemId}`"
                     data-wowhead-domain="ptr-2"
