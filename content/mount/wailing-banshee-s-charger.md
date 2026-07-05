@@ -1,0 +1,14 @@
+---
+title: Wailing Banshee's Charger
+description: Guide on how to obtain the Wailing Banshee's Charger mount
+seo:
+  title: Wailing-banshee-s-charger file
+  description: GUid
+---
+
+::guides-content
+#desc
+## Source
+
+This mount comes from the Trading Post and costs [575 Trader's Tender](https://www.wowhead.com/ptr-2/currency=2032/traders-tender).
+::
