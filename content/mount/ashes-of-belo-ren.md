@@ -12,7 +12,7 @@ Dropped by [L'ura](https://www.wowhead.com/fr/npc=240391/lura) from the Midnight
 
 ## Introduced in
 
-Patch 12.0.0 Midnight
+Patch 12.0.0 "Midnight"
 
 #guide
 ## Tips on how to get the mount
