@@ -1,4 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const studioGithubClientId =
+  process.env.STUDIO_GITHUB_CLIENT_ID ??
+  process.env.NUXT_STUDIO_AUTH_GITHUB_CLIENT_ID;
+const studioGithubClientSecret =
+  process.env.STUDIO_GITHUB_CLIENT_SECRET ??
+  process.env.NUXT_STUDIO_AUTH_GITHUB_CLIENT_SECRET;
+
+if (studioGithubClientId && !process.env.STUDIO_GITHUB_CLIENT_ID) {
+  process.env.STUDIO_GITHUB_CLIENT_ID = studioGithubClientId;
+}
+
+if (studioGithubClientSecret && !process.env.STUDIO_GITHUB_CLIENT_SECRET) {
+  process.env.STUDIO_GITHUB_CLIENT_SECRET = studioGithubClientSecret;
+}
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
