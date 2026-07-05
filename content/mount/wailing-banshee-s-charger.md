@@ -1,9 +1,6 @@
 ---
 title: Wailing Banshee's Charger
 description: Guide on how to obtain the Wailing Banshee's Charger mount
-seo:
-  title: Wailing-banshee-s-charger file
-  description: GUid
 ---
 
 ::guides-content
