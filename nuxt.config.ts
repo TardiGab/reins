@@ -2,7 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/fonts", "@nuxt/content"],
+  modules: [
+    "@nuxt/fonts",
+    "@nuxt/content",
+    "nuxt-studio",
+    "@nuxtjs/color-mode",
+  ],
   css: ["@/assets/styles/main.scss"],
   vite: {
     optimizeDeps: {
@@ -37,5 +42,17 @@ export default defineNuxtConfig({
     experimental: {
       sqliteConnector: "native",
     },
+  },
+  studio: {
+    repository: {
+      provider: "github",
+      owner: "TardiGab",
+      repo: "reins",
+      branch: "main",
+    },
+  },
+  colorMode: {
+    preference: "dark",
+    fallback: "dark",
   },
 });

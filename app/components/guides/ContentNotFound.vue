@@ -73,6 +73,12 @@ const { data: creatureDisplay } = await useFetch(
     },
   },
 );
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>
@@ -281,10 +287,14 @@ const { data: creatureDisplay } = await useFetch(
         color: $yellow;
       }
     }
+    span {
+      color: white;
+    }
     ul,
     ol {
       margin: 0;
       padding: 0;
+      color: white;
       @media screen and (max-width: 780px) {
         padding: 0 0.5rem;
       }
