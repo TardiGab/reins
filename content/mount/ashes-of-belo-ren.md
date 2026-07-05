@@ -1,6 +1,6 @@
 ---
-title: "Ashes of Belo'ren"
-description: "How to get the Ashes of Belo'ren mount from the March on Quel’Danas Raid in Midnight"
+title: Ashes of Belo'ren
+description: How to get the Ashes of Belo'ren mount from the March on Quel’Danas Raid in Midnight
 image: /image/guides/midnight/ashes-of-belo-ren.webp
 ---
 
@@ -19,5 +19,4 @@ Patch 12.0.0 Midnight
 
 Until the start of the "The Last Titan" expansion the mount is guaranteed to drop for 2 players who took part in killing the boss.
 After the next expansion rolls in, the mount will, as every recent raid mount, have a 1% drop rate per week per character in Mythic difficulty only. Not affected by bonus rolls.
-
 ::

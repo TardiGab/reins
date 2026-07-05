@@ -63,6 +63,12 @@ const { data: creatureDisplay } = await useFetch(
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
+
+onMounted(() => {
+  if (window.$WowheadPower) {
+    window.$WowheadPower.refreshLinks();
+  }
+});
 </script>
 
 <template>

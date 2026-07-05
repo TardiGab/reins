@@ -62,6 +62,7 @@
   border-top: 2px solid $border-container;
   position: relative;
   z-index: 1;
+  color: white;
   &::after {
     content: "";
     position: absolute;
