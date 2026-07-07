@@ -104,13 +104,9 @@ onMounted(() => {
           <p class="guide__p">
             Oops! The content you're looking for doesn't exist (yet). Feel free
             to
-            <a
-              href="https://github.com/TardiGab/reins/tree/main/content"
-              class="guide__link"
-              target="_blank"
-            >
+            <NuxtLink to="/contribute" class="guide__link" target="_blank">
               contribute
-            </a>
+            </NuxtLink>
             and create a guide for this mount!
           </p>
         </div>
