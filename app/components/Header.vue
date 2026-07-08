@@ -21,6 +21,14 @@ const emit = defineEmits<{
         <NuxtLink to="/compare" class="nav__link">
           <span class="nav__link--label nav__label">Compare with a friend</span>
         </NuxtLink>
+        <a href="https://ko-fi.com/D6U820JAKB" target="_blank" class="kofi"
+          ><img
+            height="36"
+            style="border: 0px; height: 36px"
+            src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+            border="0"
+            alt="Buy Me a Coffee at ko-fi.com"
+        /></a>
       </div>
       <button
         @click="
@@ -123,19 +131,12 @@ const emit = defineEmits<{
   }
   &--right {
     position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
     @media screen and (max-width: 780px) {
       display: none;
-    }
-    &::before {
-      content: "";
-      display: block;
-      position: absolute;
-      left: -0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 80%;
-      width: 1px;
-      background-color: $yellow;
     }
   }
 
@@ -346,5 +347,21 @@ const emit = defineEmits<{
 .slide-enter-from,
 .slide-leave-to {
   transform: translateX(120%);
+}
+
+.kofi {
+  display: flex;
+  position: relative;
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 80%;
+    width: 1px;
+    background-color: $yellow;
+  }
 }
 </style>
