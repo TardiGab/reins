@@ -4,7 +4,6 @@ description: Guide on how to obtain the Invincible mount
 patch: 3.3 "Fall of the Lich King"
 ---
 
-
 ## Source
 
 Dropped by [The Lich King](https://www.wowhead.com/npc=36597/the-lich-king) in Icecrown Citadel on Heroic 25 difficulty.
