@@ -45,20 +45,24 @@ mounts.forEach((category) => {
   });
 });
 
-const { data: mountData } = await useFetch<MountInfo>("/api/mount-info", {
-  query: {
-    mountId: mountInfos.ID,
-  },
-});
+const mountData = ref<MountInfo | null>(null);
+const creatureDisplay = ref<string | null>(null);
 
-const { data: creatureDisplay } = await useFetch(
-  "/api/creature-display-media",
-  {
-    query: {
-      creatureDisplayId: mountData.value?.creature_displays[0].id,
-    },
-  },
-);
+if (mountInfos.ID) {
+  const { data } = await useFetch<MountInfo>("/api/mount-info", {
+    query: { mountId: mountInfos.ID },
+  });
+  mountData.value = data.value ?? null;
+
+  const creatureDisplayId = mountData.value?.creature_displays?.[0]?.id;
+  if (creatureDisplayId) {
+    const { data: creatureData } = await useFetch<string>(
+      "/api/creature-display-media",
+      { query: { creatureDisplayId } },
+    );
+    creatureDisplay.value = creatureData.value ?? null;
+  }
+}
 
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
