@@ -2,10 +2,9 @@
 title: Smoldering Ember Wyrm
 description: How to get the Smoldering Ember Wyrm mount from the Return to Karazhan dungeon.
 image: /images/guides/legion/return-to-karazhan/smoldering-ember-wyrm.jpg
+patch: 7.1.0 "Return to Karazhan"
 ---
 
-::guides-content
-#desc
 ## Source
 
 Dropped by [Nightbane](https://www.wowhead.com/ptr-2/npc=114895/nightbane), a secret boss in the Return to Karazhan dungeon on Mythic difficulty. This mount has a quite high drop rate (20% if solo). This scales and increases with the number of players in the group, up to 100% drop rate for a full group of 5 players.
@@ -48,4 +47,3 @@ Once you see the message, you can proceed through the dungeon as normal. While p
 4. Let's see some spiders. From where you picked up the third crystal, turn around go to the room on the left, where you can see an Elemental. One you went though the pillars, go directly to the right and take the stairs down. While you're here, you can have a chance to get the [Midnight's Eternal Reins](https://www.wowhead.com/ptr-2/item=142236/midnights-eternal-reins), which is a rare drop from [Attumen the Huntsman](https://www.wowhead.com/ptr-2/npc=114262/attumen-the-huntsman). This mount is the updated version of the [Firery Warhorse](https://www.wowhead.com/ptr-2/item=30480/fiery-warhorses-reins), from the original Karazhan dungeon. Once you finished in the stable, go to the Servant's Quarters and take the door on the back of the room. Then, follow the path to the red mark: :guides-image{:size='75' alt="Location of the fourth crystal in the Return to Karazhan dungeon on Mythic difficulty" caption="Location of the fourth crystal" src="/images/guides/legion/return-to-karazhan/fourth-crystal-map.webp"}
 5. One you interacted with the fourth crystal, you can take the portal right behind it. You will be teleported back to the entrance, but this time you need to take the right path, to the Menagerie where The Curator is. Kill the boss and the fifth crystal will appear right underneath him. Once you have the fifth stack of Medivh's Echo, your buff will turn into Meidvh's Presence. You will have 5 minutes to go speak with Medivh and summon Nightbane.
 6. When the buff is active, go back to where you came from, drop down from the broken stairs to save a bit of time, you will be at the entrance again. Take the same path as before, but this time, don't go up the ramp, take the small open door under said ramp. You'll find the Image of Medivh there. Interact with it and it will summon Nightbane. Kill the boss and hope for the mount to drop!
-::
