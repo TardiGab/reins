@@ -111,6 +111,7 @@ onMounted(() => {
             <a href="#" :data-wowhead="`item=${mountInfos.itemId}`">
               <img
                 :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
+                :alt="`${mountInfos.name} icon`"
                 class="mount-item__icon"
               />
               {{ mountInfos.name }}
