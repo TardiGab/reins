@@ -232,6 +232,9 @@ onMounted(() => {
       margin-bottom: 4rem;
       border-bottom: 2px solid $border-container;
       text-shadow: 1px 1px black;
+      @media screen and (max-width: 780px) {
+        margin-bottom: 2rem;
+      }
       a {
         display: flex;
         align-items: center;
@@ -248,7 +251,7 @@ onMounted(() => {
       gap: 5vw;
     }
     @media screen and (max-width: 780px) {
-      flex-direction: column;
+      flex-direction: column-reverse;
       gap: 2rem;
     }
     &--left,
