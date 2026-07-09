@@ -103,7 +103,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="mountInfos.name" class="mount">
+  <main v-if="mountInfos.name" class="mount">
     <div class="guide">
       <div class="guide">
         <div class="guide-heading">
@@ -198,7 +198,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  </div>
+  </main>
   <div v-else class="empty-page">
     <h2 class="empty-page__h2">Mount Not Found</h2>
     <p class="empty-page__message">
