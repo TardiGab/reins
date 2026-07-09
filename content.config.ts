@@ -8,6 +8,7 @@ export default defineContentConfig({
       source: "**/*.md",
       schema: z.object({
         date: z.string(),
+        patch: z.string(),
       }),
     }),
   },
