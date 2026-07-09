@@ -46,7 +46,7 @@ mounts.forEach((category) => {
 });
 
 const mountData = ref<MountInfo | null>(null);
-const creatureDisplay = ref<string | null>(null);
+const creatureDisplay = ref<string | undefined>(undefined);
 
 if (mountInfos.ID) {
   const { data } = await useFetch<MountInfo>("/api/mount-info", {
@@ -60,7 +60,7 @@ if (mountInfos.ID) {
       "/api/creature-display-media",
       { query: { creatureDisplayId } },
     );
-    creatureDisplay.value = creatureData.value ?? null;
+    creatureDisplay.value = creatureData.value ?? undefined;
   }
 }
 
