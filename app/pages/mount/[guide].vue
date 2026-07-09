@@ -152,7 +152,6 @@ onMounted(() => {
                 <a href="#introduced-in">Introduced in:</a>
               </h2>
               <p class="guide__p">{{ page.patch || "Unknown" }}</p>
-              <ContentRenderer :value="page" />
             </div>
 
             <div class="guide__content" v-else>
@@ -196,6 +195,9 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <div class="guide__content" v-if="page">
+          <ContentRenderer :value="page" />
+        </div>
       </div>
     </div>
   </main>
@@ -216,7 +218,7 @@ onMounted(() => {
 }
 
 .guide {
-  max-width: 1440px;
+  max-width: 80rem;
   margin: auto;
   @media screen and (max-width: 1530px) {
     max-width: 80vw;
@@ -259,7 +261,7 @@ onMounted(() => {
       flex: 1;
     }
     &--right {
-      max-width: 480px;
+      max-width: 25%;
       @media screen and (max-width: 780px) {
         max-width: 100%;
       }
@@ -397,7 +399,8 @@ onMounted(() => {
   gap: 1rem;
   &__links {
     display: flex;
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
     width: 100%;
   }
   &__wh-link,
@@ -418,7 +421,6 @@ onMounted(() => {
     overflow: hidden;
     cursor: pointer;
     text-align: center;
-    width: 100%;
     color: white !important;
     @supports (corner-shape: bevel) {
       corner-shape: bevel;
