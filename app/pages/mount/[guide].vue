@@ -151,13 +151,13 @@ onMounted(() => {
               <h2 class="guide__h2" id="introduced-in">
                 <a href="#introduced-in">Introduced in:</a>
               </h2>
-              <p>{{ page.patch || "Unknown" }}</p>
+              <p class="guide__p">{{ page.patch || "Unknown" }}</p>
               <ContentRenderer :value="page" />
             </div>
 
             <div class="guide__content" v-else>
               <h2 class="guide__h2">Guide Not Found</h2>
-              <p>
+              <p class="guide__p">
                 Oops! The content you're looking for doesn't exist (yet). Feel
                 free to
                 <NuxtLink to="/contribute" class="guide__link" target="_blank">
@@ -261,6 +261,42 @@ onMounted(() => {
         max-width: 100%;
       }
     }
+  }
+  &__h2 {
+    font-size: $h2-size;
+    margin: 0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px black;
+    font-weight: 600;
+    color: white;
+    a {
+      margin: 0;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px black;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+      &::before {
+        content: "#";
+        opacity: 0;
+        color: $yellow;
+        position: absolute;
+        left: -1em;
+        transition: opacity 0.3s ease;
+      }
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+  }
+  &__p {
+    font-size: $main-size;
+    line-height: 140%;
+    color: white;
+    text-shadow: 1px 1px black;
   }
   &__content {
     max-width: 960px;
