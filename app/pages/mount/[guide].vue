@@ -308,6 +308,13 @@ onMounted(() => {
     color: white;
     text-shadow: 1px 1px black;
   }
+  &__link {
+    color: $yellow;
+    transition: all 0.3s ease;
+    &:hover {
+      filter: brightness(0.7);
+    }
+  }
   &__content {
     max-width: 960px;
   }
