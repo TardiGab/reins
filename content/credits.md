@@ -1,6 +1,5 @@
 ---
 title: Credits
-description: Technical acknowledgments, open-source libraries, and community resources used in the development of Reins.
 seo:
   description: A
   title: Credits
