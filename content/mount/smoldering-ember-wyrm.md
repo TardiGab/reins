@@ -13,10 +13,6 @@ Dropped by [Nightbane](https://www.wowhead.com/ptr-2/npc=114895/nightbane), a se
 Note: the drop rate is shared among all players in the group, so if one player gets the mount, it won't drop for the others.
 ::
 
-## Introduced in:
-
-Patch 7.1.0 "Return to Karazhan"
-
 ## How to get the Smoldering Ember Wyrm?
 
 [Nightbane](https://www.wowhead.com/ptr-2/npc=114895/nightbane) is the secret (and final) boss in the Return to Karazhan dungeon on Mythic difficulty.

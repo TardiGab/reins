@@ -1,8 +1,5 @@
 ---
 title: Credits
-seo:
-  description: A
-  title: Credits
 ---
 
 ## Credits
