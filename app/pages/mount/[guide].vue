@@ -112,101 +112,106 @@ onMounted(() => {
   <main v-if="mountInfos.name" class="mount">
     <button @click="$router.back()" class="back-button">Go back</button>
     <div class="guide">
-      <div class="guide">
-        <div class="guide-heading">
-          <h2 class="guide-heading__h2">
-            <a href="#" :data-wowhead="`item=${mountInfos.itemId}`">
-              <img
-                :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
-                :alt="`${mountInfos.name} icon`"
-                class="mount-item__icon"
-              />
-              {{ mountInfos.name }}
-            </a>
-          </h2>
-        </div>
-        <div class="guide-desc">
-          <div class="guide-desc--left">
-            <p class="mount-quote" v-if="mountData?.description">
-              <q>{{ mountData?.description }}</q>
+      <div class="guide-heading">
+        <h2 class="guide-heading__h2">
+          <a href="#" :data-wowhead="`item=${mountInfos.itemId}`">
+            <img
+              :src="`https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon?.toLowerCase()}.jpg`"
+              :alt="`${mountInfos.name} icon`"
+              class="mount-item__icon"
+            />
+            {{ mountInfos.name }}
+          </a>
+        </h2>
+      </div>
+      <div class="guide-desc">
+        <div class="guide-desc--left">
+          <p class="mount-quote" v-if="mountData?.description">
+            <q>{{ mountData?.description }}</q>
+          </p>
+
+          <div class="mount-faction">
+            <h2 class="mount-faction__h2" id="faction">
+              <a href="#faction">Faction</a>
+            </h2>
+            <span
+              v-if="mountInfos.side === 'A'"
+              class="mount-faction__span mount-faction__span--alliance"
+            >
+              Alliance
+            </span>
+            <span
+              v-else-if="mountInfos.side === 'H'"
+              class="mount-faction__span mount-faction__span--horde"
+            >
+              Horde
+            </span>
+            <span v-else class="mount-faction__span mount-faction__span--both">
+              Both
+            </span>
+          </div>
+
+          <div class="guide__content" v-if="page">
+            <h2 class="guide__h2" id="introduced-in">
+              <a href="#introduced-in">Introduced in:</a>
+            </h2>
+            <p class="guide__p">{{ page.patch || "Unknown" }}</p>
+          </div>
+
+          <div class="guide__content" v-else>
+            <h2 class="guide__h2">Guide Not Found</h2>
+            <p class="guide__p">
+              Oops! The content you're looking for doesn't exist (yet). Feel
+              free to
+              <NuxtLink to="/contribute" class="guide__link" target="_blank">
+                contribute
+              </NuxtLink>
+              and create a guide for this mount!
             </p>
-
-            <div class="mount-faction">
-              <h2 class="mount-faction__h2" id="faction">
-                <a href="#faction">Faction</a>
-              </h2>
-              <span
-                v-if="mountInfos.side === 'A'"
-                class="mount-faction__span mount-faction__span--alliance"
-              >
-                Alliance
-              </span>
-              <span
-                v-else-if="mountInfos.side === 'H'"
-                class="mount-faction__span mount-faction__span--horde"
-              >
-                Horde
-              </span>
-              <span
-                v-else
-                class="mount-faction__span mount-faction__span--both"
-              >
-                Both
-              </span>
-            </div>
-
-            <div class="guide__content" v-if="page">
-              <h2 class="guide__h2" id="introduced-in">
-                <a href="#introduced-in">Introduced in:</a>
-              </h2>
-              <p class="guide__p">{{ page.patch || "Unknown" }}</p>
-            </div>
-
-            <div class="guide__content" v-else>
-              <h2 class="guide__h2">Guide Not Found</h2>
-              <p class="guide__p">
-                Oops! The content you're looking for doesn't exist (yet). Feel
-                free to
-                <NuxtLink to="/contribute" class="guide__link" target="_blank">
-                  contribute
-                </NuxtLink>
-                and create a guide for this mount!
-              </p>
-            </div>
-          </div>
-          <div class="guide-desc--right">
-            <div class="display-wrapper">
-              <img
-                :src="creatureDisplay"
-                :alt="`Creature display of ${mountInfos.name}`"
-                class="display-wrapper__img"
-              />
-              <div class="display-wrapper__links">
-                <a
-                  :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
-                  class="button-gray"
-                  target="_blank"
-                  rel="np"
-                >
-                  <span class="button-label">More on Wowhead</span>
-                </a>
-
-                <a
-                  :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
-                  class="button-gray"
-                  target="_blank"
-                  rel="np"
-                >
-                  <span class="button-label">View 3D model on Wowhead</span>
-                </a>
-              </div>
-            </div>
           </div>
         </div>
-        <div class="guide__content" v-if="page">
-          <ContentRenderer :value="page" />
+        <div class="guide-desc--right">
+          <div class="display-wrapper">
+            <img
+              :src="creatureDisplay"
+              :alt="`Creature display of ${mountInfos.name}`"
+              class="display-wrapper__img"
+            />
+            <div class="display-wrapper__links">
+              <a
+                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}`"
+                class="button-gray"
+                target="_blank"
+                rel="np"
+              >
+                <span class="button-label">More on Wowhead</span>
+              </a>
+
+              <a
+                :href="`https://wowhead.com/ptr-2/mount/${mountInfos.ID}#modelviewer`"
+                class="button-gray"
+                target="_blank"
+                rel="np"
+              >
+                <span class="button-label">View 3D model on Wowhead</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
+      <article class="guide__content" v-if="page">
+        <ContentRenderer :value="page" />
+      </article>
+      <aside>
+        <h3 class="toc">Table of Contents</h3>
+        <ul>
+          <li v-for="item in page?.body.toc?.links" :key="item.id">
+            <NuxtLink :to="`#${item.id}`" class="toc__link">
+              {{ item.text }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </aside>
     </div>
   </main>
   <main v-else class="empty-page">
