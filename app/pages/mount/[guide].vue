@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "#app";
+import { useRouter } from "#app";
 import mounts from "@/assets/data/mounts.json";
 
 interface Mount {
@@ -30,6 +31,7 @@ interface MountInfo {
 }
 
 const route = useRoute("mount-guide");
+const router = useRouter();
 
 let mountInfos: Mount = {};
 
@@ -108,6 +110,7 @@ onMounted(() => {
 
 <template>
   <main v-if="mountInfos.name" class="mount">
+    <button @click="$router.back()" class="back-button">Go back</button>
     <div class="guide">
       <div class="guide">
         <div class="guide-heading">
@@ -460,6 +463,40 @@ onMounted(() => {
     @include border-radius(1rem, true);
     @include container-border();
     width: 100%;
+  }
+}
+
+.back-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: $yellow;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  position: fixed;
+  top: 5rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  &:hover {
+    filter: brightness(0.8);
+  }
+  @media screen and (max-width: 780px) {
+    display: none;
+  }
+  &::before {
+    content: "";
+    margin-right: 0.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 32 32'%3E%3Cpath fill='%23ffd100' d='m16 6.594l-.72.687l-12.5 12.5l1.44 1.44L16 9.437l11.78 11.78l1.44-1.437l-12.5-12.5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    transform: rotate(-90deg);
   }
 }
 </style>
