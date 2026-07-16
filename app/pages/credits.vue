@@ -5,6 +5,10 @@ const route = useRoute("credits");
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
+
+useHead({
+  title: `Reins | ${page.value?.title}`,
+});
 </script>
 
 <template>
