@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@nuxt/content",
     "nuxt-studio",
     "@nuxtjs/color-mode",
+    "@vercel/analytics",
   ],
   css: ["@/assets/styles/main.scss"],
   vite: {
