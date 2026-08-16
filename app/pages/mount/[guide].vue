@@ -227,6 +227,7 @@ onMounted(() => {
 
 .guide {
   max-width: 80rem;
+  min-height: 70vh;
   margin: auto;
   @media screen and (max-width: 1530px) {
     max-width: 80vw;
