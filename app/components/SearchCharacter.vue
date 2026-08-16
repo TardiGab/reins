@@ -134,7 +134,7 @@ let randomLoadingValue = random(0, loadingText.value.length - 1);
         @character="loggedCharacterSelected"
       />
     </div>
-    <div class="search">
+    <div class="search" v-if="loggedCharacter">
       <span class="logged-compare__p" v-if="session.data?.user">
         <strong>Step 2:</strong> Search for your friend's character.
       </span>
