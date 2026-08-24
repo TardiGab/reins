@@ -1,6 +1,21 @@
 <script setup lang="ts">
-useHead({
-  title: "Reins | Compare your collection with a friend",
+useSeoMeta({
+  title: "Reins | Compare Mount Collections",
+  description:
+    "Search for your friend's character and realm to compare your World of Warcraft mount collections side by side.",
+  ogSiteName: "Reins",
+  ogTitle: "Reins | Compare Mount Collections",
+  ogDescription:
+    "Search for your friend's character and realm to compare your World of Warcraft mount collections side by side.",
+  ogImage: "/images/logo.png",
+  ogImageAlt: "Reins - WoW Mount Tracker",
+  ogType: "website",
+  twitterCard: "summary_large_image",
+  twitterTitle: "Reins | Compare Mount Collections",
+  twitterDescription:
+    "Search for your friend's character and realm to compare your World of Warcraft mount collections side by side.",
+  twitterImage: "/images/logo.png",
+  twitterImageAlt: "Reins - WoW Mount Tracker",
 });
 </script>
 

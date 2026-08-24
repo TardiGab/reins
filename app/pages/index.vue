@@ -8,15 +8,23 @@ const session = authClient.useSession();
 //   () => navigateTo("/collection"),
 // );
 
-useHead({
-  title: "Reins | Login",
-  meta: [
-    {
-      name: "description",
-      content:
-        "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
-    },
-  ],
+useSeoMeta({
+  title: "Reins | Login & Stable Access",
+  description:
+    "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
+  ogSiteName: "Reins",
+  ogTitle: "Reins | World of Warcraft Mount Tracker & Collection Guides",
+  ogDescription:
+    "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
+  ogImage: "/images/logo.png",
+  ogImageAlt: "Reins - WoW Mount Tracker",
+  ogType: "website",
+  twitterCard: "summary_large_image",
+  twitterTitle: "Reins | World of Warcraft Mount Tracker & Collection Guides",
+  twitterDescription:
+    "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
+  twitterImage: "/images/logo.png",
+  twitterImageAlt: "Reins - WoW Mount Tracker",
 });
 </script>
 

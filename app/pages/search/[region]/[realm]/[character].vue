@@ -17,14 +17,28 @@ onMounted(async () => {
   await go();
 });
 
-useHead({
-  title: `Reins | Visiting ${route.params.character}'s stable`,
-  meta: [
-    {
-      name: "description",
-      content: `Check out ${route.params.character}'s mount collection!`,
-    },
-  ],
+const charTitle = computed(
+  () => `Reins | Visiting ${route.params.character}'s stable`,
+);
+const charDescription = computed(
+  () =>
+    `Check out ${route.params.character}'s World of Warcraft mount collection on realm ${route.params.realm} (${String(route.params.region).toUpperCase()}) with Reins!`,
+);
+
+useSeoMeta({
+  title: charTitle,
+  description: charDescription,
+  ogSiteName: "Reins",
+  ogTitle: charTitle,
+  ogDescription: charDescription,
+  ogImage: "/images/logo.png",
+  ogImageAlt: "Reins - WoW Mount Tracker",
+  ogType: "profile",
+  twitterCard: "summary_large_image",
+  twitterTitle: charTitle,
+  twitterDescription: charDescription,
+  twitterImage: "/images/logo.png",
+  twitterImageAlt: "Reins - WoW Mount Tracker",
 });
 </script>
 

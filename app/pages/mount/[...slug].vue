@@ -4,14 +4,35 @@ const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
 
-useHead({
-  title: "Reins | Mount Not Found",
-  meta: [
-    {
-      name: "description",
-      content: "Oops! The content you're looking for doesn't exist (yet).",
-    },
-  ],
+useSeoMeta({
+  title: () =>
+    page.value?.title
+      ? `Reins | ${page.value.title}`
+      : "Reins | Mount Not Found",
+  description: () =>
+    page.value?.description ||
+    "Oops! The content you're looking for doesn't exist (yet).",
+  ogSiteName: "Reins",
+  ogTitle: () =>
+    page.value?.title
+      ? `Reins | ${page.value.title}`
+      : "Reins | Mount Not Found",
+  ogDescription: () =>
+    page.value?.description ||
+    "Oops! The content you're looking for doesn't exist (yet).",
+  ogImage: "/images/logo.png",
+  ogImageAlt: "Reins - WoW Mount Tracker",
+  ogType: "article",
+  twitterCard: "summary_large_image",
+  twitterTitle: () =>
+    page.value?.title
+      ? `Reins | ${page.value.title}`
+      : "Reins | Mount Not Found",
+  twitterDescription: () =>
+    page.value?.description ||
+    "Oops! The content you're looking for doesn't exist (yet).",
+  twitterImage: "/images/logo.png",
+  twitterImageAlt: "Reins - WoW Mount Tracker",
 });
 </script>
 

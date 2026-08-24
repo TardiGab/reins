@@ -1,6 +1,15 @@
 <script setup lang="ts">
 useHead({
-  title: "Reins",
+  titleTemplate: (titleChunk) => {
+    return titleChunk
+      ? titleChunk.includes("Reins")
+        ? titleChunk
+        : `${titleChunk} | Reins`
+      : "Reins | World of Warcraft Mount Tracker";
+  },
+  htmlAttrs: {
+    lang: "en",
+  },
   script: [
     {
       innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: false, iconSize: false, renameLinks: false};`,
@@ -16,6 +25,26 @@ useHead({
       href: "https://use.typekit.net/wyy1zbc.css",
     },
   ],
+});
+
+useSeoMeta({
+  title: "Reins | World of Warcraft Mount Tracker",
+  description:
+    "Track your World of Warcraft mount collection, plan farming routes, compare stables with friends, and discover detailed mount guides on Reins.",
+  ogSiteName: "Reins",
+  ogTitle: "Reins | World of Warcraft Mount Tracker",
+  ogDescription:
+    "Track your World of Warcraft mount collection, plan farming routes, compare stables with friends, and discover detailed mount guides on Reins.",
+  ogImage: "/images/logo.png",
+  ogImageAlt: "Reins - WoW Mount Tracker",
+  ogType: "website",
+  ogLocale: "en_US",
+  twitterCard: "summary_large_image",
+  twitterTitle: "Reins | World of Warcraft Mount Tracker",
+  twitterDescription:
+    "Track your World of Warcraft mount collection, plan farming routes, compare stables with friends, and discover detailed mount guides on Reins.",
+  twitterImage: "/images/logo.png",
+  twitterImageAlt: "Reins - WoW Mount Tracker",
 });
 
 // Retrieved 2026-03-20, License - CC BY-SA 4.0

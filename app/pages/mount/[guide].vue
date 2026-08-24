@@ -70,35 +70,40 @@ const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection("blog").path(route.path).first();
 });
 
-useHead({
-  htmlAttrs: {
-    lang: "en",
-  },
-  title: `Reins | ${mountInfos.name || "Mount Not Found"}`,
-  meta: [
-    {
-      name: "description",
-      content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
-    },
-    {
-      property: "og:sitename",
-      content: "Reins",
-    },
-    {
-      property: "og:title",
-      content: `Reins | ${mountInfos.name || "Mount Not Found"}`,
-    },
-    {
-      property: "og:description",
-      content: `Guide to obtain the ${mountInfos.name} mount in World of Warcraft.`,
-    },
-    {
-      property: "og:image",
-      content:
-        (page.value?.meta.image as string) ||
-        `https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon}.jpg`,
-    },
-  ],
+const guideTitle = computed(() =>
+  mountInfos.name
+    ? `Reins | ${mountInfos.name} Mount Guide`
+    : "Reins | Mount Not Found",
+);
+const guideDescription = computed(() =>
+  mountInfos.name
+    ? `Guide to obtain the ${mountInfos.name} mount in World of Warcraft, including faction, drop location, requirements, and tips.`
+    : "Guide not found on Reins.",
+);
+const guideImage = computed(
+  () =>
+    (page.value?.meta?.image as string) ||
+    (mountInfos.icon
+      ? `https://wow.zamimg.com/images/wow/icons/large/${mountInfos.icon.toLowerCase()}.jpg`
+      : "/images/logo.png"),
+);
+
+useSeoMeta({
+  title: guideTitle,
+  description: guideDescription,
+  ogSiteName: "Reins",
+  ogTitle: guideTitle,
+  ogDescription: guideDescription,
+  ogImage: guideImage,
+  ogImageAlt: () =>
+    mountInfos.name ? `${mountInfos.name} icon` : "Reins - WoW Mount Tracker",
+  ogType: "article",
+  twitterCard: "summary_large_image",
+  twitterTitle: guideTitle,
+  twitterDescription: guideDescription,
+  twitterImage: guideImage,
+  twitterImageAlt: () =>
+    mountInfos.name ? `${mountInfos.name} icon` : "Reins - WoW Mount Tracker",
 });
 
 onMounted(() => {

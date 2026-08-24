@@ -30,6 +30,15 @@ useHead({
   ],
 });
 
+useSeoMeta({
+  title: `Reins | ${props.error.statusCode || "Error"} - ${props.error.statusText || "Something went wrong"}`,
+  description: "An error occurred on Reins.",
+  robots: "noindex, nofollow",
+  ogSiteName: "Reins",
+  ogTitle: `Reins | ${props.error.statusCode || "Error"} - ${props.error.statusText || "Something went wrong"}`,
+  ogDescription: "An error occurred on Reins.",
+});
+
 const navState = ref(false);
 const handleNavOpened = (state: boolean) => {
   navState.value = state;
