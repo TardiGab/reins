@@ -5,33 +5,47 @@ export default defineEventHandler(async (event) => {
     headers: event.headers,
   });
 
+  if (!session?.user) {
+    return null;
+  }
+
+  const accounts = await auth.api.listUserAccounts({
+    headers: event.headers,
+  });
+  const bnetAccount = accounts?.find(
+    (acc: any) => acc.providerId === "battlenet",
+  );
+
+  if (!bnetAccount) {
+    return null;
+  }
+
   const tokenData = await auth.api.getAccessToken({
     body: {
-      providerId: "battlenet",
+      accountId: bnetAccount.id,
     },
     headers: event.headers,
   });
 
   const token = tokenData?.accessToken;
+  if (!token) {
+    return null;
+  }
 
-  const response = fetch(
-    "https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&locale=en_US",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  try {
+    const res = await fetch(
+      "https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&locale=en_US",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    },
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      const account = data.wow_accounts;
-      return account[0].characters;
-    })
-    .catch((error) => {
-      console.error("Error fetching WoW account data:", error);
-    });
-
-  return response;
+    );
+    const data = await res.json();
+    const account = data.wow_accounts;
+    return account?.[0]?.characters || [];
+  } catch (error) {
+    console.error("Error fetching WoW account data:", error);
+    return null;
+  }
 });

@@ -6,7 +6,11 @@ export default defineEventHandler(async (event) => {
     headers: event.headers,
   });
 
-  const userID = session?.user.id;
+  const userID = session?.user?.email;
+
+  if (!userID) {
+    return [];
+  }
 
   const sql = neon(process.env.DATABASE_URL!);
   const pinnedMountsResponse =

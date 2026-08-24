@@ -12,7 +12,7 @@ interface Error extends NuxtError {
 const props = defineProps<{ error: Error }>();
 
 useHead({
-  title: `Reins | Oups! ${props.error.statusText}`,
+  title: `Reins | Oops! ${props.error.statusText}`,
   script: [
     {
       innerHTML: `const whTooltips = {colorLinks: true, iconizeLinks: false, iconSize: false, renameLinks: false};`,

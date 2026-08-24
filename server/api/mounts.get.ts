@@ -5,35 +5,46 @@ export default defineEventHandler(async (event) => {
     headers: event.headers,
   });
 
+  if (!session?.user) {
+    return [];
+  }
+
+  const accounts = await auth.api.listUserAccounts({
+    headers: event.headers,
+  });
+  const bnetAccount = accounts?.find(
+    (acc: any) => acc.providerId === "battlenet",
+  );
+
+  if (!bnetAccount) {
+    return [];
+  }
+
   const tokenData = await auth.api.getAccessToken({
     body: {
-      providerId: "battlenet",
+      accountId: bnetAccount.id,
     },
     headers: event.headers,
   });
 
   const token = tokenData?.accessToken;
+  if (!token) {
+    return [];
+  }
 
-  if (session?.user) {
-    const mountsResponse = fetch(
+  try {
+    const res = await fetch(
       "https://eu.api.blizzard.com/profile/user/wow/collections/mounts?namespace=profile-eu&locale=en_US",
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       },
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        const mounts = data.mounts;
-        return mounts;
-      })
-      .catch((error) => {
-        console.error("Error fetching mounts:", error);
-      });
-
-    return mountsResponse;
+    );
+    const data = await res.json();
+    return data.mounts || [];
+  } catch (error) {
+    console.error("Error fetching mounts:", error);
+    return [];
   }
 });

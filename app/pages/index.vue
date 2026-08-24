@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authClient } from "~~/server/lib/auth-client";
+import { authClient } from "~/lib/auth-client";
 
 const session = authClient.useSession();
 

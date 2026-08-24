@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
-import { authClient } from "~~/server/lib/auth-client";
+import { authClient } from "~/lib/auth-client";
 const { data: userMounts } = await useFetch("/api/mounts");
 
 const session = authClient.useSession();

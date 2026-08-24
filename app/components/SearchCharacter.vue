@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { random } from "#imports";
-import { authClient } from "~~/server/lib/auth-client";
+import { authClient } from "~/lib/auth-client";
 
 const session = authClient.useSession();
 
