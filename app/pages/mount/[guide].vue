@@ -172,7 +172,14 @@ onMounted(() => {
               <p class="guide__p">
                 Oops! The content you're looking for doesn't exist (yet). Feel
                 free to
-                <NuxtLink to="/contribute" class="guide__link" target="_blank">
+                <NuxtLink
+                  :to="{
+                    path: '/contribute',
+                    query: { redirect: route.fullPath },
+                  }"
+                  class="guide__link"
+                  target="_blank"
+                >
                   contribute
                 </NuxtLink>
                 and create a guide for this mount!
