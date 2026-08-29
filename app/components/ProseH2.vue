@@ -31,6 +31,7 @@ const generate = computed(
   text-shadow: 1px 1px black;
   font-weight: 600;
   color: white;
+  line-height: 0.9;
   a {
     margin: 0;
     margin-top: 2rem;

@@ -43,11 +43,11 @@
                 Report an issue
               </NuxtLink>
             </li>
-            <!-- <li class="footer__nav-item">
+            <li class="footer__nav-item">
               <NuxtLink to="/privacy-policy" class="footer__nav-link">
                 Privacy Policy
               </NuxtLink>
-            </li> -->
+            </li>
           </ul>
         </nav>
       </div>
