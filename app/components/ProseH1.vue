@@ -24,7 +24,7 @@ const generate = computed(
 
 <style lang="scss" scoped>
 .content-h1 {
-  font-size: 2.5rem;
+  font-size: $h1-size;
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1rem;
