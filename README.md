@@ -17,6 +17,16 @@ You have a writing spirit? Mounts have their own page and you can contribute by 
 - Compare your mounts collections with other WoW players
 - Get guides on how to obtain mounts
 
+## Tech Stack
+
+- **Framework:** [Nuxt 4](https://nuxt.com/) (Vue 3, TypeScript)
+- **Content & CMS:** [@nuxt/content](https://content.nuxt.com/) (v3) & [Nuxt Studio](https://nuxt.studio/)
+- **Styling & Design:** SCSS / Sass
+- **Authentication:** [Better Auth](https://www.better-auth.com/) (Battle.net OAuth 2.0 / OpenID Connect)
+- **Database:** PostgreSQL ([Neon](https://neon.tech/) Serverless / `pg`)
+- **External APIs:** [Blizzard Battle.net API](https://develop.battle.net/) (World of Warcraft Profile & Game Data APIs)
+- **Analytics & Hosting:** [Vercel](https://vercel.com/) & [@vercel/analytics](https://vercel.com/analytics)
+
 ## Have an idea for a new feature? Want to report a bug? 
 
 Please open an issue on the [GitHub repository's issues page](https://github.com/TardiGab/reins/issues) and I will take a look at it as soon as possible.
