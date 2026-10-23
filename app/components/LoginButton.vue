@@ -8,6 +8,10 @@ function logout() {
     window.location.reload();
   }, 100);
 }
+
+const props = defineProps<{
+  disabled?: boolean;
+}>();
 </script>
 
 <template>
@@ -22,6 +26,7 @@ function logout() {
       "
       class="login-bnet"
       v-if="!session.data"
+      :disabled="props.disabled"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +68,10 @@ function logout() {
   }
   &:active {
     filter: brightness(80%);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 </style>
