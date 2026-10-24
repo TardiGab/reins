@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import mountsGlobal from "@/assets/data/mounts.json";
 import { authClient } from "~~/server/lib/auth-client";
+
+const regionCookie = useCookie<string>("region");
 const { data: userMounts } = await useFetch("/api/mounts", {
   key: "user-mounts",
+  query: {
+    region: regionCookie.value || "eu",
+  },
 });
 const session = authClient.useSession();
 

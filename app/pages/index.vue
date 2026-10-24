@@ -3,10 +3,10 @@ import { authClient } from "~~/server/lib/auth-client";
 
 const session = authClient.useSession();
 
-// watch(
-//   () => session.value.data?.session,
-//   () => navigateTo("/collection"),
-// );
+watch(
+  () => session.value.data?.session,
+  () => navigateTo("/collection"),
+);
 
 useSeoMeta({
   title: "Reins | Login & Stable Access",
@@ -25,6 +25,19 @@ useSeoMeta({
     "Track your World of Warcraft mount collection and see what mounts you're missing with Reins. Pin your mounts to plan your farming route, compare your collections with friends, and get guides on how to obtain mounts.",
   twitterImage: "/images/logo.png",
   twitterImageAlt: "Reins - WoW Mount Tracker",
+});
+
+const regionCookie = useCookie<string>("region");
+const region = ref<string>(regionCookie.value || "");
+const regionSelected = (selectedRegion: string) => {
+  region.value = selectedRegion;
+  regionCookie.value = selectedRegion.toLowerCase();
+};
+
+watch(region, (newRegion) => {
+  if (newRegion) {
+    regionCookie.value = newRegion;
+  }
 });
 </script>
 
@@ -45,13 +58,15 @@ useSeoMeta({
               v-if="$route.query.session === 'expired'"
               class="login__disclamer"
             >
-              Your session is expired. Please log out and log back in.
+              Your session is expired or the region is invalid. Please log out
+              and log back in.
             </p>
             <NuxtLink to="/collection" class="login__collection-link" v-else>
               <span class="login__collection-text">Go to my collection</span>
             </NuxtLink>
           </div>
-          <LoginButton class="login__button" />
+          <SelectRegion @region="regionSelected" v-if="!session.data" />
+          <LoginButton class="login__button" :disabled="!region" />
           <p class="login__disclamer">
             We do not have access to your email address or password. Your
             informations will directly go to Blizzard.

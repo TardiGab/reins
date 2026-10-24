@@ -1,6 +1,10 @@
 import { auth } from "../lib/auth";
 
 export default defineEventHandler(async (event) => {
+  interface Query {
+    region: string;
+  }
+
   const session = await auth.api.getSession({
     headers: event.headers,
   });
@@ -13,9 +17,11 @@ export default defineEventHandler(async (event) => {
   });
 
   const token = tokenData?.accessToken;
+  const query: Query = getQuery(event);
+  const region = query.region;
 
   const response = fetch(
-    "https://eu.api.blizzard.com/profile/user/wow?namespace=profile-eu&locale=en_US",
+    `https://${region}.api.blizzard.com/profile/user/wow?namespace=profile-${region}&locale=en_US`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
