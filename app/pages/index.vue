@@ -58,7 +58,8 @@ watch(region, (newRegion) => {
               v-if="$route.query.session === 'expired'"
               class="login__disclamer"
             >
-              Your session is expired. Please log out and log back in.
+              Your session is expired or the region is invalid. Please log out
+              and log back in.
             </p>
             <NuxtLink to="/collection" class="login__collection-link" v-else>
               <span class="login__collection-text">Go to my collection</span>
