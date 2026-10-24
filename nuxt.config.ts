@@ -77,7 +77,17 @@ export default defineNuxtConfig({
     "nuxt-studio",
     "@nuxtjs/color-mode",
     "@vercel/analytics",
+    "@nuxt/eslint",
   ],
+  eslint: {
+    config: {
+      stylistic: {
+        indent: 2,
+        semi: true,
+        quotes: "double",
+      },
+    },
+  },
   css: ["@/assets/styles/main.scss"],
   vite: {
     optimizeDeps: {
